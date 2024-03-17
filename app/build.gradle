@@ -30,21 +30,25 @@ sourceSets {
             srcDir 'src/main/java'
         }
         resources {
-           srcDir 'src/main/resources'
+            srcDir 'src/main/resources'
         }
     }
-   test {
+    test {
         java {
-           srcDir 'src/test'
+            srcDir 'src/test/java'
         }
         resources {
-           srcDir 'src/main/resources'
+            srcDir 'src/test/resources'
         }
     }
 }
 
 processResources {
-    duplicatesStrategy = 'include'
+    duplicatesStrategy = 'INCLUDE'
+}
+
+processTestResources {
+    duplicatesStrategy = 'INCLUDE'
 }
 
 tasks.named('test') {
