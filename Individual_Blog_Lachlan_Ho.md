@@ -1,10 +1,12 @@
 ## Week 5
 
-- List the tasks you completed this week here
+- Began reading the spec
 
 ## Week 6
 
-- List the tasks you completed this week here
+- Finished reading the spec
+- Meeting with partner to discuss strategy and plan of attack
+- Went bouldering
 
 ## Week 7
 
