@@ -18,8 +18,8 @@ public class OrGoal implements GoalStrategy {
     public String toString(Game game) {
         if (achieved(game))
             return "";
-        else
-            return "(" + goal1.toString(game) + " OR " + goal2.toString(game) + ")";
+
+        return "(" + goal1.toString(game) + " OR " + goal2.toString(game) + ")";
     }
 
 }

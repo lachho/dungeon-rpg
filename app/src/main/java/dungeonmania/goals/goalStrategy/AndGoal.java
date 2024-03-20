@@ -18,6 +18,9 @@ public class AndGoal implements GoalStrategy {
 
     @Override
     public String toString(Game game) {
+        if (this.achieved(game))
+            return "";
+
         return "(" + goal1.toString(game) + " AND " + goal2.toString(game) + ")";
     }
 }

@@ -16,7 +16,10 @@ public class TreasureGoal implements GoalStrategy {
 
     @Override
     public String toString(Game game) {
+        if (this.achieved(game))
+            return "";
+
         return ":treasure";
     }
-    
+
 }
