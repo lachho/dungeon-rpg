@@ -11,19 +11,12 @@ import dungeonmania.goals.goalStrategy.TreasureGoal;
 
 public class Goal {
     private GoalStrategy strategy;
-    private String type;
-    private int target;
-    private Goal goal1;
-    private Goal goal2;
 
     public Goal(String type) {
         this(type, 0);
-        // this.type = type;
     }
 
     public Goal(String type, int target) {
-        // this.type = type;
-        // this.target = target;
         switch (type) {
         case "exit":
             strategy = new ExitGoal();
@@ -50,9 +43,6 @@ public class Goal {
         default:
             strategy = new NoGoal();
         }
-        // this.type = type;
-        // this.goal1 = goal1;
-        // this.goal2 = goal2;
     }
 
     /**
@@ -63,50 +53,10 @@ public class Goal {
             return false;
 
         return strategy.achieved(game);
-        // switch (type) {
-        // case "exit":
-        //     Player character = game.getPlayer();
-        //     Position pos = character.getPosition();
-        //     List<Exit> es = game.getMap().getEntities(Exit.class);
-        //     if (es == null || es.size() == 0)
-        //         return false;
-        //     return es.stream().map(Entity::getPosition).anyMatch(pos::equals);
-        // case "boulders":
-        //     return game.getMap().getEntities(Switch.class).stream().allMatch(s -> s.isActivated());
-        // case "treasure":
-        //     return game.getCollectedTreasureCount() >= target;
-        // case "AND":
-        //     return goal1.achieved(game) && goal2.achieved(game);
-        // case "OR":
-        //     return goal1.achieved(game) || goal2.achieved(game);
-        // default:
-        //     break;
-        // }
-        // return false;
     }
 
     public String toString(Game game) {
-        if (achieved(game))
-            return "";
-
         return strategy.toString(game);
-        // switch (type) {
-        // case "exit":
-        //     return ":exit";
-        // case "boulders":
-        //     return ":boulders";
-        // case "treasure":
-        //     return ":treasure";
-        // case "AND":
-        //     return "(" + goal1.toString(game) + " AND " + goal2.toString(game) + ")";
-        // case "OR":
-        //     if (achieved(game))
-        //         return "";
-        //     else
-        //         return "(" + goal1.toString(game) + " OR " + goal2.toString(game) + ")";
-        // default:
-        //     return "";
-        // }
     }
 
 }
