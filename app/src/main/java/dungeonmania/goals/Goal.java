@@ -1,12 +1,6 @@
 package dungeonmania.goals;
 
-import java.util.List;
-
 import dungeonmania.Game;
-import dungeonmania.entities.Entity;
-import dungeonmania.entities.Exit;
-import dungeonmania.entities.Player;
-import dungeonmania.entities.Switch;
 import dungeonmania.goals.goalStrategy.AndGoal;
 import dungeonmania.goals.goalStrategy.BoulderGoal;
 import dungeonmania.goals.goalStrategy.ExitGoal;
@@ -14,7 +8,6 @@ import dungeonmania.goals.goalStrategy.GoalStrategy;
 import dungeonmania.goals.goalStrategy.NoGoal;
 import dungeonmania.goals.goalStrategy.OrGoal;
 import dungeonmania.goals.goalStrategy.TreasureGoal;
-import dungeonmania.util.Position;
 
 public class Goal {
     private GoalStrategy strategy;
@@ -32,30 +25,30 @@ public class Goal {
         // this.type = type;
         // this.target = target;
         switch (type) {
-            case "exit":
-                strategy = new ExitGoal();
-                break;
-            case "boulders":
-                strategy = new BoulderGoal();
-                break;
-            case "treasure":
-                strategy = new TreasureGoal(target);
-                break;
-            default:
-                strategy = new NoGoal();
+        case "exit":
+            strategy = new ExitGoal();
+            break;
+        case "boulders":
+            strategy = new BoulderGoal();
+            break;
+        case "treasure":
+            strategy = new TreasureGoal(target);
+            break;
+        default:
+            strategy = new NoGoal();
         }
     }
 
     public Goal(String type, Goal goal1, Goal goal2) {
         switch (type) {
-            case "AND":
-                strategy = new AndGoal(goal1.strategy, goal2.strategy);
-                break;
-            case "OR":
-                strategy = new OrGoal(goal1.strategy, goal2.strategy);
-                break;
-            default:
-                strategy = new NoGoal();
+        case "AND":
+            strategy = new AndGoal(goal1.strategy, goal2.strategy);
+            break;
+        case "OR":
+            strategy = new OrGoal(goal1.strategy, goal2.strategy);
+            break;
+        default:
+            strategy = new NoGoal();
         }
         // this.type = type;
         // this.goal1 = goal1;
