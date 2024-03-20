@@ -5,8 +5,7 @@
 ## Week 6
 
 - Finished reading the spec
-- Meeting with partner to discuss strategy and plan of attack
-- Went bouldering
+- Refactored Task 1.e - Goals.java wth the assistance of Partner to review failing tests.
 
 ## Week 7
 
