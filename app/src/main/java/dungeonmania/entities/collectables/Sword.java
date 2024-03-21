@@ -4,12 +4,10 @@ import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.Player;
-import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
-public class Sword extends Entity implements InventoryItem, BattleItem {
+public class Sword extends Collectables implements BattleItem {
     public static final double DEFAULT_ATTACK = 1;
     public static final double DEFAULT_ATTACK_SCALE_FACTOR = 1;
     public static final int DEFAULT_DURABILITY = 5;
@@ -30,14 +28,6 @@ public class Sword extends Entity implements InventoryItem, BattleItem {
         return true;
     }
 
-    @Override
-    public void onOverlap(GameMap map, Entity entity) {
-        if (entity instanceof Player) {
-            if (!((Player) entity).pickUp(this))
-                return;
-            map.destroyEntity(this);
-        }
-    }
 
     @Override
     public void onMovedAway(GameMap map, Entity entity) {
