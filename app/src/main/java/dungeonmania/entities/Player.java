@@ -76,7 +76,8 @@ public class Player extends Entity implements Battleable {
     public void onOverlap(GameMap map, Entity entity) {
         if (entity instanceof Enemy) {
             if (entity instanceof Mercenary) {
-                if (((Mercenary) entity).isAllied()) return;
+                if (((Mercenary) entity).isAllied())
+                    return;
             }
             map.getGame().battle(this, (Enemy) entity);
         }
