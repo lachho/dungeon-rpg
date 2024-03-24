@@ -158,6 +158,18 @@ public class Game {
         return tickCount;
     }
 
+    public List<Entity> getEntities(Position position) {
+        return map.getEntities(position);
+    }
+
+    public Position getPlayerPosition() {
+        return player.getPosition();
+    }
+
+    public Position getPlayerPreviousPosition() {
+        return player.getPreviousPosition();
+    }
+
     public int getTick() {
         return this.tickCount;
     }

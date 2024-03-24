@@ -4,7 +4,6 @@ import dungeonmania.Game;
 import dungeonmania.entities.buildables.Bow;
 import dungeonmania.entities.buildables.Shield;
 import dungeonmania.entities.collectables.*;
-import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.enemies.*;
 import dungeonmania.map.GameMap;
 import dungeonmania.entities.collectables.potions.InvincibilityPotion;
@@ -37,7 +36,7 @@ public class EntityFactory {
         if (rate == 0 || (tick + 1) % rate != 0)
             return;
         int radius = 20;
-        Position player = map.getPlayer().getPosition();
+        Position player = game.getPlayerPosition();
 
         Spider dummySpider = buildSpider(new Position(0, 0)); // for checking possible positions
 
