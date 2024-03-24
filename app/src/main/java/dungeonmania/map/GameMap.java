@@ -72,7 +72,7 @@ public class GameMap {
     private void initRegisterMovables() {
         List<Enemy> enemies = getEntities(Enemy.class);
         enemies.forEach(e -> {
-            game.register(() -> e.move(game), Game.AI_MOVEMENT, e.getId());
+            game.registerEnemyMovement(e);
         });
     }
 

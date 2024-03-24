@@ -31,49 +31,75 @@ public class EntityFactory {
 
     public void spawnSpider(Game game) {
         GameMap map = game.getMap();
+
         int tick = game.getTick();
         int rate = config.optInt("spider_spawn_interval", 0);
-        if (rate == 0 || (tick + 1) % rate != 0)
+        if (!isValidSpawnRate(rate, tick))
             return;
-        int radius = 20;
+
+        int radius = Spider.DEFAULT_SPAWN_RADIUS;
         Position player = game.getPlayerPosition();
 
         Spider dummySpider = buildSpider(new Position(0, 0)); // for checking possible positions
 
-        List<Position> availablePos = new ArrayList<>();
-        for (int i = player.getX() - radius; i < player.getX() + radius; i++) {
-            for (int j = player.getY() - radius; j < player.getY() + radius; j++) {
-                if (Position.calculatePositionBetween(player, new Position(i, j)).magnitude() > radius)
-                    continue;
-                Position np = new Position(i, j);
-                if (!map.canMoveTo(dummySpider, np) || np.equals(player))
-                    continue;
-                if (map.getEntities(np).stream().anyMatch(e -> e instanceof Enemy))
-                    continue;
-                availablePos.add(np);
-            }
-        }
+        List<Position> availablePos = getAvailablePositions(player, map, radius, dummySpider);
+
         Position initPosition = availablePos.get(ranGen.nextInt(availablePos.size()));
         Spider spider = buildSpider(initPosition);
         map.addEntity(spider);
-        game.register(() -> spider.move(game), Game.AI_MOVEMENT, spider.getId());
+
+        game.registerEnemyMovement(spider);
+    }
+
+    private List<Position> getAvailablePositions(Position player, GameMap map, int radius, Spider dummySpider) {
+        List<Position> availablePos = new ArrayList<>();
+        int playerXPosition = player.getX();
+        int playerYPosition = player.getY();
+
+        for (int i = playerXPosition - radius; i < playerXPosition + radius; i++) {
+            for (int j = playerYPosition - radius; j < playerYPosition + radius; j++) {
+                if (Position.calculatePositionBetween(player, new Position(i, j)).magnitude() > radius)
+                    continue;
+                Position newPosition = new Position(i, j);
+                if (!map.canMoveTo(dummySpider, newPosition) || newPosition.equals(player))
+                    continue;
+                if (map.getEntities(newPosition).stream().anyMatch(e -> e instanceof Enemy))
+                    continue;
+                availablePos.add(newPosition);
+            }
+        }
+
+        return availablePos;
     }
 
     public void spawnZombie(Game game, ZombieToastSpawner spawner) {
         GameMap map = game.getMap();
+
         int tick = game.getTick();
-        Random randGen = new Random();
         int spawnInterval = config.optInt("zombie_spawn_interval", ZombieToastSpawner.DEFAULT_SPAWN_INTERVAL);
-        if (spawnInterval == 0 || (tick + 1) % spawnInterval != 0)
+        if (!isValidSpawnRate(spawnInterval, tick))
             return;
-        List<Position> pos = spawner.getPosition().getCardinallyAdjacentPositions();
-        pos = pos.stream().filter(p -> !map.getEntities(p).stream().anyMatch(e -> (e instanceof Wall)))
-                .collect(Collectors.toList());
+
+        List<Position> pos = spawner.getCardinallyAdjacentPositions();
+
+        pos = getAdjacentWalls(pos, map);
         if (pos.size() == 0)
             return;
+
+        Random randGen = new Random();
         ZombieToast zt = buildZombieToast(pos.get(randGen.nextInt(pos.size())));
         map.addEntity(zt);
-        game.register(() -> zt.move(game), Game.AI_MOVEMENT, zt.getId());
+
+        game.registerEnemyMovement(zt);
+    }
+
+    private boolean isValidSpawnRate(int rate, int tick) {
+        return !(rate == 0 || (tick + 1) % rate != 0);
+    }
+
+    private List<Position> getAdjacentWalls(List<Position> pos, GameMap map) {
+        return pos.stream().filter(p -> !map.getEntities(p).stream().anyMatch(e -> (e instanceof Wall)))
+                .collect(Collectors.toList());
     }
 
     public Spider buildSpider(Position pos) {
