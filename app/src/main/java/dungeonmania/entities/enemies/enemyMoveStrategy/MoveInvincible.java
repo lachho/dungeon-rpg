@@ -10,27 +10,34 @@ public class MoveInvincible implements MoveStrategy {
     @Override
     public void move(Game game, Enemy enemy) {
         GameMap map = game.getMap();
-        Position plrDiff = Position.calculatePositionBetween(map.getPlayer().getPosition(), enemy.getPosition());
 
-        Position moveX = (plrDiff.getX() >= 0) ? Position.translateBy(enemy.getPosition(), Direction.RIGHT)
-                : Position.translateBy(enemy.getPosition(), Direction.LEFT);
-        Position moveY = (plrDiff.getY() >= 0) ? Position.translateBy(enemy.getPosition(), Direction.UP)
-                : Position.translateBy(enemy.getPosition(), Direction.DOWN);
-        Position offset = enemy.getPosition();
+        Position enemyPosition = enemy.getPosition();
+        Position plrDiff = Position.calculatePositionBetween(game.getPlayerPosition(), enemyPosition);
+
+        Position moveX = calculateNextXPosition(plrDiff, enemyPosition);
+        Position moveY = calculateNextYPosition(plrDiff, enemyPosition);
 
         if (plrDiff.getY() == 0 && map.canMoveTo(enemy, moveX))
-            offset = moveX;
+            enemyPosition = moveX;
         else if (plrDiff.getX() == 0 && map.canMoveTo(enemy, moveY))
-            offset = moveY;
+            enemyPosition = moveY;
         else {
             if (map.canMoveTo(enemy, moveX))
-                offset = moveX;
+                enemyPosition = moveX;
             else if (map.canMoveTo(enemy, moveY))
-                offset = moveY;
-            else
-                offset = enemy.getPosition();
+                enemyPosition = moveY;
         }
 
-        map.moveTo(enemy, offset);
+        map.moveTo(enemy, enemyPosition);
+    }
+
+    private Position calculateNextXPosition(Position plrDiff, Position enemyPosition) {
+        return (plrDiff.getX() >= 0) ? Position.translateBy(enemyPosition, Direction.RIGHT)
+                : Position.translateBy(enemyPosition, Direction.LEFT);
+    }
+
+    private Position calculateNextYPosition(Position plrDiff, Position enemyPosition) {
+        return (plrDiff.getY() >= 0) ? Position.translateBy(enemyPosition, Direction.UP)
+                : Position.translateBy(enemyPosition, Direction.DOWN);
     }
 }
