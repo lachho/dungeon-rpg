@@ -15,7 +15,7 @@ public class MoveAlly implements MoveStrategy {
 
         Position nextPos = getNextPosition(mercenary, game, map, playerPosition);
 
-        if (!mercenary.isAdjacentToPlayer() && Position.isAdjacent(playerPosition, nextPos))
+        if (canMercenaryFollowPlayer(mercenary, playerPosition, nextPos))
             mercenary.setAdjacentToPlayer(true);
 
         map.moveTo(enemy, nextPos);
@@ -24,6 +24,10 @@ public class MoveAlly implements MoveStrategy {
     private Position getNextPosition(Mercenary mercenary, Game game, GameMap map, Position playerPosition) {
         return mercenary.isAdjacentToPlayer() ? game.getPlayerPreviousPosition()
                 : map.dijkstraPathFind(mercenary.getPosition(), playerPosition, mercenary);
+    }
+
+    private boolean canMercenaryFollowPlayer(Mercenary mercenary, Position playerPosition, Position nextPos) {
+        return !mercenary.isAdjacentToPlayer() && Position.isAdjacent(playerPosition, nextPos);
     }
 
 }
