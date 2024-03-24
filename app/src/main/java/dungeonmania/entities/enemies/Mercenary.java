@@ -93,13 +93,11 @@ public class Mercenary extends Enemy implements Interactable {
 
     @Override
     public void move(Game game) {
-        GameMap map = game.getMap();
-
         if (allied) {
             moveStrategy = new MoveAlly();
-        } else if (map.getPlayer().getEffectivePotion() instanceof InvisibilityPotion) {
+        } else if (game.getPlayer().getEffectivePotion() instanceof InvisibilityPotion) {
             moveStrategy = new MoveInvisible();
-        } else if (game.getMap().getPlayer().getEffectivePotion() instanceof InvincibilityPotion) {
+        } else if (game.getPlayer().getEffectivePotion() instanceof InvincibilityPotion) {
             moveStrategy = new MoveInvincible();
         } else {
             moveStrategy = new MoveMercenary();
