@@ -9,7 +9,7 @@ import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
-public class MoveInvisible implements MoveStrategy {
+public class MoveInvisibleAndZombieToast implements MoveStrategy {
 
     @Override
     public void move(Game game, Enemy enemy) {

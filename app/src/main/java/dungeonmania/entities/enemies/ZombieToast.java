@@ -13,7 +13,7 @@ import dungeonmania.Game;
 import dungeonmania.entities.collectables.potions.InvincibilityPotion;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvincible;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveStrategy;
-import dungeonmania.entities.enemies.enemyMoveStrategy.MoveZombieToast;
+import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvisibleAndZombieToast;
 import dungeonmania.util.Position;
 
 public class ZombieToast extends Enemy {
@@ -31,7 +31,7 @@ public class ZombieToast extends Enemy {
         if (game.getMap().getPlayer().getEffectivePotion() instanceof InvincibilityPotion) {
             moveStrategy = new MoveInvincible();
         } else {
-            moveStrategy = new MoveZombieToast();
+            moveStrategy = new MoveInvisibleAndZombieToast();
         }
 
         moveStrategy.move(game, this);
