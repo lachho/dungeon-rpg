@@ -16,7 +16,7 @@ public class MoveInvisible implements MoveStrategy {
         GameMap map = game.getMap();
         // Move random
         Random randGen = new Random();
-        List<Position> pos = enemy.getPosition().getCardinallyAdjacentPositions();
+        List<Position> pos = enemy.getCardinallyAdjacentPositions();
         Position nextPos;
         pos = pos.stream().filter(p -> map.canMoveTo(enemy, p)).collect(Collectors.toList());
         if (pos.size() == 0) {
