@@ -17,16 +17,10 @@ public class MoveInvincible implements MoveStrategy {
         Position moveX = calculateNextXPosition(plrDiff, enemyPosition);
         Position moveY = calculateNextYPosition(plrDiff, enemyPosition);
 
-        if (plrDiff.getY() == 0 && map.canMoveTo(enemy, moveX))
+        if (map.canMoveTo(enemy, moveX))
             enemyPosition = moveX;
-        else if (plrDiff.getX() == 0 && map.canMoveTo(enemy, moveY))
+        else if (map.canMoveTo(enemy, moveY))
             enemyPosition = moveY;
-        else {
-            if (map.canMoveTo(enemy, moveX))
-                enemyPosition = moveX;
-            else if (map.canMoveTo(enemy, moveY))
-                enemyPosition = moveY;
-        }
 
         map.moveTo(enemy, enemyPosition);
     }
