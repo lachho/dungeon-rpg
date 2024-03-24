@@ -16,6 +16,7 @@ import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.Goal;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Direction;
+import dungeonmania.util.Position;
 
 public class Game {
     private String id;
@@ -75,6 +76,7 @@ public class Game {
         return this;
     }
 
+    // FIXME - demeter violation
     public void battle(Player player, Enemy enemy) {
         battleFacade.battle(this, player, enemy);
         if (player.getBattleStatistics().getHealth() <= 0) {
@@ -202,5 +204,9 @@ public class Game {
 
     public BattleFacade getBattleFacade() {
         return battleFacade;
+    }
+
+    public void moveTo(Entity entity, Position position) {
+        map.moveTo(entity, position);
     }
 }
