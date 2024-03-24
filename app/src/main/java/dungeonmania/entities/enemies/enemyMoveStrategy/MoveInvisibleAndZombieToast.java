@@ -15,14 +15,16 @@ public class MoveInvisibleAndZombieToast implements MoveStrategy {
         GameMap map = game.getMap();
         // Move random
         Random randGen = new Random();
-        List<Position> pos = enemy.getCardinallyAdjacentPositions();
+        List<Position> cardinallyAdjacentPositions = enemy.getCardinallyAdjacentPositions();
         Position nextPos;
 
-        pos = pos.stream().filter(p -> map.canMoveTo(enemy, p)).collect(Collectors.toList());
-        if (pos.size() == 0) {
+        List<Position> validMoves = cardinallyAdjacentPositions.stream().filter(p -> map.canMoveTo(enemy, p))
+                .collect(Collectors.toList());
+
+        if (validMoves.size() == 0) {
             nextPos = enemy.getPosition();
         } else {
-            nextPos = pos.get(randGen.nextInt(pos.size()));
+            nextPos = validMoves.get(randGen.nextInt(validMoves.size()));
         }
 
         game.moveTo(enemy, nextPos);
