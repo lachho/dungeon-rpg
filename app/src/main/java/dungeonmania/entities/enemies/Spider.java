@@ -50,25 +50,14 @@ public class Spider extends Enemy {
         }
     }
 
+    public Position getNextPosition() {
+        return getMovementTrajectory().get(getNextPositionElement());
+    }
+
     @Override
     public void move(Game game) {
         moveStrategy = new MoveSpider();
         moveStrategy.move(game, this);
-
-        // Position nextPos = movementTrajectory.get(nextPositionElement);
-        // List<Entity> entities = game.getMap().getEntities(nextPos);
-        // if (entities != null && entities.size() > 0 && entities.stream().anyMatch(e -> e instanceof Boulder)) {
-        //     forward = !forward;
-        //     updateNextPosition();
-        //     updateNextPosition();
-        // }
-        // nextPos = movementTrajectory.get(nextPositionElement);
-        // entities = game.getMap().getEntities(nextPos);
-        // if (entities == null || entities.size() == 0
-        //         || entities.stream().allMatch(e -> e.canMoveOnto(game.getMap(), this))) {
-        //     game.getMap().moveTo(this, nextPos);
-        //     updateNextPosition();
-        // }
     }
 
     public List<Position> getMovementTrajectory() {
