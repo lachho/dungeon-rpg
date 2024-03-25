@@ -1,10 +1,8 @@
 package dungeonmania.entities.playerState;
 
-import dungeonmania.entities.collectables.potions.Potion;
-
 public class BaseState extends PlayerState {
-    public BaseState(Potion potion) {
-        super(potion);
+    public BaseState() {
+        super(null);
     }
 
     @Override

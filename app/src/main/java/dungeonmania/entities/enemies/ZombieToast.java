@@ -1,7 +1,6 @@
 package dungeonmania.entities.enemies;
 
 import dungeonmania.Game;
-import dungeonmania.entities.collectables.potions.InvincibilityPotion;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvincible;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveStrategy;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvisibleAndZombieToast;
@@ -18,7 +17,7 @@ public class ZombieToast extends Enemy {
 
     @Override
     public void move(Game game) {
-        if (game.getPlayer().getEffectivePotion() instanceof InvincibilityPotion) {
+        if (game.getPlayer().getState().equals("Invincible")) {
             moveStrategy = new MoveInvincible();
         } else {
             moveStrategy = new MoveInvisibleAndZombieToast();

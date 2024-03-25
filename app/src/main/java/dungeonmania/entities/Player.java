@@ -25,7 +25,7 @@ public class Player extends Entity implements Battleable, Overlappable {
     private BattleStatistics battleStatistics;
     private Inventory inventory;
     private Queue<Potion> queue = new LinkedList<>();
-    private Potion inEffective = null;
+    // private Potion inEffective = null;
     private int nextTrigger = 0;
 
     private int collectedTreasureCount = 0;
@@ -37,7 +37,7 @@ public class Player extends Entity implements Battleable, Overlappable {
         battleStatistics = new BattleStatistics(health, attack, 0, BattleStatistics.DEFAULT_DAMAGE_MAGNIFIER,
                 BattleStatistics.DEFAULT_PLAYER_DAMAGE_REDUCER);
         inventory = new Inventory();
-        state = new BaseState(inEffective);
+        state = new BaseState();
     }
 
     public int getCollectedTreasureCount() {
@@ -98,7 +98,7 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public Potion getEffectivePotion() {
-        return inEffective;
+        return state.getPotion();
     }
 
     public <T extends InventoryItem> void use(Class<T> itemType) {
@@ -114,12 +114,12 @@ public class Player extends Entity implements Battleable, Overlappable {
 
     public void triggerNext(int currentTick) {
         if (queue.isEmpty()) {
-            inEffective = null;
-            changeState(new BaseState(inEffective));
+            // inEffective = null;
+            changeState(new BaseState());
             return;
         }
-        inEffective = queue.remove();
-        changeState(inEffective.createState());
+        Potion potion = queue.remove();
+        changeState(potion.createState());
 
         // if (queue.isEmpty()) {
         //     inEffective = null;
@@ -132,7 +132,7 @@ public class Player extends Entity implements Battleable, Overlappable {
         // } else {
         //     state.transitionInvisible();
         // }
-        nextTrigger = currentTick + inEffective.getDuration();
+        nextTrigger = currentTick + potion.getDuration();
     }
 
     public void changeState(PlayerState playerState) {
@@ -142,13 +142,13 @@ public class Player extends Entity implements Battleable, Overlappable {
     public void use(Potion potion, int tick) {
         inventory.remove(potion);
         queue.add(potion);
-        if (inEffective == null) {
+        if (getState().equals("base")) {
             triggerNext(tick);
         }
     }
 
     public void onTick(int tick) {
-        if (inEffective == null || tick == nextTrigger) {
+        if (getState().equals("base") || tick == nextTrigger) {
             triggerNext(tick);
         }
     }
@@ -167,9 +167,9 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public BattleStatistics applyBuff(BattleStatistics origin) {
-        if (inEffective != null) return inEffective.applyBuff(origin);
+        if (getState().equals("base")) return origin;
+        return state.applyBuff(origin);
 
-        return origin; 
         // if (state.isInvincible()) {
         //     return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));
         // } else if (state.isInvisible()) {

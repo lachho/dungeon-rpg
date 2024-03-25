@@ -1,5 +1,6 @@
 package dungeonmania.entities.playerState;
 
+import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.collectables.potions.Potion;
 
 public abstract class PlayerState {
@@ -15,6 +16,16 @@ public abstract class PlayerState {
         // this.isInvisible = isInvisible;
     }
 
+    public Potion getPotion() {
+        return potion;
+    }
+
+    public abstract String getState();
+
+    public BattleStatistics applyBuff(BattleStatistics origin) {
+        return potion.applyBuff(origin);
+    }
+    
     // public boolean isInvincible() {
     //     return isInvincible;
     // };
@@ -26,12 +37,6 @@ public abstract class PlayerState {
     // public Player getPlayer() {
     //     return player;
     // }
-
-    public Potion getPotion() {
-        return potion;
-    }
-
-    public abstract String getState();
 
     // public abstract void transitionInvisible();
 

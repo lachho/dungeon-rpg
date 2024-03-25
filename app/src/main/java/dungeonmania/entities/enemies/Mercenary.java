@@ -10,8 +10,8 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.Interactable;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.potions.InvincibilityPotion;
-import dungeonmania.entities.collectables.potions.InvisibilityPotion;
+// import dungeonmania.entities.collectables.potions.InvincibilityPotion;
+// import dungeonmania.entities.collectables.potions.InvisibilityPotion;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveAlly;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvincible;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvisibleAndZombieToast;
@@ -96,9 +96,9 @@ public class Mercenary extends Enemy implements Interactable {
 
         if (allied) {
             moveStrategy = new MoveAlly();
-        } else if (game.getPlayer().getEffectivePotion() instanceof InvisibilityPotion) {
+        } else if (game.getPlayer().getState().equals("Invisible")) {
             moveStrategy = new MoveInvisibleAndZombieToast();
-        } else if (game.getPlayer().getEffectivePotion() instanceof InvincibilityPotion) {
+        } else if (game.getPlayer().getState().equals("Invincible")) {
             moveStrategy = new MoveInvincible();
         } else {
             moveStrategy = new MoveMercenary();
