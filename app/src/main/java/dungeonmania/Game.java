@@ -116,6 +116,10 @@ public class Game {
             sub.add(new ComparableCallback(r, priority, id));
     }
 
+    public void registerEnemyMovement(Enemy e) {
+        register(() -> e.move(this), AI_MOVEMENT, e.getId());
+    }
+
     public void registerOnce(Runnable r, int priority, String id) {
         if (isInTick)
             addingSub.add(new ComparableCallback(r, priority, id, true));
