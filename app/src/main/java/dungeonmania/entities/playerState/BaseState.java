@@ -1,26 +1,29 @@
 package dungeonmania.entities.playerState;
 
-import dungeonmania.entities.Player;
-
 public class BaseState extends PlayerState {
-    public BaseState(Player player) {
-        super(player, false, false);
+    public BaseState() {
+        super(null);
     }
 
     @Override
-    public void transitionBase() {
-        // Do nothing
+    public String getState() {
+        return "Base";
     }
 
-    @Override
-    public void transitionInvincible() {
-        Player player = getPlayer();
-        player.changeState(new InvincibleState(player));
-    }
+    // @Override
+    // public void transitionBase() {
+    //     // Do nothing
+    // }
 
-    @Override
-    public void transitionInvisible() {
-        Player player = getPlayer();
-        player.changeState(new InvisibleState(player));
-    }
+    // @Override
+    // public void transitionInvincible() {
+    //     Player player = getPlayer();
+    //     player.changeState(new InvincibleState(player));
+    // }
+
+    // @Override
+    // public void transitionInvisible() {
+    //     Player player = getPlayer();
+    //     player.changeState(new InvisibleState(player));
+    // }
 }
