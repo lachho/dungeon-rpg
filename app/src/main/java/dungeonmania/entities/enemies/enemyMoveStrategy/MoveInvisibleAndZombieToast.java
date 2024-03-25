@@ -9,22 +9,24 @@ import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
-public class MoveInvisible implements MoveStrategy {
-
+public class MoveInvisibleAndZombieToast implements MoveStrategy {
     @Override
     public void move(Game game, Enemy enemy) {
         GameMap map = game.getMap();
         // Move random
         Random randGen = new Random();
-        List<Position> pos = enemy.getPosition().getCardinallyAdjacentPositions();
+        List<Position> cardinallyAdjacentPositions = enemy.getCardinallyAdjacentPositions();
         Position nextPos;
-        pos = pos.stream().filter(p -> map.canMoveTo(enemy, p)).collect(Collectors.toList());
-        if (pos.size() == 0) {
+
+        List<Position> validMoves = cardinallyAdjacentPositions.stream().filter(p -> map.canMoveTo(enemy, p))
+                .collect(Collectors.toList());
+
+        if (validMoves.size() == 0) {
             nextPos = enemy.getPosition();
         } else {
-            nextPos = pos.get(randGen.nextInt(pos.size()));
+            nextPos = validMoves.get(randGen.nextInt(validMoves.size()));
         }
-        map.moveTo(enemy, nextPos);
-    }
 
+        game.moveTo(enemy, nextPos);
+    }
 }

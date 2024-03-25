@@ -5,6 +5,7 @@ import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 import java.util.UUID;
+import java.util.List;
 
 public abstract class Entity {
     public static final int FLOOR_LAYER = 0;
@@ -48,6 +49,10 @@ public abstract class Entity {
 
     public Position getPosition() {
         return position;
+    }
+
+    public List<Position> getCardinallyAdjacentPositions() {
+        return position.getCardinallyAdjacentPositions();
     }
 
     public Position getPreviousPosition() {
