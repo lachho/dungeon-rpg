@@ -11,26 +11,35 @@ import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
 public class MoveSpider implements MoveStrategy {
-
     @Override
     public void move(Game game, Enemy enemy) {
         Spider spider = (Spider) enemy;
         GameMap map = game.getMap();
-        Position nextPos = spider.getMovementTrajectory().get(spider.getNextPositionElement());
-        List<Entity> entities = game.getMap().getEntities(nextPos);
 
-        if (entities != null && entities.size() > 0 && entities.stream().anyMatch(e -> e instanceof Boulder)) {
+        Position nextPos = spider.getNextPosition();
+        List<Entity> entities = game.getEntities(nextPos);
+
+        if (isBoulderAtPosition(game, nextPos, entities)) {
             spider.setForward(!spider.isForward());
             spider.updateNextPosition();
             spider.updateNextPosition();
         }
-        nextPos = spider.getMovementTrajectory().get(spider.getNextPositionElement());
 
-        entities = game.getMap().getEntities(nextPos);
-        if (entities == null || entities.size() == 0
-                || entities.stream().allMatch(e -> e.canMoveOnto(game.getMap(), spider))) {
+        nextPos = spider.getNextPosition();
+        entities = game.getEntities(nextPos);
+
+        if (isValidMovePosition(game, nextPos, entities, spider)) {
             map.moveTo(enemy, nextPos);
             spider.updateNextPosition();
         }
+    }
+
+    private boolean isBoulderAtPosition(Game game, Position position, List<Entity> entities) {
+        return entities != null && entities.size() > 0 && entities.stream().anyMatch(e -> e instanceof Boulder);
+    }
+
+    private boolean isValidMovePosition(Game game, Position position, List<Entity> entities, Spider spider) {
+        return entities == null || entities.size() == 0
+                || entities.stream().allMatch(e -> e.canMoveOnto(game.getMap(), spider));
     }
 }
