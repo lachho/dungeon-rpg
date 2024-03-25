@@ -8,7 +8,6 @@ import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.potions.InvincibilityPotion;
 import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.Mercenary;
@@ -38,7 +37,7 @@ public class Player extends Entity implements Battleable, Overlappable {
         battleStatistics = new BattleStatistics(health, attack, 0, BattleStatistics.DEFAULT_DAMAGE_MAGNIFIER,
                 BattleStatistics.DEFAULT_PLAYER_DAMAGE_REDUCER);
         inventory = new Inventory();
-        state = new BaseState(this);
+        state = new BaseState(inEffective);
     }
 
     public int getCollectedTreasureCount() {
@@ -116,11 +115,11 @@ public class Player extends Entity implements Battleable, Overlappable {
     public void triggerNext(int currentTick) {
         if (queue.isEmpty()) {
             inEffective = null;
-            changeState(new BaseState(this));
+            changeState(new BaseState(inEffective));
             return;
         }
         inEffective = queue.remove();
-        changeState(inEffective.createState(this));
+        changeState(inEffective.createState());
 
         // if (queue.isEmpty()) {
         //     inEffective = null;
@@ -176,5 +175,9 @@ public class Player extends Entity implements Battleable, Overlappable {
         // } else if (state.isInvisible()) {
         //     return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, false, false));
         // }
+    }
+
+    public String getState() {
+        return state.getState();
     }
 }

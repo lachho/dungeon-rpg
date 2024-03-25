@@ -1,7 +1,6 @@
 package dungeonmania.entities.collectables.potions;
 
 import dungeonmania.battles.BattleStatistics;
-import dungeonmania.entities.Player;
 import dungeonmania.entities.playerState.InvisibleState;
 import dungeonmania.entities.playerState.PlayerState;
 import dungeonmania.util.Position;
@@ -19,8 +18,8 @@ public class InvisibilityPotion extends Potion {
     }
 
     @Override
-    public PlayerState createState(Player player) {
-        return new InvisibleState(player);
+    public PlayerState createState() {
+        return new InvisibleState(this);
     }
 
 }

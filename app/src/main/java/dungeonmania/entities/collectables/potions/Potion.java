@@ -4,7 +4,6 @@ import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.Player;
 import dungeonmania.entities.collectables.Collectables;
 import dungeonmania.entities.playerState.PlayerState;
 import dungeonmania.map.GameMap;
@@ -43,5 +42,5 @@ public abstract class Potion extends Collectables implements BattleItem {
         return 1;
     }
 
-    public abstract PlayerState createState(Player player);
+    public abstract PlayerState createState();
 }
