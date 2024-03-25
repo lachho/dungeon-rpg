@@ -25,9 +25,11 @@ public abstract class PlayerState {
         return player;
     }
 
-    public abstract void transitionInvisible();
+    public abstract String getState();
 
-    public abstract void transitionInvincible();
+    // public abstract void transitionInvisible();
 
-    public abstract void transitionBase();
+    // public abstract void transitionInvincible();
+
+    // public abstract void transitionBase();
 }

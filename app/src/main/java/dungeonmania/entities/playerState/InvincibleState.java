@@ -8,20 +8,25 @@ public class InvincibleState extends PlayerState {
     }
 
     @Override
-    public void transitionBase() {
-        Player player = getPlayer();
-        player.changeState(new BaseState(player));
+    public String getState() {
+        return "Invincible";
     }
 
-    @Override
-    public void transitionInvincible() {
-        Player player = getPlayer();
-        player.changeState(new InvincibleState(player));
-    }
+    // @Override
+    // public void transitionBase() {
+    //     Player player = getPlayer();
+    //     player.changeState(new BaseState(player));
+    // }
 
-    @Override
-    public void transitionInvisible() {
-        Player player = getPlayer();
-        player.changeState(new InvisibleState(player));
-    }
+    // @Override
+    // public void transitionInvincible() {
+    //     Player player = getPlayer();
+    //     player.changeState(new InvincibleState(player));
+    // }
+
+    // @Override
+    // public void transitionInvisible() {
+    //     Player player = getPlayer();
+    //     player.changeState(new InvisibleState(player));
+    // }
 }
