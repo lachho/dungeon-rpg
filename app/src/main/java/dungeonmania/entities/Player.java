@@ -114,25 +114,25 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public void triggerNext(int currentTick) {
-        // if (queue.isEmpty()) {
-        //     inEffective = null;
-        //     changeState(new BaseState(this));
-        //     return;
-        // }
-        // inEffective = queue.remove();
-        // changeState(inEffective.createState(this));
-
         if (queue.isEmpty()) {
             inEffective = null;
-            state.transitionBase();
+            changeState(new BaseState(this));
             return;
         }
         inEffective = queue.remove();
-        if (inEffective instanceof InvincibilityPotion) {
-            state.transitionInvincible();
-        } else {
-            state.transitionInvisible();
-        }
+        changeState(inEffective.createState(this));
+
+        // if (queue.isEmpty()) {
+        //     inEffective = null;
+        //     state.transitionBase();
+        //     return;
+        // }
+        // inEffective = queue.remove();
+        // if (inEffective instanceof InvincibilityPotion) {
+        //     state.transitionInvincible();
+        // } else {
+        //     state.transitionInvisible();
+        // }
         nextTrigger = currentTick + inEffective.getDuration();
     }
 
