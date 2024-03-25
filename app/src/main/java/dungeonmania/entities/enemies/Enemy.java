@@ -29,6 +29,14 @@ public abstract class Enemy extends Entity implements Battleable, Destroyable, O
         return battleStatistics;
     }
 
+    public double getBattleStatisticsHealth() {
+        return battleStatistics.getHealth();
+    }
+
+    public void setBattleStatisticsHealth(double health) {
+        battleStatistics.setHealth(health);
+    }
+
     public void onOverlap(GameMap map, Entity entity) {
         if (entity instanceof Player) {
             Player player = (Player) entity;
