@@ -142,13 +142,13 @@ public class Player extends Entity implements Battleable, Overlappable {
     public void use(Potion potion, int tick) {
         inventory.remove(potion);
         queue.add(potion);
-        if (getState().equals("base")) {
+        if (getState().equals("Base")) {
             triggerNext(tick);
         }
     }
 
     public void onTick(int tick) {
-        if (getState().equals("base") || tick == nextTrigger) {
+        if (getState().equals("Base") || tick == nextTrigger) {
             triggerNext(tick);
         }
     }
@@ -167,7 +167,7 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public BattleStatistics applyBuff(BattleStatistics origin) {
-        if (getState().equals("base")) return origin;
+        if (getState().equals("Base")) return origin;
         return state.applyBuff(origin);
 
         // if (state.isInvincible()) {

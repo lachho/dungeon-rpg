@@ -7,7 +7,7 @@ public class BaseState extends PlayerState {
 
     @Override
     public String getState() {
-        return "base";
+        return "Base";
     }
 
     // @Override

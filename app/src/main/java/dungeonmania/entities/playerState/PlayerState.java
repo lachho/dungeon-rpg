@@ -25,7 +25,7 @@ public abstract class PlayerState {
     public BattleStatistics applyBuff(BattleStatistics origin) {
         return potion.applyBuff(origin);
     }
-    
+
     // public boolean isInvincible() {
     //     return isInvincible;
     // };
