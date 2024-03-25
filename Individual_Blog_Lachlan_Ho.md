@@ -13,7 +13,8 @@
 
 ## Week 7
 
-- List the tasks you completed this week here
+- Refactored Player State pattern
+- Decoupled potion from player
 
 ## Week 8
 
