@@ -114,6 +114,14 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public void triggerNext(int currentTick) {
+        // if (queue.isEmpty()) {
+        //     inEffective = null;
+        //     changeState(new BaseState(this));
+        //     return;
+        // }
+        // inEffective = queue.remove();
+        // changeState(inEffective.createState(this));
+
         if (queue.isEmpty()) {
             inEffective = null;
             state.transitionBase();
@@ -160,6 +168,7 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public BattleStatistics applyBuff(BattleStatistics origin) {
+        // if (inEffective != null) inEffective.applyBuff(origin);
         if (state.isInvincible()) {
             return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));
         } else if (state.isInvisible()) {
