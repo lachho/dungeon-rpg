@@ -8,7 +8,6 @@ import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Treasure;
-import dungeonmania.entities.collectables.potions.InvincibilityPotion;
 import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.Mercenary;
@@ -26,7 +25,7 @@ public class Player extends Entity implements Battleable, Overlappable {
     private BattleStatistics battleStatistics;
     private Inventory inventory;
     private Queue<Potion> queue = new LinkedList<>();
-    private Potion inEffective = null;
+    // private Potion inEffective = null;
     private int nextTrigger = 0;
 
     private int collectedTreasureCount = 0;
@@ -38,7 +37,7 @@ public class Player extends Entity implements Battleable, Overlappable {
         battleStatistics = new BattleStatistics(health, attack, 0, BattleStatistics.DEFAULT_DAMAGE_MAGNIFIER,
                 BattleStatistics.DEFAULT_PLAYER_DAMAGE_REDUCER);
         inventory = new Inventory();
-        state = new BaseState(this);
+        state = new BaseState();
     }
 
     public int getCollectedTreasureCount() {
@@ -99,7 +98,7 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public Potion getEffectivePotion() {
-        return inEffective;
+        return state.getPotion();
     }
 
     public <T extends InventoryItem> void use(Class<T> itemType) {
@@ -115,17 +114,25 @@ public class Player extends Entity implements Battleable, Overlappable {
 
     public void triggerNext(int currentTick) {
         if (queue.isEmpty()) {
-            inEffective = null;
-            state.transitionBase();
+            // inEffective = null;
+            changeState(new BaseState());
             return;
         }
-        inEffective = queue.remove();
-        if (inEffective instanceof InvincibilityPotion) {
-            state.transitionInvincible();
-        } else {
-            state.transitionInvisible();
-        }
-        nextTrigger = currentTick + inEffective.getDuration();
+        Potion potion = queue.remove();
+        changeState(potion.createState());
+
+        // if (queue.isEmpty()) {
+        //     inEffective = null;
+        //     state.transitionBase();
+        //     return;
+        // }
+        // inEffective = queue.remove();
+        // if (inEffective instanceof InvincibilityPotion) {
+        //     state.transitionInvincible();
+        // } else {
+        //     state.transitionInvisible();
+        // }
+        nextTrigger = currentTick + potion.getDuration();
     }
 
     public void changeState(PlayerState playerState) {
@@ -135,13 +142,13 @@ public class Player extends Entity implements Battleable, Overlappable {
     public void use(Potion potion, int tick) {
         inventory.remove(potion);
         queue.add(potion);
-        if (inEffective == null) {
+        if (getState().equals("Base")) {
             triggerNext(tick);
         }
     }
 
     public void onTick(int tick) {
-        if (inEffective == null || tick == nextTrigger) {
+        if (getState().equals("Base") || tick == nextTrigger) {
             triggerNext(tick);
         }
     }
@@ -168,11 +175,17 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public BattleStatistics applyBuff(BattleStatistics origin) {
-        if (state.isInvincible()) {
-            return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));
-        } else if (state.isInvisible()) {
-            return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, false, false));
-        }
-        return origin;
+        if (getState().equals("Base")) return origin;
+        return state.applyBuff(origin);
+
+        // if (state.isInvincible()) {
+        //     return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));
+        // } else if (state.isInvisible()) {
+        //     return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, false, false));
+        // }
+    }
+
+    public String getState() {
+        return state.getState();
     }
 }
