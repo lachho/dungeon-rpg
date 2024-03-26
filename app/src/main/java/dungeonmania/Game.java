@@ -12,6 +12,7 @@ import dungeonmania.entities.Player;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
+import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.Goal;
 import dungeonmania.map.GameMap;
@@ -242,5 +243,9 @@ public class Game {
 
     public String getPlayerState() {
         return player.getState();
+    }
+
+    public void removePlayerInventoryItem(InventoryItem item) {
+        player.remove(item);
     }
 }

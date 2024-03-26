@@ -17,7 +17,7 @@ public class ZombieToast extends Enemy {
 
     @Override
     public void move(Game game) {
-        if (game.getPlayer().getState().equals("Invincible")) {
+        if (game.getPlayerState().equals("Invincible")) {
             moveStrategy = new MoveInvincible();
         } else {
             moveStrategy = new MoveInvisibleAndZombieToast();

@@ -25,7 +25,7 @@ public class Sword extends Collectables implements BattleItem {
     public void use(Game game) {
         durability--;
         if (durability <= 0) {
-            game.getPlayer().remove(this);
+            game.removePlayerInventoryItem(this);
         }
     }
 
