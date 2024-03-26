@@ -30,11 +30,6 @@ public class BattleStatistics {
     public BattleStatistics(double health, double attack, double defence, double attackMagnifier, double damageReducer,
             boolean isInvincible, boolean isEnabled) {
         this(health, attack, defence, attackMagnifier, damageReducer);
-        // this.health = health;
-        // this.attack = attack;
-        // this.defence = defence;
-        // this.magnifier = attackMagnifier;
-        // this.reducer = damageReducer;
         this.invincible = isInvincible;
         this.enabled = isEnabled;
     }
@@ -96,14 +91,14 @@ public class BattleStatistics {
         self.setHealth((self.invincible) ? self.getHealth() : 0);
     }
 
-    public static BattleStatistics applyBuff(BattleStatistics origin, BattleStatistics buff) {
-        return new BattleStatistics(origin.health + buff.health, origin.attack + buff.attack,
-                origin.defence + buff.defence, origin.magnifier, origin.reducer, buff.isInvincible(), buff.isEnabled());
-    }
+    // public static BattleStatistics applyBuff(BattleStatistics origin, BattleStatistics buff) {
+    //     return new BattleStatistics(origin.health + buff.health, origin.attack + buff.attack,
+    //             origin.defence + buff.defence, origin.magnifier, origin.reducer, buff.isInvincible(), buff.isEnabled());
+    // }
 
-    public void applyBuff(BattleStatistics origin) {
+    // public void applyBuff(BattleStatistics origin) {
 
-    }
+    // }
 
     public double getHealth() {
         return health;

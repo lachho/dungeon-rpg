@@ -17,7 +17,7 @@ import dungeonmania.util.NameConverter;
 
 public class BattleFacade {
     private List<BattleResponse> battleResponses = new ArrayList<>();
-    private List<BattleItem> battleItems = new ArrayList<>();
+    private List<BattleItem> battleItems; 
     private BattleStatistics playerStats;
     private BattleStatistics enemyStats;
     private Game game;
@@ -29,18 +29,15 @@ public class BattleFacade {
         this.game = game;
         this.player = player;
         this.enemy = enemy;
+        battleItems = new ArrayList<>();
         playerStats = new BattleStatistics(player.getBattleStatistics());
-
+        enemyStats = enemy.getBattleStatistics();
         calculatePlayerBuff();
 
-        enemyStats = enemy.getBattleStatistics();
         if (!playerStats.isEnabled() || !enemyStats.isEnabled())
             return;
 
         logBattleResponse(battleResult());
-        
-        updateHealth();
-        decreaseDurabilityOfItems(game, battleItems);
     }
 
     public List<BattleResponse> getBattleResponses() {
@@ -72,7 +69,10 @@ public class BattleFacade {
     }
 
     private List<BattleRound> battleResult() {
-        return playerStats.battle(enemyStats);
+        List<BattleRound> rounds = playerStats.battle(enemyStats);
+        updateHealth();
+        decreaseDurabilityOfItems();
+        return rounds;
     }
 
     private void updateHealth() {
@@ -80,7 +80,7 @@ public class BattleFacade {
         enemy.setBattleStatisticsHealth(enemyStats.getHealth());
     }
 
-    private void decreaseDurabilityOfItems(Game game, List<BattleItem> battleItems) {
+    private void decreaseDurabilityOfItems() {
         for (BattleItem item : battleItems) {
             if (item instanceof InventoryItem)
                 item.use(game);
