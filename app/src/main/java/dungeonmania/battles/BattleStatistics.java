@@ -44,25 +44,56 @@ public class BattleStatistics {
     }
 
     public List<BattleRound> battle(BattleStatistics target) {
-        List<BattleRound> rounds = new ArrayList<>();
         if (invincible ^ target.invincible) {
-            double damageOnSelf = (invincible) ? 0 : getHealth();
-            double damageOnTarget = (target.invincible) ? 0 : target.getHealth();
-            setHealth((invincible) ? getHealth() : 0);
-            target.setHealth((target.invincible) ? target.getHealth() : 0);
-            rounds.add(new BattleRound(-damageOnSelf, -damageOnTarget));
-            return rounds;
+            return battleOneInvincible(target);
         }
 
+        return battleNeitherOrBothInvincible(target);
+    }
+
+    private List<BattleRound> battleOneInvincible(BattleStatistics target) {
+        List<BattleRound> rounds = new ArrayList<>();
+
+        double damageOnSelf = calculateInvincibleDamage(this);
+        double damageOnTarget = calculateInvincibleDamage(target);
+
+        updateInvincibleHealth(this);
+        updateInvincibleHealth(target);
+
+        rounds.add(new BattleRound(-damageOnSelf, -damageOnTarget));
+        return rounds;
+    }
+
+    private List<BattleRound> battleNeitherOrBothInvincible(BattleStatistics target) {
+        List<BattleRound> rounds = new ArrayList<>();
+
         while (getHealth() > 0 && target.getHealth() > 0) {
-            double damageOnSelf = target.getMagnifier() * (target.getAttack() - getDefence()) / getReducer();
-            double damageOnTarget = getMagnifier() * (getAttack() - target.getDefence())
-                    / target.getReducer();
-            setHealth(getHealth() - damageOnSelf);
-            target.setHealth(target.getHealth() - damageOnTarget);
+            double damageOnSelf = calculateDamage(target, this);
+            double damageOnTarget = calculateDamage(this, target);
+
+            updateHealth(this, damageOnSelf);
+            updateHealth(target, damageOnTarget);
+
             rounds.add(new BattleRound(-damageOnSelf, -damageOnTarget));
         }
+
         return rounds;
+    }
+
+    private static double calculateDamage(BattleStatistics target, BattleStatistics self) {
+        return target.getMagnifier() * (target.getAttack() - self.getDefence()) / self.getReducer();
+    }
+
+    private static double calculateInvincibleDamage(BattleStatistics self) {
+        return (self.invincible) ? 0 : self.getHealth();
+    }
+
+    private static void updateHealth(BattleStatistics self, double damage) {
+        self.setHealth(self.getHealth() - damage);
+    }
+
+    private static void updateInvincibleHealth(BattleStatistics self) {
+        self.setHealth((self.invincible) ? self.getHealth() : 0);
     }
 
     public static BattleStatistics applyBuff(BattleStatistics origin, BattleStatistics buff) {

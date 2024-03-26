@@ -5,4 +5,8 @@ package dungeonmania.battles;
  */
 public interface Battleable {
     public BattleStatistics getBattleStatistics();
+
+    public double getBattleStatisticsHealth();
+
+    public void setBattleStatisticsHealth(double health);
 }

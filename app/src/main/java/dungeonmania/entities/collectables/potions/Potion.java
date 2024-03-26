@@ -5,9 +5,9 @@ import dungeonmania.battles.BattleStatistics;
 // import dungeonmania.battles.BattleStatistics;
 // import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
+import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.collectables.Collectables;
 import dungeonmania.entities.playerState.PlayerState;
-import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
 public abstract class Potion extends Collectables {
@@ -18,6 +18,7 @@ public abstract class Potion extends Collectables {
         this.duration = duration;
     }
 
+    // TODO can we remove this?
     @Override
     public boolean canMoveOnto(GameMap map, Entity entity) {
         return true;
@@ -27,7 +28,6 @@ public abstract class Potion extends Collectables {
     // public void use(Game game) {
     //     return;
     // }
-
     public int getDuration() {
         return duration;
     }

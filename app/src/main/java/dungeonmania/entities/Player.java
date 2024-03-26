@@ -78,11 +78,6 @@ public class Player extends Entity implements Battleable, Overlappable {
         }
     }
 
-    @Override
-    public boolean canMoveOnto(GameMap map, Entity entity) {
-        return true;
-    }
-
     public Entity getEntity(String itemUsedId) {
         return inventory.getEntity(itemUsedId);
     }
@@ -156,6 +151,14 @@ public class Player extends Entity implements Battleable, Overlappable {
     @Override
     public BattleStatistics getBattleStatistics() {
         return battleStatistics;
+    }
+
+    public double getBattleStatisticsHealth() {
+        return battleStatistics.getHealth();
+    }
+
+    public void setBattleStatisticsHealth(double health) {
+        battleStatistics.setHealth(health);
     }
 
     public <T extends InventoryItem> int countEntityOfType(Class<T> itemType) {
