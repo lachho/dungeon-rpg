@@ -5,9 +5,9 @@ import dungeonmania.battles.BattleStatistics;
 // import dungeonmania.battles.BattleStatistics;
 // import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
-import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.collectables.Collectables;
 import dungeonmania.entities.playerState.PlayerState;
+import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
 public abstract class Potion extends Collectables {
