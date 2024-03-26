@@ -1,4 +1,4 @@
-package dungeonmania.entities.battleDecorator;
+package dungeonmania.battles.battleDecorator;
 
 import java.util.List;
 

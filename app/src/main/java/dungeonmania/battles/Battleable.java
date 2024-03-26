@@ -13,6 +13,6 @@ public interface Battleable {
     public void setBattleStatisticsHealth(double health);
 
     public void applyBuff(BattleStatistics origin);
-    
+
     public void use(Game game);
 }

@@ -1,4 +1,4 @@
-package dungeonmania.entities.battleDecorator;
+package dungeonmania.battles.battleDecorator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.BattleItem;
 
 public class BasePlayer implements BuffDecorator {
-    public BasePlayer() {}
+    public BasePlayer() { }
 
     @Override
     public void applyBuff(BattleStatistics origin) {

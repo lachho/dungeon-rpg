@@ -5,12 +5,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dungeonmania.Game;
+import dungeonmania.battles.battleDecorator.BasePlayer;
+import dungeonmania.battles.battleDecorator.BuffDecorator;
+import dungeonmania.battles.battleDecorator.DecoratedPlayer;
 import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
-import dungeonmania.entities.battleDecorator.BasePlayer;
-import dungeonmania.entities.battleDecorator.BuffDecorator;
-import dungeonmania.entities.battleDecorator.DecoratedPlayer;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.Mercenary;
 import dungeonmania.response.models.BattleResponse;
@@ -19,7 +19,7 @@ import dungeonmania.util.NameConverter;
 
 public class BattleFacade {
     private List<BattleResponse> battleResponses = new ArrayList<>();
-    // private List<BattleItem> battleItems; 
+    // private List<BattleItem> battleItems;
     private BattleStatistics playerStats;
     private BattleStatistics enemyStats;
     private Game game;
@@ -74,7 +74,7 @@ public class BattleFacade {
     }
 
     private List<BattleRound> battleResult() {
-        List<BattleRound> rounds = BattleResult.battle(playerStats, enemyStats);
+        List<BattleRound> rounds = playerStats.battle(enemyStats);
         updateHealth();
         decreaseDurabilityOfItems();
         return rounds;

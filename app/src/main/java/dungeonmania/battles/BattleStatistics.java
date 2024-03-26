@@ -1,5 +1,8 @@
 package dungeonmania.battles;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BattleStatistics {
     public static final double DEFAULT_DAMAGE_MAGNIFIER = 1.0;
     public static final double DEFAULT_PLAYER_DAMAGE_REDUCER = 10.0;
@@ -33,6 +36,59 @@ public class BattleStatistics {
 
     public BattleStatistics(BattleStatistics player) {
         this(player.getHealth(), player.getAttack(), player.getDefence(), player.getMagnifier(), player.getReducer());
+    }
+
+    public List<BattleRound> battle(BattleStatistics target) {
+        if (isInvincible() ^ target.isInvincible()) {
+            return battleOneInvincible(target);
+        }
+
+        return battleNeitherOrBothInvincible(target);
+    }
+
+    private List<BattleRound> battleOneInvincible(BattleStatistics target) {
+        List<BattleRound> rounds = new ArrayList<>();
+
+        double damageOnSelf = calculateInvincibleDamage(this);
+        double damageOnTarget = calculateInvincibleDamage(target);
+
+        updateInvincibleHealth(this);
+        updateInvincibleHealth(target);
+
+        rounds.add(new BattleRound(-damageOnSelf, -damageOnTarget));
+        return rounds;
+    }
+
+    private List<BattleRound> battleNeitherOrBothInvincible(BattleStatistics target) {
+        List<BattleRound> rounds = new ArrayList<>();
+
+        while (getHealth() > 0 && target.getHealth() > 0) {
+            double damageOnSelf = calculateDamage(target, this);
+            double damageOnTarget = calculateDamage(this, target);
+
+            updateHealth(this, damageOnSelf);
+            updateHealth(target, damageOnTarget);
+
+            rounds.add(new BattleRound(-damageOnSelf, -damageOnTarget));
+        }
+
+        return rounds;
+    }
+
+    private static double calculateDamage(BattleStatistics target, BattleStatistics self) {
+        return target.getMagnifier() * (target.getAttack() - self.getDefence()) / self.getReducer();
+    }
+
+    private static double calculateInvincibleDamage(BattleStatistics self) {
+        return (self.isInvincible()) ? 0 : self.getHealth();
+    }
+
+    private static void updateHealth(BattleStatistics self, double damage) {
+        self.setHealth(self.getHealth() - damage);
+    }
+
+    private static void updateInvincibleHealth(BattleStatistics self) {
+        self.setHealth((self.isInvincible()) ? self.getHealth() : 0);
     }
 
     public double getHealth() {

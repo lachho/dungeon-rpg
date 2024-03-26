@@ -3,7 +3,8 @@ package dungeonmania.battles;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BattleResult {
+//Deprecated MARKED FOR REMOVAL
+public class DEPRECATEDBattleResult {
     public static List<BattleRound> battle(BattleStatistics self, BattleStatistics target) {
         if (self.isInvincible() ^ target.isInvincible()) {
             return battleOneInvincible(self, target);

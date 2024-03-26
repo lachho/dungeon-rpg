@@ -1,4 +1,4 @@
-package dungeonmania.entities.battleDecorator;
+package dungeonmania.battles.battleDecorator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,7 @@ import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.BattleItem;
 
-public class DecoratedPlayer implements BuffDecorator{
+public class DecoratedPlayer implements BuffDecorator {
     private BuffDecorator decorator;
     private BattleItem item;
 
@@ -29,7 +29,7 @@ public class DecoratedPlayer implements BuffDecorator{
     }
 
     public List<BattleItem> getItems() {
-        List<BattleItem> items = new ArrayList<>(decorator.getItems()); 
+        List<BattleItem> items = new ArrayList<>(decorator.getItems());
         items.add(item);
         return items;
     }
