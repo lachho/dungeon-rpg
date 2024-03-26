@@ -75,13 +75,12 @@ public class Game {
         return this;
     }
 
-    // FIXME - demeter violation
     public void battle(Player player, Enemy enemy) {
         battleFacade.battle(this, player, enemy);
-        if (player.getBattleStatistics().getHealth() <= 0) {
+        if (player.getBattleStatisticsHealth() <= 0) {
             map.destroyEntity(player);
         }
-        if (enemy.getBattleStatistics().getHealth() <= 0) {
+        if (enemy.getBattleStatisticsHealth() <= 0) {
             map.destroyEntity(enemy);
         }
     }
