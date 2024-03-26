@@ -5,7 +5,7 @@ import java.util.List;
 
 public class BattleResult {
     public static List<BattleRound> battle(BattleStatistics self, BattleStatistics target) {
-        if (self.invincible ^ target.invincible) {
+        if (self.isInvincible() ^ target.isInvincible()) {
             return battleOneInvincible(self, target);
         }
 
@@ -46,7 +46,7 @@ public class BattleResult {
     }
 
     private static double calculateInvincibleDamage(BattleStatistics self) {
-        return (self.invincible) ? 0 : self.getHealth();
+        return (self.isInvincible()) ? 0 : self.getHealth();
     }
 
     private static void updateHealth(BattleStatistics self, double damage) {
@@ -54,13 +54,6 @@ public class BattleResult {
     }
 
     private static void updateInvincibleHealth(BattleStatistics self) {
-        self.setHealth((self.invincible) ? self.getHealth() : 0);
+        self.setHealth((self.isInvincible()) ? self.getHealth() : 0);
     }
-
-    public static BattleStatistics applyBuff(BattleStatistics origin, BattleStatistics buff) {
-        return new BattleStatistics(origin.health + buff.health, origin.attack + buff.attack,
-                origin.defence + buff.defence, origin.magnifier, origin.reducer, buff.isInvincible(), buff.isEnabled());
-    }
-
-
 }

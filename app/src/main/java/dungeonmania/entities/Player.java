@@ -7,7 +7,6 @@ import java.util.Queue;
 import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
-import dungeonmania.entities.battleDecorator.BattleEffect;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.potions.Potion;
@@ -21,7 +20,7 @@ import dungeonmania.map.GameMap;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
-public class Player extends Entity implements Battleable, Overlappable, BattleEffect {
+public class Player extends Entity implements Battleable, Overlappable {
     public static final double DEFAULT_ATTACK = 5.0;
     public static final double DEFAULT_HEALTH = 5.0;
     private BattleStatistics battleStatistics;

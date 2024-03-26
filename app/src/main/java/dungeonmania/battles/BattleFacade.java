@@ -8,28 +8,32 @@ import dungeonmania.Game;
 import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
+import dungeonmania.entities.battleDecorator.BasePlayer;
+import dungeonmania.entities.battleDecorator.BuffDecorator;
+import dungeonmania.entities.battleDecorator.DecoratedPlayer;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.Mercenary;
-import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.ResponseBuilder;
 import dungeonmania.util.NameConverter;
 
 public class BattleFacade {
     private List<BattleResponse> battleResponses = new ArrayList<>();
-    private List<BattleItem> battleItems; 
+    // private List<BattleItem> battleItems; 
     private BattleStatistics playerStats;
     private BattleStatistics enemyStats;
     private Game game;
     private Enemy enemy;
     private Player player;
+    private BuffDecorator buffs;
 
     public void battle(Game game, Player player, Enemy enemy) {
         // 0. init
         this.game = game;
         this.player = player;
         this.enemy = enemy;
-        battleItems = new ArrayList<>();
+        // battleItems = new ArrayList<>();
+        buffs = new BasePlayer();
         playerStats = new BattleStatistics(player.getBattleStatistics());
         enemyStats = enemy.getBattleStatistics();
         calculatePlayerBuff();
@@ -52,11 +56,13 @@ public class BattleFacade {
             // FIXME demeter violation
             for (BattleItem item : player.getInventory().getEntities(BattleItem.class)) {
                 // if (!(item instanceof Potion)) {
-                item.applyBuff(playerStats);
-                battleItems.add(item);
+                buffs = new DecoratedPlayer(buffs, item);
+                // item.applyBuff(playerStats);
+                // battleItems.add(item);
                 // }
             }
         }
+        buffs.applyBuff(playerStats);
         calculateMercenaryBuff();
     }
 
@@ -64,12 +70,11 @@ public class BattleFacade {
         List<Mercenary> mercs = game.getMap().getEntities(Mercenary.class);
         for (Mercenary merc : mercs) {
             if (merc.isAllied()) merc.applyBuff(playerStats);
-            // playerStats = BattleStatistics.applyBuff(playerStats, merc .getBattleStatistics());
         }
     }
 
     private List<BattleRound> battleResult() {
-        List<BattleRound> rounds = playerStats.battle(enemyStats);
+        List<BattleRound> rounds = BattleResult.battle(playerStats, enemyStats);
         updateHealth();
         decreaseDurabilityOfItems();
         return rounds;
@@ -81,17 +86,18 @@ public class BattleFacade {
     }
 
     private void decreaseDurabilityOfItems() {
-        for (BattleItem item : battleItems) {
-            if (item instanceof InventoryItem)
-                item.use(game);
-        }
+        // for (BattleItem item : battleItems) {
+        //     if (item instanceof InventoryItem)
+        //         item.use(game);
+        // }
+        buffs.use(game);
     }
 
     private void logBattleResponse(List<BattleRound> rounds) {
         battleResponses
                 .add(new BattleResponse(NameConverter.toSnakeCase(enemy),
                         rounds.stream().map(ResponseBuilder::getRoundResponse).collect(Collectors.toList()),
-                        battleItems.stream().map(Entity.class::cast).map(ResponseBuilder::getItemResponse)
+                        buffs.getItems().stream().map(Entity.class::cast).map(ResponseBuilder::getItemResponse)
                                 .collect(Collectors.toList()),
                         player.getBattleStatisticsHealth(), enemy.getBattleStatisticsHealth()));
     }
