@@ -17,7 +17,7 @@ import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvincible;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvisibleAndZombieToast;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveMercenary;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveStrategy;
-import dungeonmania.map.GameMap;
+// import dungeonmania.map.GameMap;
 // import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
