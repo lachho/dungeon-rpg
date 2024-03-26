@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Switch;
+import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.map.GameMap;
 
 public class Bomb extends Collectables {
@@ -55,7 +56,7 @@ public class Bomb extends Collectables {
     }
 
     public void onPutDown(GameMap map, Position p) {
-        translate(Position.calculatePositionBetween(getPosition(), p));
+        setPosition(p);
         map.addEntity(this);
         this.state = State.PLACED;
         List<Position> adjPosList = getPosition().getCardinallyAdjacentPositions();
