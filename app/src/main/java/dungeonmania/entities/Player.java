@@ -162,6 +162,14 @@ public class Player extends Entity implements Battleable, Overlappable {
         return battleStatistics;
     }
 
+    public double getBattleStatisticsHealth() {
+        return battleStatistics.getHealth();
+    }
+
+    public void setBattleStatisticsHealth(double health) {
+        battleStatistics.setHealth(health);
+    }
+
     public <T extends InventoryItem> int countEntityOfType(Class<T> itemType) {
         return inventory.count(itemType);
     }
