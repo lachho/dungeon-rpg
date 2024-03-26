@@ -27,6 +27,7 @@ public class Portal extends Entity implements Overlappable {
         return true;
     }
 
+    // FIXME DEMETER
     public boolean canTeleportTo(GameMap map, Entity entity) {
         List<Position> neighbours = getPosition().getCardinallyAdjacentPositions();
         return neighbours.stream().allMatch(n -> map.canMoveTo(entity, n));
@@ -39,6 +40,7 @@ public class Portal extends Entity implements Overlappable {
             doTeleport(game.getMap(), entity);
     }
 
+    // FIXME DEMETER
     private void doTeleport(GameMap map, Entity entity) {
         Position destination = pair.getPosition().getCardinallyAdjacentPositions().stream()
                 .filter(dest -> map.canMoveTo(entity, dest)).findAny().orElse(null);
@@ -51,6 +53,7 @@ public class Portal extends Entity implements Overlappable {
         return color.toString();
     }
 
+    // FIXME DEMETER
     public List<Position> getDestPositions(GameMap map, Entity entity) {
         return pair == null ? null
                 : pair.getPosition().getAdjacentPositions().stream().filter(p -> map.canMoveTo(entity, p))

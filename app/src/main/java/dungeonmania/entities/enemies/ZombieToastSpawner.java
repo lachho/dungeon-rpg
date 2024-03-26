@@ -22,6 +22,8 @@ public class ZombieToastSpawner extends Entity implements Interactable, Destroya
         game.unsubscribe(getId());
     }
 
+
+    // FIXME DEMETER
     @Override
     public void interact(Player player, Game game) {
         player.getInventory().getWeapon().use(game);

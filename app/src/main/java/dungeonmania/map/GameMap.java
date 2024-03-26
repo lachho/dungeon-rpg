@@ -220,6 +220,7 @@ public class GameMap {
         }
     }
 
+    // FIXME DEMETER
     public Entity getEntity(String id) {
         Entity res = null;
         for (Map.Entry<Position, GraphNode> entry : nodes.entrySet()) {

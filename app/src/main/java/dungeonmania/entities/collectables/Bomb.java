@@ -50,6 +50,7 @@ public class Bomb extends Collectables {
         this.state = State.INVENTORY;
     }
 
+    // FIXME DEMETER
     public void onPutDown(GameMap map, Position p) {
         translate(Position.calculatePositionBetween(getPosition(), p));
         map.addEntity(this);
@@ -63,6 +64,7 @@ public class Bomb extends Collectables {
         });
     }
 
+    // FIXME DEMETER
     public void explode(GameMap map) {
         int x = getPosition().getX();
         int y = getPosition().getY();
