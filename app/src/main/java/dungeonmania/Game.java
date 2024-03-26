@@ -236,4 +236,8 @@ public class Game {
     public void destroyEntity(Entity entity) {
         map.destroyEntity(entity);
     }
+
+    public <T extends Entity> List<T> getMapEntities(Class<T> type) {
+        return map.getEntities(type);
+    }
 }
