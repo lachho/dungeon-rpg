@@ -38,7 +38,7 @@ public class Bomb extends Collectables {
     }
 
     @Override
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (state != State.SPAWNED)
             return;
         if (entity instanceof Player) {

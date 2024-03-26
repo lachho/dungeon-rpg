@@ -31,7 +31,7 @@ public class Switch extends Entity implements Moveable, Overlappable {
         bombs.remove(b);
     }
 
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (entity instanceof Boulder) {
             activated = true;
             bombs.stream().forEach(b -> b.notify(game.getMap()));
