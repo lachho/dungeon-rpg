@@ -49,7 +49,6 @@ public class Game {
         this.id = UUID.randomUUID().toString();
         map.init();
         this.tickCount = 0;
-        player = map.getPlayer();
         register(() -> player.onTick(tickCount), PLAYER_MOVEMENT, "potionQueue");
     }
 
@@ -216,6 +215,10 @@ public class Game {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     public BattleFacade getBattleFacade() {

@@ -18,7 +18,8 @@ public class ZombieToast extends Enemy {
 
     @Override
     public void move(Game game) {
-        if (game.getMap().getPlayer().getEffectivePotion() instanceof InvincibilityPotion) {
+        // FIXME - demeter
+        if (game.getPlayer().getEffectivePotion() instanceof InvincibilityPotion) {
             moveStrategy = new MoveInvincible();
         } else {
             moveStrategy = new MoveInvisibleAndZombieToast();

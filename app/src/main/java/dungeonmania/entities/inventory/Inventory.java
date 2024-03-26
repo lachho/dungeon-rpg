@@ -51,6 +51,7 @@ public class Inventory {
         List<Treasure> treasure = getEntities(Treasure.class);
         List<Key> keys = getEntities(Key.class);
 
+        // FIXME REFACTOR
         if (wood.size() >= 1 && arrows.size() >= 3 && !forceShield) {
             if (remove) {
                 items.remove(wood.get(0));
