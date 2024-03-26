@@ -22,8 +22,8 @@ public abstract class PlayerState {
 
     public abstract String getState();
 
-    public BattleStatistics applyBuff(BattleStatistics origin) {
-        return potion.applyBuff(origin);
+    public void applyBuff(BattleStatistics origin) {
+        potion.applyBuff(origin);
     }
 
     // public boolean isInvincible() {

@@ -29,31 +29,36 @@ public class BattleStatistics {
 
     public BattleStatistics(double health, double attack, double defence, double attackMagnifier, double damageReducer,
             boolean isInvincible, boolean isEnabled) {
-        this.health = health;
-        this.attack = attack;
-        this.defence = defence;
-        this.magnifier = attackMagnifier;
-        this.reducer = damageReducer;
+        this(health, attack, defence, attackMagnifier, damageReducer);
+        // this.health = health;
+        // this.attack = attack;
+        // this.defence = defence;
+        // this.magnifier = attackMagnifier;
+        // this.reducer = damageReducer;
         this.invincible = isInvincible;
         this.enabled = isEnabled;
     }
 
-    public static List<BattleRound> battle(BattleStatistics self, BattleStatistics target) {
+    public BattleStatistics(BattleStatistics player) {
+        this(player.getHealth(), player.getAttack(), player.getDefence(), player.getMagnifier(), player.getReducer());
+    }
+
+    public List<BattleRound> battle(BattleStatistics target) {
         List<BattleRound> rounds = new ArrayList<>();
-        if (self.invincible ^ target.invincible) {
-            double damageOnSelf = (self.invincible) ? 0 : self.getHealth();
+        if (invincible ^ target.invincible) {
+            double damageOnSelf = (invincible) ? 0 : getHealth();
             double damageOnTarget = (target.invincible) ? 0 : target.getHealth();
-            self.setHealth((self.invincible) ? self.getHealth() : 0);
+            setHealth((invincible) ? getHealth() : 0);
             target.setHealth((target.invincible) ? target.getHealth() : 0);
             rounds.add(new BattleRound(-damageOnSelf, -damageOnTarget));
             return rounds;
         }
 
-        while (self.getHealth() > 0 && target.getHealth() > 0) {
-            double damageOnSelf = target.getMagnifier() * (target.getAttack() - self.getDefence()) / self.getReducer();
-            double damageOnTarget = self.getMagnifier() * (self.getAttack() - target.getDefence())
+        while (getHealth() > 0 && target.getHealth() > 0) {
+            double damageOnSelf = target.getMagnifier() * (target.getAttack() - getDefence()) / getReducer();
+            double damageOnTarget = getMagnifier() * (getAttack() - target.getDefence())
                     / target.getReducer();
-            self.setHealth(self.getHealth() - damageOnSelf);
+            setHealth(getHealth() - damageOnSelf);
             target.setHealth(target.getHealth() - damageOnTarget);
             rounds.add(new BattleRound(-damageOnSelf, -damageOnTarget));
         }
@@ -65,12 +70,20 @@ public class BattleStatistics {
                 origin.defence + buff.defence, origin.magnifier, origin.reducer, buff.isInvincible(), buff.isEnabled());
     }
 
+    public void applyBuff(BattleStatistics origin) {
+
+    }
+
     public double getHealth() {
         return health;
     }
 
     public void setHealth(double health) {
         this.health = health;
+    }
+
+    public void addHealth(double health) {
+        this.health += health;
     }
 
     public double getAttack() {
@@ -81,8 +94,16 @@ public class BattleStatistics {
         this.attack = attack;
     }
 
+    public void addAttack(double attack) {
+        this.attack += attack;
+    }
+
     public double getDefence() {
         return defence;
+    }
+
+    public void addDefence(double defence) {
+        this.defence += defence;
     }
 
     public void setDefence(double defence) {

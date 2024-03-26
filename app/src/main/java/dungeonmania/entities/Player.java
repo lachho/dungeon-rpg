@@ -97,10 +97,6 @@ public class Player extends Entity implements Battleable, Overlappable {
         return inventory;
     }
 
-    public Potion getEffectivePotion() {
-        return state.getPotion();
-    }
-
     public <T extends InventoryItem> void use(Class<T> itemType) {
         T item = inventory.getFirst(itemType);
         if (item != null)
@@ -166,9 +162,9 @@ public class Player extends Entity implements Battleable, Overlappable {
         return inventory.count(itemType);
     }
 
-    public BattleStatistics applyBuff(BattleStatistics origin) {
-        if (getState().equals("Base")) return origin;
-        return state.applyBuff(origin);
+    public void applyBuff(BattleStatistics origin) {
+
+        if (!getState().equals("Base")) state.applyBuff(origin);
 
         // if (state.isInvincible()) {
         //     return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));

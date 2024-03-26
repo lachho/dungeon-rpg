@@ -25,41 +25,38 @@ public class BattleFacade {
         double initialEnemyHealth = enemy.getBattleStatistics().getHealth();
         String enemyString = NameConverter.toSnakeCase(enemy);
 
-
         // 1. apply buff provided by the game and player's inventory
         // getting buffing amount
         List<BattleItem> battleItems = new ArrayList<>();
-        BattleStatistics playerBuff = new BattleStatistics(0, 0, 0, 1, 1);
+        BattleStatistics playerStats = new BattleStatistics(player.getBattleStatistics());
 
-        Potion effectivePotion = player.getEffectivePotion();
-        if (effectivePotion != null) {
-            playerBuff = player.applyBuff(playerBuff);
+        if (player.getState() != "Base") {
+            player.applyBuff(playerStats);
         } else {
             for (BattleItem item : player.getInventory().getEntities(BattleItem.class)) {
-                if (item instanceof Potion) continue;
-                playerBuff = item.applyBuff(playerBuff);
+                // if (!(item instanceof Potion)) {
+                item.applyBuff(playerStats);
                 battleItems.add(item);
+                // }
             }
         }
 
         List<Mercenary> mercs = game.getMap().getEntities(Mercenary.class);
         for (Mercenary merc : mercs) {
-            if (!merc.isAllied()) continue;
-            playerBuff = BattleStatistics.applyBuff(playerBuff, merc.getBattleStatistics());
+            if (merc.isAllied()) merc.applyBuff(playerStats);
+            // playerStats = BattleStatistics.applyBuff(playerStats, merc .getBattleStatistics());
         }
 
         // 2. Battle the two stats
-        BattleStatistics playerBaseStatistics = player.getBattleStatistics();
-        BattleStatistics enemyBaseStatistics = enemy.getBattleStatistics();
-        BattleStatistics playerBattleStatistics = BattleStatistics.applyBuff(playerBaseStatistics, playerBuff);
-        BattleStatistics enemyBattleStatistics = enemyBaseStatistics;
-        if (!playerBattleStatistics.isEnabled() || !enemyBaseStatistics.isEnabled())
+        // BattleStatistics playerBattleStatistics = BattleStatistics.applyBuff(player.getBattleStatistics(), playerStats);
+        BattleStatistics enemyStats = enemy.getBattleStatistics();
+        if (!playerStats.isEnabled() || !enemyStats.isEnabled())
             return;
-        List<BattleRound> rounds = BattleStatistics.battle(playerBattleStatistics, enemyBattleStatistics);
+        List<BattleRound> rounds = playerStats.battle(enemyStats);
 
         // 3. update health to the actual statistics
-        player.getBattleStatistics().setHealth(playerBattleStatistics.getHealth());
-        enemy.getBattleStatistics().setHealth(enemyBattleStatistics.getHealth());
+        player.getBattleStatistics().setHealth(playerStats.getHealth());
+        enemy.getBattleStatistics().setHealth(enemyStats.getHealth());
 
         // 4. call to decrease durability of items
         for (BattleItem item : battleItems) {

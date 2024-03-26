@@ -22,8 +22,9 @@ public class Shield extends Buildable {
     }
 
     @Override
-    public BattleStatistics applyBuff(BattleStatistics origin) {
-        return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, defence, 1, 1));
+    public void applyBuff(BattleStatistics origin) {
+        origin.addDefence(defence);
+        // return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, defence, 1, 1));
     }
 
     @Override
