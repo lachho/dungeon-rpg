@@ -3,6 +3,7 @@ package dungeonmania.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import dungeonmania.Game;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
@@ -35,14 +36,14 @@ public class Switch extends Entity implements Moveable, Overlappable {
         return true;
     }
 
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (entity instanceof Boulder) {
             activated = true;
-            bombs.stream().forEach(b -> b.notify(map));
+            bombs.stream().forEach(b -> b.notify(game.getMap()));
         }
     }
 
-    public void onMovedAway(GameMap map, Entity entity) {
+    public void onMovedAway(Game game, Entity entity) {
         if (entity instanceof Boulder) {
             activated = false;
         }

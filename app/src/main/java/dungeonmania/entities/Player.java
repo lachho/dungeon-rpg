@@ -17,6 +17,7 @@ import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.entities.playerState.BaseState;
 import dungeonmania.entities.playerState.PlayerState;
 import dungeonmania.map.GameMap;
+import dungeonmania.Game;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -69,13 +70,13 @@ public class Player extends Entity implements Battleable, Overlappable {
         map.moveTo(this, Position.translateBy(this.getPosition(), direction));
     }
 
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (entity instanceof Enemy) {
             if (entity instanceof Mercenary) {
                 if (((Mercenary) entity).isAllied())
                     return;
             }
-            map.getGame().battle(this, (Enemy) entity);
+            game.battle(this, (Enemy) entity);
         }
     }
 

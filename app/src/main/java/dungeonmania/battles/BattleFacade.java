@@ -56,6 +56,7 @@ public class BattleFacade {
         return calculateMercenaryBuff(playerBuff, game);
     }
 
+    // FIXME demeter violation
     private BattleStatistics calculateMercenaryBuff(BattleStatistics playerBuff, Game game) {
         List<Mercenary> mercs = game.getMap().getEntities(Mercenary.class);
         for (Mercenary merc : mercs) {

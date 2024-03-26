@@ -228,4 +228,12 @@ public class Game {
     public void moveTo(Entity entity, Position position) {
         map.moveTo(entity, position);
     }
+
+    public void moveTo(Entity entity, Direction direction) {
+        map.moveTo(entity, direction);
+    }
+
+    public void destroyEntity(Entity entity) {
+        map.destroyEntity(entity);
+    }
 }
