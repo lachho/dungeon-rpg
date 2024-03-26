@@ -239,4 +239,8 @@ public class Game {
     public <T extends Entity> List<T> getMapEntities(Class<T> type) {
         return map.getEntities(type);
     }
+
+    public String getPlayerState() {
+        return player.getState();
+    }
 }
