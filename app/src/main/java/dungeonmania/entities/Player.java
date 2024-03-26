@@ -171,7 +171,8 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public BattleStatistics applyBuff(BattleStatistics origin) {
-        if (getState().equals("Base")) return origin;
+        if (getState().equals("Base"))
+            return origin;
         return state.applyBuff(origin);
 
         // if (state.isInvincible()) {
@@ -183,5 +184,9 @@ public class Player extends Entity implements Battleable, Overlappable {
 
     public String getState() {
         return state.getState();
+    }
+
+    public <T> List<T> getPlayerInventoryEntities(Class<T> clz) {
+        return inventory.getEntities(clz);
     }
 }

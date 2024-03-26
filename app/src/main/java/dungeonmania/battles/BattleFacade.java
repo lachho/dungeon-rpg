@@ -43,8 +43,7 @@ public class BattleFacade {
         if (effectivePotion != null) {
             playerBuff = player.applyBuff(playerBuff);
         } else {
-            // FIXME demeter violation
-            for (BattleItem item : player.getInventory().getEntities(BattleItem.class)) {
+            for (BattleItem item : player.getPlayerInventoryEntities(BattleItem.class)) {
                 if (item instanceof Potion)
                     continue;
 
