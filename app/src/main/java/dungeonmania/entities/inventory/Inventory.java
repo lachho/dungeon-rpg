@@ -111,6 +111,7 @@ public class Inventory {
         return getFirst(Sword.class) != null || getFirst(Bow.class) != null;
     }
 
+    // FIXME- getWeapon()/useWeapon() is only used in ZombieToastSpawner - bad inheritance
     public BattleItem getWeapon() {
         BattleItem weapon = getFirst(Sword.class);
         if (weapon == null)

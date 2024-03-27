@@ -220,7 +220,6 @@ public class GameMap {
         }
     }
 
-    // FIXME DEMETER
     public Entity getEntity(String id) {
         Entity res = null;
         for (Map.Entry<Position, GraphNode> entry : nodes.entrySet()) {
@@ -248,7 +247,6 @@ public class GameMap {
     public <T extends Entity> List<T> getEntities(Class<T> type) {
         return getEntities().stream().filter(type::isInstance).map(type::cast).collect(Collectors.toList());
     }
-
 
     public Game getGame() {
         return game;
