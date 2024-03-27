@@ -15,13 +15,12 @@ public class ZombieToastSpawner extends Entity implements Interactable, Destroya
     }
 
     public void spawn(Game game) {
-        game.getEntityFactory().spawnZombie(game, this);
+        game.spawnZombie(game, this);
     }
 
     public void onDestroy(Game game) {
         game.unsubscribe(getId());
     }
-
 
     // FIXME DEMETER
     @Override

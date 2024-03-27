@@ -12,6 +12,7 @@ import dungeonmania.entities.Player;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
+import dungeonmania.entities.enemies.ZombieToastSpawner;
 import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.Goal;
@@ -247,5 +248,9 @@ public class Game {
 
     public void removePlayerInventoryItem(InventoryItem item) {
         player.remove(item);
+    }
+
+    public void spawnZombie(Game game, ZombieToastSpawner zombieToastSpawner) {
+        entityFactory.spawnZombie(game, zombieToastSpawner);
     }
 }
