@@ -93,6 +93,10 @@ public class Player extends Entity implements Battleable, Overlappable {
         return inventory;
     }
 
+    public void useWeapon(Game game) {
+        inventory.useWeapon(game);
+    }
+
     public Potion getEffectivePotion() {
         return state.getPotion();
     }
@@ -189,4 +193,5 @@ public class Player extends Entity implements Battleable, Overlappable {
     public <T> List<T> getPlayerInventoryEntities(Class<T> clz) {
         return inventory.getEntities(clz);
     }
+
 }
