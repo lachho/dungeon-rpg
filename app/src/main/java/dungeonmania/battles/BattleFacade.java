@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dungeonmania.Game;
-import dungeonmania.battles.battleDecorator.BasePlayer;
 import dungeonmania.battles.battleDecorator.BuffDecorator;
 import dungeonmania.battles.battleDecorator.DecoratedPlayer;
 import dungeonmania.entities.BattleItem;
@@ -33,7 +32,7 @@ public class BattleFacade {
         this.player = player;
         this.enemy = enemy;
         // battleItems = new ArrayList<>();
-        buffs = new BasePlayer();
+        buffs = new DecoratedPlayer();
         playerStats = new BattleStatistics(player.getBattleStatistics());
         enemyStats = enemy.getBattleStatistics();
         calculatePlayerBuff();

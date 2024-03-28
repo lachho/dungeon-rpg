@@ -11,6 +11,11 @@ public class DecoratedPlayer implements BuffDecorator {
     private BuffDecorator decorator;
     private BattleItem item;
 
+    public DecoratedPlayer() {
+        decorator = null;
+        item = null;
+    }
+
     public DecoratedPlayer(BuffDecorator decorator, BattleItem item) {
         this.decorator = decorator;
         this.item = item;
@@ -18,19 +23,26 @@ public class DecoratedPlayer implements BuffDecorator {
 
     @Override
     public void applyBuff(BattleStatistics origin) {
-        decorator.applyBuff(origin);
-        item.applyBuff(origin);
+        if (decorator != null) {
+            decorator.applyBuff(origin);
+            item.applyBuff(origin);
+        }
     }
 
     @Override
     public void use(Game game) {
-        decorator.use(game);
-        item.use(game);
+        if (decorator != null) {
+            decorator.use(game);
+            item.use(game);
+        }
     }
 
     public List<BattleItem> getItems() {
-        List<BattleItem> items = new ArrayList<>(decorator.getItems());
-        items.add(item);
-        return items;
+        if (item != null) {
+            List<BattleItem> items = new ArrayList<>(decorator.getItems());
+            items.add(item);
+            return items;
+        }
+        return new ArrayList<>();
     }
 }

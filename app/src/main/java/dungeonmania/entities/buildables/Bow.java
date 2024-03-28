@@ -21,7 +21,7 @@ public class Bow extends Buildable {
 
     @Override
     public void applyBuff(BattleStatistics origin) {
-        origin.setMagnifier(2);
+        origin.addMagnifier(2);
         // return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 2, 1));
     }
 

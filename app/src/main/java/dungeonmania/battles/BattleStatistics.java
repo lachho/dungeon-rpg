@@ -134,6 +134,9 @@ public class BattleStatistics {
     public void setMagnifier(double magnifier) {
         this.magnifier = magnifier;
     }
+    public void addMagnifier(double magnifier) {
+        this.magnifier *= magnifier;
+    }
 
     public double getReducer() {
         return reducer;
