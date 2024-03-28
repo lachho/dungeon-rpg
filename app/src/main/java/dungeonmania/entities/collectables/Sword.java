@@ -30,8 +30,9 @@ public class Sword extends Collectables implements BattleItem {
     }
 
     @Override
-    public BattleStatistics applyBuff(BattleStatistics origin) {
-        return BattleStatistics.applyBuff(origin, new BattleStatistics(0, attack, 0, 1, 1));
+    public void applyBuff(BattleStatistics origin) {
+        origin.addAttack(attack);
+        //return BattleStatistics.applyBuff(origin, new BattleStatistics(0, attack, 0, 1, 1));
     }
 
     @Override
