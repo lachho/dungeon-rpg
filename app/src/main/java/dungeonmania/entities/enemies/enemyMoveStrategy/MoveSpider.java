@@ -29,6 +29,7 @@ public class MoveSpider implements MoveStrategy {
         entities = game.getEntities(nextPos);
 
         if (isValidMovePosition(game, nextPos, entities, spider)) {
+            // FIXME - demeter
             map.moveTo(enemy, nextPos);
             spider.updateNextPosition();
         }

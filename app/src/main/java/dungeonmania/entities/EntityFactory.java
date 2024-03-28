@@ -73,6 +73,7 @@ public class EntityFactory {
     }
 
     public void spawnZombie(Game game, ZombieToastSpawner spawner) {
+        // FIXME DEMETER
         GameMap map = game.getMap();
 
         int tick = game.getTick();
