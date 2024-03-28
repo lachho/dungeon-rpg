@@ -113,8 +113,12 @@ public class Mercenary extends Enemy implements Interactable {
 
     @Override
     public BattleStatistics getBattleStatistics() {
-        if (!allied)
-            return super.getBattleStatistics();
-        return new BattleStatistics(0, allyAttack, allyDefence, 1, 1);
+        // if (allied) return new BattleStatistics(0, allyAttack, allyDefence, 1, 1);
+        return super.getBattleStatistics();
+    }
+
+    public void applyBuff(BattleStatistics origin) {
+        origin.addAttack(allyAttack);
+        origin.addDefence(allyDefence);
     }
 }

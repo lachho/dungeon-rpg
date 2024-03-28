@@ -5,100 +5,100 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dungeonmania.Game;
+import dungeonmania.battles.battleDecorator.BuffDecorator;
+import dungeonmania.battles.battleDecorator.DecoratedPlayer;
 import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
-import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.Mercenary;
-import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.ResponseBuilder;
 import dungeonmania.util.NameConverter;
 
 public class BattleFacade {
     private List<BattleResponse> battleResponses = new ArrayList<>();
+    // private List<BattleItem> battleItems;
+    private BattleStatistics playerStats;
+    private BattleStatistics enemyStats;
+    private Game game;
+    private Enemy enemy;
+    private Player player;
+    private BuffDecorator buffs;
 
     public void battle(Game game, Player player, Enemy enemy) {
-        List<BattleItem> battleItems = new ArrayList<>();
-        BattleStatistics playerBuff = new BattleStatistics(0, 0, 0, 1, 1);
-        playerBuff = calculatePlayerBuff(battleItems, playerBuff, player, game);
+        // 0. init
+        this.game = game;
+        this.player = player;
+        this.enemy = enemy;
+        // battleItems = new ArrayList<>();
+        buffs = new DecoratedPlayer();
+        playerStats = new BattleStatistics(player.getBattleStatistics());
+        enemyStats = enemy.getBattleStatistics();
+        calculatePlayerBuff();
 
-        List<BattleRound> battleRounds = battleTwoStatistics(player, enemy, playerBuff);
-        if (battleRounds == null)
+        if (!playerStats.isEnabled() || !enemyStats.isEnabled())
             return;
 
-        decreaseDurabilityOfItems(game, battleItems);
-
-        logBattleResponse(player, enemy, battleRounds, battleItems);
+        logBattleResponse(battleResult());
     }
 
     public List<BattleResponse> getBattleResponses() {
         return battleResponses;
     }
 
-    private BattleStatistics calculatePlayerBuff(List<BattleItem> battleItems, BattleStatistics playerBuff,
-            Player player, Game game) {
-        Potion effectivePotion = player.getEffectivePotion();
-        if (effectivePotion != null) {
-            playerBuff = player.applyBuff(playerBuff);
-        } else {
-            for (BattleItem item : player.getPlayerInventoryEntities(BattleItem.class)) {
-                if (item instanceof Potion)
-                    continue;
+    private void calculatePlayerBuff() {
 
-                playerBuff = item.applyBuff(playerBuff);
-                battleItems.add(item);
+        if (player.getState() != "Base") {
+            player.applyBuff(playerStats);
+        } else {
+            // FIXME demeter violation
+            for (BattleItem item : player.getInventory().getEntities(BattleItem.class)) {
+                // if (!(item instanceof Potion)) {
+                buffs = new DecoratedPlayer(buffs, item);
+                // item.applyBuff(playerStats);
+                // battleItems.add(item);
+                // }
             }
         }
-
-        return calculateMercenaryBuff(playerBuff, game);
+        buffs.applyBuff(playerStats);
+        calculateMercenaryBuff();
     }
 
-    private BattleStatistics calculateMercenaryBuff(BattleStatistics playerBuff, Game game) {
-        List<Mercenary> mercs = game.getMapEntities(Mercenary.class);
+    private void calculateMercenaryBuff() {
+        List<Mercenary> mercs = game.getMap().getEntities(Mercenary.class);
         for (Mercenary merc : mercs) {
-            if (!merc.isAllied())
-                continue;
-            playerBuff = BattleStatistics.applyBuff(playerBuff, merc.getBattleStatistics());
-        }
-
-        return playerBuff;
-    }
-
-    private List<BattleRound> battleTwoStatistics(Player player, Enemy enemy, BattleStatistics playerBuff) {
-        BattleStatistics playerBaseStatistics = player.getBattleStatistics();
-        BattleStatistics enemyBaseStatistics = enemy.getBattleStatistics();
-        BattleStatistics playerBattleStatistics = BattleStatistics.applyBuff(playerBaseStatistics, playerBuff);
-        BattleStatistics enemyBattleStatistics = enemyBaseStatistics;
-        if (!playerBattleStatistics.isEnabled() || !enemyBaseStatistics.isEnabled())
-            return null;
-
-        List<BattleRound> battleRounds = BattleStatistics.battle(playerBattleStatistics, enemyBattleStatistics);
-
-        updateHealth(player, enemy, playerBattleStatistics, enemyBattleStatistics);
-        return battleRounds;
-    }
-
-    private void updateHealth(Player player, Enemy enemy, BattleStatistics playerBattleStatistics,
-            BattleStatistics enemyBattleStatistics) {
-        player.setBattleStatisticsHealth(playerBattleStatistics.getHealth());
-        enemy.setBattleStatisticsHealth(enemyBattleStatistics.getHealth());
-    }
-
-    private void decreaseDurabilityOfItems(Game game, List<BattleItem> battleItems) {
-        for (BattleItem item : battleItems) {
-            if (item instanceof InventoryItem)
-                item.use(game);
+            if (merc.isAllied()) merc.applyBuff(playerStats);
         }
     }
 
-    private void logBattleResponse(Player player, Enemy enemy, List<BattleRound> rounds, List<BattleItem> battleItems) {
+    private List<BattleRound> battleResult() {
+        List<BattleRound> rounds = playerStats.battle(enemyStats);
+        updateHealth();
+        decreaseDurabilityOfItems();
+        return rounds;
+    }
+
+    private void updateHealth() {
+        player.setBattleStatisticsHealth(playerStats.getHealth());
+        enemy.setBattleStatisticsHealth(enemyStats.getHealth());
+    }
+
+    private void decreaseDurabilityOfItems() {
+        // for (BattleItem item : battleItems) {
+        //     if (item instanceof InventoryItem)
+        //         item.use(game);
+        // }
+        buffs.use(game);
+    }
+
+    private void logBattleResponse(List<BattleRound> rounds) {
         battleResponses
                 .add(new BattleResponse(NameConverter.toSnakeCase(enemy),
                         rounds.stream().map(ResponseBuilder::getRoundResponse).collect(Collectors.toList()),
-                        battleItems.stream().map(Entity.class::cast).map(ResponseBuilder::getItemResponse)
+                        buffs.getItems().stream().map(Entity.class::cast).map(ResponseBuilder::getItemResponse)
                                 .collect(Collectors.toList()),
                         player.getBattleStatisticsHealth(), enemy.getBattleStatisticsHealth()));
     }
+
 }

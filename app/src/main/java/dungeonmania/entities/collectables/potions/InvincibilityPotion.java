@@ -12,9 +12,9 @@ public class InvincibilityPotion extends Potion {
         super(position, duration);
     }
 
-    @Override
-    public BattleStatistics applyBuff(BattleStatistics origin) {
-        return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));
+    public void applyBuff(BattleStatistics origin) {
+        origin.setInvincible(true);
+        // return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));
     }
 
     @Override
