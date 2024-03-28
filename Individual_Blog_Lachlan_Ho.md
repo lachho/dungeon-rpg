@@ -15,6 +15,8 @@
 
 - Refactored Player State pattern
 - Decoupled potion from player
+- Refactored BattleStatistics applyBuff updates to reduce coupling
+- Refactored BattleItems to use a decorator pattern
 
 ## Week 8
 
