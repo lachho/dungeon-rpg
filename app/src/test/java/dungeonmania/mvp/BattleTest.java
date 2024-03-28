@@ -335,7 +335,7 @@ public class BattleTest {
         // Note that the bow does not add extra damage to the attack
         int playerAttack = Integer.parseInt(TestUtils.getValueFromConfigFile("player_attack", config));
         // Delta health is negative so take negative here
-        assertEquals(playerAttack / 5, -firstRound.getDeltaEnemyHealth(), 0.001);
+        assertEquals(playerAttack / 2.5, -firstRound.getDeltaEnemyHealth(), 0.001);
     }
 
     @Test

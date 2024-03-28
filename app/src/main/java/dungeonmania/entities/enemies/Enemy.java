@@ -29,10 +29,12 @@ public abstract class Enemy extends Entity implements Battleable, Destroyable, O
         return battleStatistics;
     }
 
+    @Override
     public double getBattleStatisticsHealth() {
         return battleStatistics.getHealth();
     }
 
+    @Override
     public void setBattleStatisticsHealth(double health) {
         battleStatistics.setHealth(health);
     }
@@ -50,4 +52,14 @@ public abstract class Enemy extends Entity implements Battleable, Destroyable, O
     }
 
     public abstract void move(Game game);
+
+    @Override
+    public void applyBuff(BattleStatistics origin) {
+        return;
+    }
+
+    @Override
+    public void use(Game game) {
+        return;
+    }
 }

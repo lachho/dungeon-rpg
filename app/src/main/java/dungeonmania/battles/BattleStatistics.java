@@ -29,44 +29,44 @@ public class BattleStatistics {
 
     public BattleStatistics(double health, double attack, double defence, double attackMagnifier, double damageReducer,
             boolean isInvincible, boolean isEnabled) {
-        this.health = health;
-        this.attack = attack;
-        this.defence = defence;
-        this.magnifier = attackMagnifier;
-        this.reducer = damageReducer;
+        this(health, attack, defence, attackMagnifier, damageReducer);
         this.invincible = isInvincible;
         this.enabled = isEnabled;
     }
 
-    public static List<BattleRound> battle(BattleStatistics self, BattleStatistics target) {
-        if (self.invincible ^ target.invincible) {
-            return battleOneInvincible(self, target);
-        }
-
-        return battleNeitherOrBothInvincible(self, target);
+    public BattleStatistics(BattleStatistics player) {
+        this(player.getHealth(), player.getAttack(), player.getDefence(), player.getMagnifier(), player.getReducer());
     }
 
-    private static List<BattleRound> battleOneInvincible(BattleStatistics self, BattleStatistics target) {
+    public List<BattleRound> battle(BattleStatistics target) {
+        if (isInvincible() ^ target.isInvincible()) {
+            return battleOneInvincible(target);
+        }
+
+        return battleNeitherOrBothInvincible(target);
+    }
+
+    private List<BattleRound> battleOneInvincible(BattleStatistics target) {
         List<BattleRound> rounds = new ArrayList<>();
 
-        double damageOnSelf = calculateInvincibleDamage(self);
+        double damageOnSelf = calculateInvincibleDamage(this);
         double damageOnTarget = calculateInvincibleDamage(target);
 
-        updateInvincibleHealth(self);
+        updateInvincibleHealth(this);
         updateInvincibleHealth(target);
 
         rounds.add(new BattleRound(-damageOnSelf, -damageOnTarget));
         return rounds;
     }
 
-    private static List<BattleRound> battleNeitherOrBothInvincible(BattleStatistics self, BattleStatistics target) {
+    private List<BattleRound> battleNeitherOrBothInvincible(BattleStatistics target) {
         List<BattleRound> rounds = new ArrayList<>();
 
-        while (self.getHealth() > 0 && target.getHealth() > 0) {
-            double damageOnSelf = calculateDamage(target, self);
-            double damageOnTarget = calculateDamage(self, target);
+        while (getHealth() > 0 && target.getHealth() > 0) {
+            double damageOnSelf = calculateDamage(target, this);
+            double damageOnTarget = calculateDamage(this, target);
 
-            updateHealth(self, damageOnSelf);
+            updateHealth(this, damageOnSelf);
             updateHealth(target, damageOnTarget);
 
             rounds.add(new BattleRound(-damageOnSelf, -damageOnTarget));
@@ -80,7 +80,7 @@ public class BattleStatistics {
     }
 
     private static double calculateInvincibleDamage(BattleStatistics self) {
-        return (self.invincible) ? 0 : self.getHealth();
+        return (self.isInvincible()) ? 0 : self.getHealth();
     }
 
     private static void updateHealth(BattleStatistics self, double damage) {
@@ -88,12 +88,7 @@ public class BattleStatistics {
     }
 
     private static void updateInvincibleHealth(BattleStatistics self) {
-        self.setHealth((self.invincible) ? self.getHealth() : 0);
-    }
-
-    public static BattleStatistics applyBuff(BattleStatistics origin, BattleStatistics buff) {
-        return new BattleStatistics(origin.health + buff.health, origin.attack + buff.attack,
-                origin.defence + buff.defence, origin.magnifier, origin.reducer, buff.isInvincible(), buff.isEnabled());
+        self.setHealth((self.isInvincible()) ? self.getHealth() : 0);
     }
 
     public double getHealth() {
@@ -104,6 +99,10 @@ public class BattleStatistics {
         this.health = health;
     }
 
+    public void addHealth(double health) {
+        this.health += health;
+    }
+
     public double getAttack() {
         return attack;
     }
@@ -112,8 +111,16 @@ public class BattleStatistics {
         this.attack = attack;
     }
 
+    public void addAttack(double attack) {
+        this.attack += attack;
+    }
+
     public double getDefence() {
         return defence;
+    }
+
+    public void addDefence(double defence) {
+        this.defence += defence;
     }
 
     public void setDefence(double defence) {
@@ -126,6 +133,9 @@ public class BattleStatistics {
 
     public void setMagnifier(double magnifier) {
         this.magnifier = magnifier;
+    }
+    public void addMagnifier(double magnifier) {
+        this.magnifier *= magnifier;
     }
 
     public double getReducer() {
