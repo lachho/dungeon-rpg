@@ -17,7 +17,6 @@ import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.entities.playerState.BaseState;
 import dungeonmania.entities.playerState.PlayerState;
 import dungeonmania.map.GameMap;
-import dungeonmania.Game;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -48,6 +47,10 @@ public class Player extends Entity implements Battleable, Overlappable {
 
     public boolean hasWeapon() {
         return inventory.hasWeapon();
+    }
+
+    public void useWeapon(Game game) {
+        inventory.useWeapon(game);
     }
 
     // unused
@@ -170,7 +173,8 @@ public class Player extends Entity implements Battleable, Overlappable {
 
     public void applyBuff(BattleStatistics origin) {
 
-        if (!getState().equals("Base")) state.applyBuff(origin);
+        if (!getState().equals("Base"))
+            state.applyBuff(origin);
 
         // if (state.isInvincible()) {
         //     return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));
