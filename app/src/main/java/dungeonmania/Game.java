@@ -234,6 +234,10 @@ public class Game {
         map.moveTo(entity, direction);
     }
 
+    public void addEntity(Entity entity) {
+        map.addEntity(entity);
+    }
+
     public void destroyEntity(Entity entity) {
         map.destroyEntity(entity);
     }

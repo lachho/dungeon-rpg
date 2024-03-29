@@ -30,8 +30,6 @@ public class EntityFactory {
     }
 
     public void spawnSpider(Game game) {
-        GameMap map = game.getMap();
-
         int tick = game.getTick();
         int rate = config.optInt("spider_spawn_interval", 0);
         if (!isValidSpawnRate(rate, tick))
@@ -42,13 +40,13 @@ public class EntityFactory {
 
         Spider dummySpider = buildSpider(new Position(0, 0)); // for checking possible positions
 
+        GameMap map = game.getMap();
         List<Position> availablePos = getAvailablePositions(player, map, radius, dummySpider);
 
         Position initPosition = availablePos.get(ranGen.nextInt(availablePos.size()));
         Spider spider = buildSpider(initPosition);
-        // FIXME - Demeter
-        map.addEntity(spider);
 
+        game.addEntity(spider);
         game.registerEnemyMovement(spider);
     }
 
@@ -74,9 +72,6 @@ public class EntityFactory {
     }
 
     public void spawnZombie(Game game, ZombieToastSpawner spawner) {
-        // FIXME DEMETER
-        GameMap map = game.getMap();
-
         int tick = game.getTick();
         int spawnInterval = config.optInt("zombie_spawn_interval", ZombieToastSpawner.DEFAULT_SPAWN_INTERVAL);
         if (!isValidSpawnRate(spawnInterval, tick))
@@ -84,14 +79,15 @@ public class EntityFactory {
 
         List<Position> pos = spawner.getCardinallyAdjacentPositions();
 
+        GameMap map = game.getMap();
         pos = getAdjacentWalls(pos, map);
         if (pos.size() == 0)
             return;
 
         Random randGen = new Random();
         ZombieToast zt = buildZombieToast(pos.get(randGen.nextInt(pos.size())));
-        map.addEntity(zt);
 
+        game.addEntity(zt);
         game.registerEnemyMovement(zt);
     }
 
