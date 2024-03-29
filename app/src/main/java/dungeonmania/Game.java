@@ -261,4 +261,8 @@ public class Game {
     public boolean canMoveTo(Entity entity, Position position) {
         return map.canMoveTo(entity, position);
     }
+
+    public Position mapDijkstraPathFind(Position enemyPosition, Position playerPosition, Enemy enemy) {
+        return map.dijkstraPathFind(enemyPosition, playerPosition, enemy);
+    }
 }
