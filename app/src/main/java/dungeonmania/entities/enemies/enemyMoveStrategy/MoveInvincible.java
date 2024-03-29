@@ -2,25 +2,21 @@ package dungeonmania.entities.enemies.enemyMoveStrategy;
 
 import dungeonmania.Game;
 import dungeonmania.entities.enemies.Enemy;
-import dungeonmania.map.GameMap;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class MoveInvincible implements MoveStrategy {
     @Override
     public void move(Game game, Enemy enemy) {
-        GameMap map = game.getMap();
-
         Position enemyPosition = enemy.getPosition();
         Position plrDiff = Position.calculatePositionBetween(game.getPlayerPosition(), enemyPosition);
 
         Position moveX = calculateNextXPosition(plrDiff, enemyPosition);
         Position moveY = calculateNextYPosition(plrDiff, enemyPosition);
 
-        // FIXME demeter
-        if (map.canMoveTo(enemy, moveX))
+        if (game.canMoveTo(enemy, moveX))
             enemyPosition = moveX;
-        else if (map.canMoveTo(enemy, moveY))
+        else if (game.canMoveTo(enemy, moveY))
             enemyPosition = moveY;
 
         game.moveTo(enemy, enemyPosition);

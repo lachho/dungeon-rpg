@@ -253,4 +253,8 @@ public class Game {
     public void spawnZombie(Game game, ZombieToastSpawner zombieToastSpawner) {
         entityFactory.spawnZombie(game, zombieToastSpawner);
     }
+
+    public boolean canMoveTo(Entity entity, Position position) {
+        return map.canMoveTo(entity, position);
+    }
 }
