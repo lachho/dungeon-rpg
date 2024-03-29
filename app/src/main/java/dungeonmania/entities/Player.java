@@ -84,10 +84,6 @@ public class Player extends Entity implements Battleable, Overlappable {
         }
     }
 
-    public Entity getEntity(String itemUsedId) {
-        return inventory.getEntity(itemUsedId);
-    }
-
     public boolean pickUp(Entity item) {
         if (item instanceof Treasure)
             collectedTreasureCount++;
@@ -192,8 +188,11 @@ public class Player extends Entity implements Battleable, Overlappable {
         return state.getState();
     }
 
-    public <T> List<T> getPlayerInventoryEntities(Class<T> clz) {
-        return inventory.getEntities(clz);
+    public Entity getInventoryEntity(String itemUsedId) {
+        return inventory.getEntity(itemUsedId);
     }
 
+    public <T> List<T> getInventoryEntities(Class<T> clz) {
+        return inventory.getEntities(clz);
+    }
 }

@@ -52,7 +52,7 @@ public class BattleFacade {
         if (player.getState() != "Base") {
             player.applyBuff(playerStats);
         } else {
-            for (BattleItem item : player.getPlayerInventoryEntities(BattleItem.class)) {
+            for (BattleItem item : player.getInventoryEntities(BattleItem.class)) {
                 // if (!(item instanceof Potion)) {
                 buffs = new DecoratedPlayer(buffs, item);
                 // item.applyBuff(playerStats);

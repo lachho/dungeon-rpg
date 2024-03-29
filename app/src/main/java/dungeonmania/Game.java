@@ -61,7 +61,7 @@ public class Game {
     }
 
     public Game tick(String itemUsedId) throws InvalidActionException {
-        Entity item = player.getEntity(itemUsedId);
+        Entity item = player.getInventoryEntity(itemUsedId);
         if (item == null)
             throw new InvalidActionException(String.format("Item with id %s doesn't exist", itemUsedId));
         if (!(item instanceof Bomb) && !(item instanceof Potion))
