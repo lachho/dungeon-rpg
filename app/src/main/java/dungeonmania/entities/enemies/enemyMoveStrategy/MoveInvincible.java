@@ -10,7 +10,6 @@ public class MoveInvincible implements MoveStrategy {
     @Override
     public void move(Game game, Enemy enemy) {
         GameMap map = game.getMap();
-        // FIXME - demeter
 
         Position enemyPosition = enemy.getPosition();
         Position plrDiff = Position.calculatePositionBetween(game.getPlayerPosition(), enemyPosition);
@@ -18,12 +17,13 @@ public class MoveInvincible implements MoveStrategy {
         Position moveX = calculateNextXPosition(plrDiff, enemyPosition);
         Position moveY = calculateNextYPosition(plrDiff, enemyPosition);
 
+        // FIXME demeter
         if (map.canMoveTo(enemy, moveX))
             enemyPosition = moveX;
         else if (map.canMoveTo(enemy, moveY))
             enemyPosition = moveY;
 
-        map.moveTo(enemy, enemyPosition);
+        game.moveTo(enemy, enemyPosition);
     }
 
     private Position calculateNextXPosition(Position plrDiff, Position enemyPosition) {

@@ -46,6 +46,7 @@ public class EntityFactory {
 
         Position initPosition = availablePos.get(ranGen.nextInt(availablePos.size()));
         Spider spider = buildSpider(initPosition);
+        // FIXME - Demeter
         map.addEntity(spider);
 
         game.registerEnemyMovement(spider);

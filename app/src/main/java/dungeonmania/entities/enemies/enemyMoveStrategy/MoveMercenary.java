@@ -13,6 +13,6 @@ public class MoveMercenary implements MoveStrategy {
         Player player = game.getPlayer();
         // FIXME - demeter
         Position nextPos = map.dijkstraPathFind(enemy.getPosition(), player.getPosition(), enemy);
-        map.moveTo(enemy, nextPos);
+        game.moveTo(enemy, nextPos);
     }
 }

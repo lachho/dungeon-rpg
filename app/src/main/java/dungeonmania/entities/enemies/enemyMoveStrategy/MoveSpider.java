@@ -7,14 +7,12 @@ import dungeonmania.entities.Boulder;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.Spider;
-import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
 public class MoveSpider implements MoveStrategy {
     @Override
     public void move(Game game, Enemy enemy) {
         Spider spider = (Spider) enemy;
-        GameMap map = game.getMap();
 
         Position nextPos = spider.getNextPosition();
         List<Entity> entities = game.getEntities(nextPos);
@@ -29,8 +27,7 @@ public class MoveSpider implements MoveStrategy {
         entities = game.getEntities(nextPos);
 
         if (isValidMovePosition(game, nextPos, entities, spider)) {
-            // FIXME - demeter
-            map.moveTo(enemy, nextPos);
+            game.moveTo(enemy, nextPos);
             spider.updateNextPosition();
         }
     }

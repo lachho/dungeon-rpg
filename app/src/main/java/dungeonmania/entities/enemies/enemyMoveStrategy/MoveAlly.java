@@ -18,8 +18,7 @@ public class MoveAlly implements MoveStrategy {
         if (canMercenaryFollowPlayer(mercenary, playerPosition, nextPos))
             mercenary.setAdjacentToPlayer(true);
 
-        // FIXME - demeter
-        map.moveTo(enemy, nextPos);
+        game.moveTo(enemy, nextPos);
     }
 
     private Position getNextPosition(Mercenary mercenary, Game game, GameMap map, Position playerPosition) {
