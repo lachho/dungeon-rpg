@@ -52,8 +52,7 @@ public class BattleFacade {
         if (player.getState() != "Base") {
             player.applyBuff(playerStats);
         } else {
-            // FIXME demeter violation
-            for (BattleItem item : player.getInventory().getEntities(BattleItem.class)) {
+            for (BattleItem item : player.getPlayerInventoryEntities(BattleItem.class)) {
                 // if (!(item instanceof Potion)) {
                 buffs = new DecoratedPlayer(buffs, item);
                 // item.applyBuff(playerStats);
@@ -68,7 +67,8 @@ public class BattleFacade {
     private void calculateMercenaryBuff() {
         List<Mercenary> mercs = game.getMap().getEntities(Mercenary.class);
         for (Mercenary merc : mercs) {
-            if (merc.isAllied()) merc.applyBuff(playerStats);
+            if (merc.isAllied())
+                merc.applyBuff(playerStats);
         }
     }
 
