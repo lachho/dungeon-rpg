@@ -1,4 +1,4 @@
 package dungeonmania.entities.collectables;
 
-public interface DoorUnlockable {
+public interface TreasureCount {
 }
