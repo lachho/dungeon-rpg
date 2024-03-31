@@ -8,15 +8,15 @@ import dungeonmania.Game;
 import dungeonmania.util.Position;
 
 public class Collectables extends Entity implements InventoryItem, Overlappable {
-  public Collectables(Position position) {
-    super(position);
-  }
-
-  public void onOverlap(Game game, Entity entity) {
-    if (entity instanceof Player) {
-      if (!((Player) entity).pickUp(this))
-        return;
-      game.destroyEntity(this);
+    public Collectables(Position position) {
+        super(position);
     }
-  }
+
+    public void onOverlap(GameMap map, Entity entity) {
+        if (entity instanceof Player) {
+        if (!((Player) entity).pickUp(this))
+            return;
+        map.destroyEntity(this);
+        }
+    }
 }

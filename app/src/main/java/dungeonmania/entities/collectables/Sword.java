@@ -2,10 +2,9 @@ package dungeonmania.entities.collectables;
 
 import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
-import dungeonmania.entities.BattleItem;
 import dungeonmania.util.Position;
 
-public class Sword extends Collectables implements BattleItem {
+public class Sword extends Collectables implements Weapon {
     public static final double DEFAULT_ATTACK = 1;
     public static final double DEFAULT_ATTACK_SCALE_FACTOR = 1;
     public static final int DEFAULT_DURABILITY = 5;

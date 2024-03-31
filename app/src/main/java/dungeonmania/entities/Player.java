@@ -63,7 +63,7 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public boolean build(String entity, EntityFactory factory) {
-        InventoryItem item = inventory.checkBuildCriteria(this, true, entity.equals("shield"), factory);
+        InventoryItem item = inventory.build(entity, factory);
         if (item == null)
             return false;
         return inventory.add(item);
