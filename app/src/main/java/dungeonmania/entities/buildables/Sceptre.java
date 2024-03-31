@@ -5,7 +5,6 @@ import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.inventory.Inventory;
-import dungeonmania.util.Position;
 
 public class Sceptre extends Entity implements Buildable {
     private int durability;
