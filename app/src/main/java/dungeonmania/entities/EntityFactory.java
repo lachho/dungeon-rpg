@@ -2,6 +2,8 @@ package dungeonmania.entities;
 
 import dungeonmania.Game;
 import dungeonmania.entities.buildables.Bow;
+import dungeonmania.entities.buildables.MidnightArmour;
+import dungeonmania.entities.buildables.Sceptre;
 import dungeonmania.entities.buildables.Shield;
 import dungeonmania.entities.collectables.*;
 import dungeonmania.entities.enemies.*;
@@ -147,6 +149,17 @@ public class EntityFactory {
         return new Shield(shieldDurability, shieldDefence);
     }
 
+    //TODO
+    public Sceptre buildSceptre() {
+        return null;
+    }
+
+    //TODO
+    public MidnightArmour buildMidnightArmour() {
+        return null;
+    }
+
+    //TODO update method
     private Entity constructEntity(JSONObject jsonEntity, JSONObject config) {
         Position pos = new Position(jsonEntity.getInt("x"), jsonEntity.getInt("y"));
 
