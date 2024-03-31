@@ -30,7 +30,7 @@ public class SunStoneTest {
     @Test
     @Tag("20-2")
     @DisplayName("Use sunstone to open door, check is retained after use")
-    public void OpenDoor() {
+    public void openDoor() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
         //TODO replicate old dungeon and config and replace key with door d_DoorsKeysTest_useKeyWalkThroughOpenDoor
@@ -120,7 +120,8 @@ public class SunStoneTest {
     public void buildShieldWithSunStone() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        //TODO update to replace treasure with sunstone, sunstone to be retained d_BuildablesTest_BuildShieldWithTreasure
+        //TODO update to replace treasure with sunstone, sunstone to be retained
+        //d_BuildablesTest_BuildShieldWithTreasure
         DungeonResponse res = dmc.newGame("d_SunStoneTest_BuildShieldWithSunStone",
                 "c_SunStoneTest_BuildShieldWithSunStone");
         assertEquals(0, TestUtils.getInventory(res, "wood").size());
@@ -151,7 +152,8 @@ public class SunStoneTest {
     public void buildShieldWithTreasure() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        //TODO update also collect a sunstone, but treasure to be consumed in , sunstone to be retained d_BuildablesTest_BuildShieldWithTreasure
+        //TODO update also collect a sunstone, but treasure to be consumed in , sunstone to be retained
+        //d_BuildablesTest_BuildShieldWithTreasure
         DungeonResponse res = dmc.newGame("d_SunStoneTest_BuildShieldWithTreasure",
                 "c_SunStoneTest_BuildShieldWithTreasure");
         assertEquals(0, TestUtils.getInventory(res, "wood").size());
