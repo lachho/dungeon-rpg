@@ -9,6 +9,7 @@ import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.collectables.Treasure;
+import dungeonmania.entities.collectables.TreasureCount;
 import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.Mercenary;
@@ -84,7 +85,7 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public boolean pickUp(Entity item) {
-        if (item instanceof Treasure)
+        if (item instanceof TreasureCount)
             collectedTreasureCount++;
         return inventory.add((InventoryItem) item);
     }
@@ -168,7 +169,8 @@ public class Player extends Entity implements Battleable, Overlappable {
 
     public void applyBuff(BattleStatistics origin) {
 
-        if (!getState().equals("Base")) state.applyBuff(origin);
+        if (!getState().equals("Base"))
+            state.applyBuff(origin);
 
         // if (state.isInvincible()) {
         //     return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));

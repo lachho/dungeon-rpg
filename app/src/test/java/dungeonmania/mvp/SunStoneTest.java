@@ -23,6 +23,7 @@ public class SunStoneTest {
     public void collectSunstone() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
+        //TODO replicate old dungeon and config and replace key with door d_DoorsKeysTest_useKeyWalkThroughOpenDoor
         DungeonResponse res = dmc.newGame("d_SunStoneTest_collection", "c_SunStoneTest_collection");
         assertEquals(1, TestUtils.getInventory(res, "sunstone").size());
     }
