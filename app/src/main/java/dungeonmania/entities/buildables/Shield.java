@@ -45,7 +45,7 @@ public class Shield extends Entity implements Buildable {
     @Override
     public boolean checkBuildCriteria(Inventory inventory) {
         return inventory.count(Wood.class) >= 2
-        && (inventory.count(Treasure.class) >= 1 || inventory.count(Key.class) >= 1);
+                && (inventory.count(Treasure.class) >= 1 || inventory.count(Key.class) >= 1);
     }
 
     @Override
@@ -60,7 +60,8 @@ public class Shield extends Entity implements Buildable {
         }
 
         inventory.removeMultiple(Wood.class, 2);
-        if (!inventory.removeFirst(Treasure.class)) inventory.removeFirst(Key.class);
+        if (!inventory.removeFirst(Treasure.class))
+            inventory.removeFirst(Key.class);
 
         return true;
     }

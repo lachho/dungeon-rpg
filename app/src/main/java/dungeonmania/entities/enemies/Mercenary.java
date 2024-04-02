@@ -1,24 +1,17 @@
 package dungeonmania.entities.enemies;
 
-// import java.util.List;
-// import java.util.Random;
-// import java.util.stream.Collectors;
-
 import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Interactable;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.collectables.Treasure;
-// import dungeonmania.entities.collectables.potions.InvincibilityPotion;
-// import dungeonmania.entities.collectables.potions.InvisibilityPotion;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveAlly;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvincible;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvisibleAndZombieToast;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveMercenary;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveStrategy;
 import dungeonmania.map.GameMap;
-// import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
 public class Mercenary extends Enemy implements Interactable {
@@ -113,7 +106,6 @@ public class Mercenary extends Enemy implements Interactable {
 
     @Override
     public BattleStatistics getBattleStatistics() {
-        // if (allied) return new BattleStatistics(0, allyAttack, allyDefence, 1, 1);
         return super.getBattleStatistics();
     }
 

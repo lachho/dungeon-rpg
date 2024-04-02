@@ -26,7 +26,6 @@ public class Player extends Entity implements Battleable, Overlappable {
     private BattleStatistics battleStatistics;
     private Inventory inventory;
     private Queue<Potion> queue = new LinkedList<>();
-    // private Potion inEffective = null;
     private int nextTrigger = 0;
 
     private int collectedTreasureCount = 0;
@@ -113,17 +112,6 @@ public class Player extends Entity implements Battleable, Overlappable {
         Potion potion = queue.remove();
         changeState(potion.createState());
 
-        // if (queue.isEmpty()) {
-        //     inEffective = null;
-        //     state.transitionBase();
-        //     return;
-        // }
-        // inEffective = queue.remove();
-        // if (inEffective instanceof InvincibilityPotion) {
-        //     state.transitionInvincible();
-        // } else {
-        //     state.transitionInvisible();
-        // }
         nextTrigger = currentTick + potion.getDuration();
     }
 
@@ -167,15 +155,8 @@ public class Player extends Entity implements Battleable, Overlappable {
     }
 
     public void applyBuff(BattleStatistics origin) {
-
         if (!getState().equals("Base"))
             state.applyBuff(origin);
-
-        // if (state.isInvincible()) {
-        //     return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));
-        // } else if (state.isInvisible()) {
-        //     return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, false, false));
-        // }
     }
 
     @Override

@@ -11,7 +11,6 @@ public class Sceptre extends Entity implements Buildable {
 
     public Sceptre(int durability) {
         super(null);
-        //TODO Auto-generated constructor stub
     }
 
     @Override
@@ -22,14 +21,15 @@ public class Sceptre extends Entity implements Buildable {
 
     @Override
     public void use(Game game) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'use'");
+        durability--;
+        if (durability <= 0) {
+            game.getPlayer().remove(this);
+        }
     }
 
     @Override
     public int getDurability() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getDurability'");
+        return durability;
     }
 
     @Override
@@ -52,8 +52,7 @@ public class Sceptre extends Entity implements Buildable {
 
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+        return "sceptre";
     }
 
 }
