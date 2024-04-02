@@ -1,7 +1,7 @@
 package dungeonmania.entities;
 
-import dungeonmania.map.GameMap;
+import dungeonmania.Game;
 
 public interface Destroyable {
-  public void onDestroy(GameMap map);
+  public void onDestroy(Game game);
 }

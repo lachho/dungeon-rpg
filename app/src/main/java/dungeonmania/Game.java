@@ -49,7 +49,6 @@ public class Game {
         this.id = UUID.randomUUID().toString();
         map.init();
         this.tickCount = 0;
-        player = map.getPlayer();
         register(() -> player.onTick(tickCount), PLAYER_MOVEMENT, "potionQueue");
     }
 
@@ -218,11 +217,23 @@ public class Game {
         return player;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     public BattleFacade getBattleFacade() {
         return battleFacade;
     }
 
     public void moveTo(Entity entity, Position position) {
         map.moveTo(entity, position);
+    }
+
+    public void moveTo(Entity entity, Direction direction) {
+        map.moveTo(entity, direction);
+    }
+
+    public void destroyEntity(Entity entity) {
+        map.destroyEntity(entity);
     }
 }

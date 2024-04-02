@@ -5,7 +5,6 @@ import dungeonmania.entities.Destroyable;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Interactable;
 import dungeonmania.entities.Player;
-import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
 public class ZombieToastSpawner extends Entity implements Interactable, Destroyable {
@@ -19,9 +18,8 @@ public class ZombieToastSpawner extends Entity implements Interactable, Destroya
         game.getEntityFactory().spawnZombie(game, this);
     }
 
-    public void onDestroy(GameMap map) {
-        Game g = map.getGame();
-        g.unsubscribe(getId());
+    public void onDestroy(Game game) {
+        game.unsubscribe(getId());
     }
 
     @Override
