@@ -19,43 +19,41 @@ import java.util.List;
 public class SunStoneTest {
     @Test
     @Tag("20-1")
-    @DisplayName("Test collect sunstone and check in inventory")
+    @DisplayName("Test collect sun_stone and check in inventory")
     public void collectSunstone() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        //TODO replicate old dungeon and config and replace key with door d_DoorsKeysTest_useKeyWalkThroughOpenDoor
-        DungeonResponse res = dmc.newGame("d_SunStoneTest_collection", "c_SunStoneTest_collection");
-        assertEquals(1, TestUtils.getInventory(res, "sunstone").size());
+        DungeonResponse res = dmc.newGame("d_SunStoneTest_collection", "c_SunStoneTest");
+        res = dmc.tick(Direction.RIGHT);
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
     }
 
     @Test
     @Tag("20-2")
-    @DisplayName("Use sunstone to open door, check is retained after use")
+    @DisplayName("Use sun_stone to open door, check is retained after use")
     public void openDoor() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        //TODO replicate old dungeon and config and replace key with door d_DoorsKeysTest_useKeyWalkThroughOpenDoor
-        DungeonResponse res = dmc.newGame("d_SunStoneTest_WalkThroughOpenDoor", "c_SunStoneTest_WalkThroughOpenDoor");
+        DungeonResponse res = dmc.newGame("d_SunStoneTest_WalkThroughOpenDoor", "c_SunStoneTest");
 
-        // pick up sunstone
+        // pick up sun_stone
         res = dmc.tick(Direction.RIGHT);
         Position pos = TestUtils.getEntities(res, "player").get(0).getPosition();
-        assertEquals(1, TestUtils.getInventory(res, "key").size());
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
 
-        // walk through door and check key is gone
+        // walk through door and check sun_stone remains
         res = dmc.tick(Direction.RIGHT);
-        assertEquals(0, TestUtils.getInventory(res, "key").size());
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
         assertNotEquals(pos, TestUtils.getEntities(res, "player").get(0).getPosition());
     }
 
     @Test
     @Tag("20-3")
-    @DisplayName("Test meeting treasure goal with sunstone")
+    @DisplayName("Test meeting treasure goal with sun_stone")
     public void treasureGoal() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        //TODO update old dungeon to collect some sunstones instead of treasures d_basicGoalsTest_treasure
-        DungeonResponse res = dmc.newGame("d_SunStoneTest_treasure", "c_SunStoneTest_treasure");
+        DungeonResponse res = dmc.newGame("d_SunStoneTest_treasure", "c_SunStoneTest");
 
         // move player to right
         res = dmc.tick(Direction.RIGHT);
@@ -70,16 +68,17 @@ public class SunStoneTest {
         // assert goal not met
         assertTrue(TestUtils.getGoals(res).contains(":treasure"));
 
-        //TODO collect sunstone
+        // collect sun_stone
         res = dmc.tick(Direction.RIGHT);
-        assertEquals(2, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
 
         // assert goal not met
         assertTrue(TestUtils.getGoals(res).contains(":treasure"));
 
-        //TODO collect sunstone
+        // collect sun_stone
         res = dmc.tick(Direction.RIGHT);
-        assertEquals(3, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(2, TestUtils.getInventory(res, "sun_stone").size());
+        assertEquals(1, TestUtils.getInventory(res, "treasure").size());
 
         // assert goal met
         assertEquals("", TestUtils.getGoals(res));
@@ -87,15 +86,14 @@ public class SunStoneTest {
 
     @Test
     @Tag("20-4")
-    @DisplayName("Create sceptre with 2 sunstones, 1 to be retained, 1 consumed")
+    @DisplayName("Create sceptre with 2 sun_stones, 1 to be retained, 1 consumed")
     public void buildSceptreWith2Stones() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        //TODO update to collect 1 wood, 2 sunstones d_BuildablesTest_BuildBow
-        DungeonResponse res = dmc.newGame("d_SunStoneTest_BuildSeptre2Stones", "c_SunStoneTest_BuildSeptre2Stones");
+        DungeonResponse res = dmc.newGame("d_SunStoneTest_BuildSeptre2Stones", "c_SunStoneTest");
 
         assertEquals(0, TestUtils.getInventory(res, "wood").size());
-        assertEquals(0, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(0, TestUtils.getInventory(res, "sun_stone").size());
 
         // Pick up Wood
         res = dmc.tick(Direction.RIGHT);
@@ -104,7 +102,7 @@ public class SunStoneTest {
         // Pick up SunStone x2
         res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
-        assertEquals(2, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(2, TestUtils.getInventory(res, "sun_stone").size());
 
         // Build Bow
         assertEquals(0, TestUtils.getInventory(res, "sceptre").size());
@@ -112,21 +110,20 @@ public class SunStoneTest {
         assertEquals(1, TestUtils.getInventory(res, "sceptre").size());
 
         // Materials used in construction disappear from inventory
-        assertEquals(1, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
     }
 
     @Test
     @Tag("20-5")
-    @DisplayName("Test building a shield with sunstone")
+    @DisplayName("Test building a shield with sun_stone")
     public void buildShieldWithSunStone() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        //TODO update to replace treasure with sunstone, sunstone to be retained
+        //TODO update to replace treasure with sun_stone, sun_stone to be retained
         //d_BuildablesTest_BuildShieldWithTreasure
-        DungeonResponse res = dmc.newGame("d_SunStoneTest_BuildShieldWithSunStone",
-                "c_SunStoneTest_BuildShieldWithSunStone");
+        DungeonResponse res = dmc.newGame("d_SunStoneTest_BuildShieldWithSunStone", "c_SunStoneTest");
         assertEquals(0, TestUtils.getInventory(res, "wood").size());
-        assertEquals(0, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(0, TestUtils.getInventory(res, "sun_stone").size());
 
         // Pick up Wood x2
         res = dmc.tick(Direction.RIGHT);
@@ -135,7 +132,7 @@ public class SunStoneTest {
 
         // Pick up Sunstone
         res = dmc.tick(Direction.RIGHT);
-        assertEquals(1, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
 
         // Build Shield
         assertEquals(0, TestUtils.getInventory(res, "shield").size());
@@ -144,19 +141,16 @@ public class SunStoneTest {
 
         // Materials used in construction disappear from inventory
         assertEquals(0, TestUtils.getInventory(res, "wood").size());
-        assertEquals(1, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
     }
 
     @Test
     @Tag("20-6")
-    @DisplayName("Test building a shield with treasure")
+    @DisplayName("Test building a shield with treasure, even if sunstone exists")
     public void buildShieldWithTreasure() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        //TODO update also collect a sunstone, but treasure to be consumed in , sunstone to be retained
-        //d_BuildablesTest_BuildShieldWithTreasure
-        DungeonResponse res = dmc.newGame("d_SunStoneTest_BuildShieldWithTreasure",
-                "c_SunStoneTest_BuildShieldWithTreasure");
+        DungeonResponse res = dmc.newGame("d_SunStoneTest_BuildShieldWithTreasure", "c_SunStoneTest");
         assertEquals(0, TestUtils.getInventory(res, "wood").size());
         assertEquals(0, TestUtils.getInventory(res, "treasure").size());
 
@@ -169,17 +163,17 @@ public class SunStoneTest {
         res = dmc.tick(Direction.RIGHT);
         res = dmc.tick(Direction.RIGHT);
         assertEquals(1, TestUtils.getInventory(res, "treasure").size());
-        assertEquals(1, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
 
         // Build Shield
         assertEquals(0, TestUtils.getInventory(res, "shield").size());
         res = assertDoesNotThrow(() -> dmc.build("shield"));
         assertEquals(1, TestUtils.getInventory(res, "shield").size());
 
-        // Materials used in construction disappear from inventory
+        // Materials used in construction disappear from inventory, yet sunstone is not consumed
         assertEquals(0, TestUtils.getInventory(res, "wood").size());
         assertEquals(0, TestUtils.getInventory(res, "treasure").size());
-        assertEquals(1, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
     }
 
     @Test
@@ -188,12 +182,13 @@ public class SunStoneTest {
     public void battleWithMindControl() throws InvalidActionException {
         DungeonManiaController controller = new DungeonManiaController();
         //TODO update such that we build a sceptre, not a shield in d_battleTest_shieldDurabilityTest
-        String config = "c_SunStoneTest_mindControl";
+        String config = "c_SunStoneTest";
         DungeonResponse res = controller.newGame("d_SunStoneTest_mindControl", config);
 
         List<EntityResponse> entities = res.getEntities();
         assertEquals(1, TestUtils.countEntityOfType(entities, "player"));
         assertEquals(3, TestUtils.countEntityOfType(entities, "zombie_toast"));
+        assertEquals(3, TestUtils.countEntityOfType(entities, "mercenary"));
 
         //TODO Pick up Arrows
         res = controller.tick(Direction.RIGHT);
@@ -202,11 +197,11 @@ public class SunStoneTest {
         // Pick up treasure
         res = controller.tick(Direction.RIGHT);
 
-        //TODO Pick up sunstone
+        //TODO Pick up sun_stone
         res = controller.tick(Direction.RIGHT);
 
         assertEquals(1, TestUtils.getInventory(res, "treasure").size());
-        assertEquals(1, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
         assertEquals(2, TestUtils.getInventory(res, "arrow").size());
 
         res = controller.build("sceptre");
@@ -215,11 +210,13 @@ public class SunStoneTest {
         res = controller.tick(Direction.RIGHT);
 
         // move such that mind control expires
-        res = controller.tick(Direction.RIGHT);
-        res = controller.tick(Direction.RIGHT);
+        res = controller.tick(Direction.LEFT);
         res = controller.tick(Direction.RIGHT);
 
         // battle zombie number 2, no more ally attack bonus
+        res = controller.tick(Direction.RIGHT);
+
+        // battle zombie number 3, no more ally attack bonus
         res = controller.tick(Direction.RIGHT);
 
         assertTrue(res.getBattles().size() != 0);
@@ -252,7 +249,7 @@ public class SunStoneTest {
         DungeonManiaController controller = new DungeonManiaController();
         //TODO update such that we build a midnight armour, not a shield in d_battleTest_shieldDurabilityTest
         // ensure there is 1 zombie and then 1 spider to battle
-        String config = "c_SunStoneTest_MidnightArmour";
+        String config = "c_SunStoneTest";
         DungeonResponse res = controller.newGame("d_SunStoneTest_MidnightArmour", config);
 
         List<EntityResponse> entities = res.getEntities();
@@ -260,51 +257,46 @@ public class SunStoneTest {
         assertEquals(1, TestUtils.countEntityOfType(entities, "zombie_toast"));
         assertEquals(1, TestUtils.countEntityOfType(entities, "spider"));
 
-        //TODO Pick up sword
+        //TODO Pick up sword, treasure, sunstone
         res = controller.tick(Direction.RIGHT);
-
-        // Pick up treasure
         res = controller.tick(Direction.RIGHT);
-
-        //TODO Pick up sjunstone
         res = controller.tick(Direction.RIGHT);
 
         assertEquals(1, TestUtils.getInventory(res, "treasure").size());
-        assertEquals(1, TestUtils.getInventory(res, "sunstone").size());
-        assertEquals(2, TestUtils.getInventory(res, "sword").size());
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
+        assertEquals(1, TestUtils.getInventory(res, "sword").size());
 
-        assertThrows(InvalidActionException.class, () -> controller.build("midnightarmour"));
+        assertThrows(InvalidActionException.class, () -> controller.build("midnight_armour"));
 
         // kill zombie number 1
         res = controller.tick(Direction.RIGHT);
 
-        res = controller.build("midnightarmour");
+        res = controller.build("midnight_armour");
 
         // battle spider, has attack and defence bonus
         res = controller.tick(Direction.RIGHT);
 
-        //TODO idk what this line does
         assertTrue(res.getBattles().size() != 0);
         List<BattleResponse> battles = res.getBattles();
         BattleResponse lastBattle = battles.get(1);
 
-        // This is the attack without ally
-        double playerBaseAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("player_attack", config));
-        double allyAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("ally_attack", config));
-
-        // check values with ally boost
-        RoundResponse firstRound = lastBattle.getRounds().get(0);
-        assertEquals((playerBaseAttack + allyAttack) / 5, -firstRound.getDeltaEnemyHealth(), 0.001);
-
         // check armour is held
         assertNotEquals(0, lastBattle.getBattleItems().size());
-        assertTrue(lastBattle.getBattleItems().get(0).getType().startsWith("midnightarmour"));
+        assertTrue(lastBattle.getBattleItems().get(0).getType().startsWith("midnight_armour"));
 
-        // Assumption: Shield effect calculation to reduce damage makes enemyAttack =
-        // enemyAttack - shield effect
+        // This is the attack without armour
+        double playerBaseAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("player_attack", config));
+        double armourAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("midnight_armour_attack", config));
+
+        // check values with armour boost
+        RoundResponse firstRound = lastBattle.getRounds().get(0);
+        assertEquals((playerBaseAttack + armourAttack) / 5, -firstRound.getDeltaEnemyHealth(), 0.001);
+
+        // Assumption: armour effect calculation to reduce damage makes enemyAttack =
+        // enemyAttack - armour effect
         int enemyAttack = Integer.parseInt(TestUtils.getValueFromConfigFile("spider_attack", config));
-        int shieldEffect = Integer.parseInt(TestUtils.getValueFromConfigFile("shield_defence", config));
-        int expectedDamage = (enemyAttack - shieldEffect) / 10;
+        int armourEffect = Integer.parseInt(TestUtils.getValueFromConfigFile("midnight_armour_defence", config));
+        int expectedDamage = (enemyAttack - armourEffect) / 10;
         // Delta health is negative so take negative here
         assertEquals(expectedDamage, -firstRound.getDeltaCharacterHealth(), 0.001);
     }
