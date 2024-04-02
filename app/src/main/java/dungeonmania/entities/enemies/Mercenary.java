@@ -96,9 +96,9 @@ public class Mercenary extends Enemy implements Interactable {
 
         if (allied) {
             moveStrategy = new MoveAlly();
-        } else if (game.getPlayer().getState().equals("Invisible")) {
+        } else if (game.getPlayerState().equals("Invisible")) {
             moveStrategy = new MoveInvisibleAndZombieToast();
-        } else if (game.getPlayer().getState().equals("Invincible")) {
+        } else if (game.getPlayerState().equals("Invincible")) {
             moveStrategy = new MoveInvincible();
         } else {
             moveStrategy = new MoveMercenary();
