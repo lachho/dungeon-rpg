@@ -9,6 +9,8 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.buildables.Bow;
 import dungeonmania.entities.buildables.Buildable;
+import dungeonmania.entities.buildables.MidnightArmour;
+import dungeonmania.entities.buildables.Sceptre;
 import dungeonmania.entities.buildables.Shield;
 import dungeonmania.entities.collectables.Weapon;
 
@@ -16,11 +18,11 @@ public class Inventory {
     private List<InventoryItem> items = new ArrayList<>();
     private List<Buildable> buildables = new ArrayList<>();
 
-    //TODO Update to include new buildables
     public Inventory() {
-        buildables.add(new Bow());
-        buildables.add(new Shield());
-        // Add more criteria here as needed in stage 3
+        buildables.add(new Bow(0));
+        buildables.add(new Shield(0, 0));
+        buildables.add(new Sceptre(0));
+        buildables.add(new MidnightArmour(0, 0));
     }
 
     public boolean add(InventoryItem item) {
@@ -59,8 +61,7 @@ public class Inventory {
     public InventoryItem build(String type, EntityFactory factory) {
         return buildables.stream().filter(item -> type.equals(item.getName()) && item.checkBuildCriteria(this))
                 .findFirst().map(item -> {
-                    item.remove(this);
-                    return item.build(factory);
+                    return item.build(factory, this);
                 }).orElse(null);
     }
 

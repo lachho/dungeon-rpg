@@ -4,13 +4,18 @@ import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
+import dungeonmania.entities.collectables.Arrow;
+import dungeonmania.entities.collectables.SpecialCraftable;
+import dungeonmania.entities.collectables.SunStone;
+import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.inventory.Inventory;
 
 public class Sceptre extends Entity implements Buildable {
-    private int durability;
+    private int duration;
 
-    public Sceptre(int durability) {
+    public Sceptre(int duration) {
         super(null);
+        this.duration = duration;
     }
 
     @Override
@@ -21,33 +26,37 @@ public class Sceptre extends Entity implements Buildable {
 
     @Override
     public void use(Game game) {
-        durability--;
-        if (durability <= 0) {
+        duration--;
+        if (duration <= 0) {
             game.getPlayer().remove(this);
         }
     }
 
     @Override
-    public int getDurability() {
-        return durability;
-    }
-
-    @Override
     public boolean checkBuildCriteria(Inventory inventory) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'checkBuildCriteria'");
+        return (inventory.count(Wood.class) >= 1 || inventory.count(Arrow.class) >= 2)
+                && ((inventory.count(SpecialCraftable.class) >= 1 && inventory.count(SunStone.class) >= 1)
+                        || inventory.count(SunStone.class) >= 2);
     }
 
     @Override
-    public Buildable build(EntityFactory factory) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'build'");
+    public Buildable build(EntityFactory factory, Inventory inventory) {
+        remove(inventory);
+        return factory.buildSceptre();
     }
 
     @Override
     public boolean remove(Inventory inventory) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        if (!checkBuildCriteria(inventory)) {
+            return false;
+        }
+
+        if (!inventory.removeFirst(Wood.class))
+            inventory.removeMultiple(Arrow.class, 2);
+        inventory.removeFirst(SpecialCraftable.class);
+        inventory.removeFirst(SunStone.class);
+
+        return true;
     }
 
     @Override

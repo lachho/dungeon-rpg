@@ -12,10 +12,6 @@ import dungeonmania.entities.inventory.Inventory;
 public class Bow extends Entity implements Buildable, Weapon {
     private int durability;
 
-    public Bow() {
-        super(null);
-    }
-
     public Bow(int durability) {
         super(null);
         this.durability = durability;
@@ -32,12 +28,6 @@ public class Bow extends Entity implements Buildable, Weapon {
     @Override
     public void applyBuff(BattleStatistics origin) {
         origin.addMagnifier(2);
-        // return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 2, 1));
-    }
-
-    @Override
-    public int getDurability() {
-        return durability;
     }
 
     @Override
@@ -46,7 +36,8 @@ public class Bow extends Entity implements Buildable, Weapon {
     }
 
     @Override
-    public Buildable build(EntityFactory factory) {
+    public Buildable build(EntityFactory factory, Inventory inventory) {
+        remove(inventory);
         return factory.buildBow();
     }
 

@@ -31,11 +31,5 @@ public class Sword extends Collectables implements Weapon {
     @Override
     public void applyBuff(BattleStatistics origin) {
         origin.addAttack(attack);
-        //return BattleStatistics.applyBuff(origin, new BattleStatistics(0, attack, 0, 1, 1));
-    }
-
-    @Override
-    public int getDurability() {
-        return durability;
     }
 }

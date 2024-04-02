@@ -34,7 +34,7 @@ public class SunStoneTest {
     public void openDoor() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_SunStoneTest_WalkThroughOpenDoor", "c_SunStoneTest");
+        DungeonResponse res = dmc.newGame("d_SunStoneTest_WalkThroughDoor", "c_SunStoneTest");
 
         // pick up sun_stone
         res = dmc.tick(Direction.RIGHT);
@@ -53,6 +53,7 @@ public class SunStoneTest {
     public void treasureGoal() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
+        //c_basicGoalsTest_treasure d_SunStoneTest_treasure c_SunStoneTest
         DungeonResponse res = dmc.newGame("d_SunStoneTest_treasure", "c_SunStoneTest");
 
         // move player to right

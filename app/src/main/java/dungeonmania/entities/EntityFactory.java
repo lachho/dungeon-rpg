@@ -145,21 +145,21 @@ public class EntityFactory {
 
     public Shield buildShield() {
         int shieldDurability = config.optInt("shield_durability");
-        double shieldDefence = config.optInt("shield_defence");
+        double shieldDefence = config.optDouble("shield_defence");
         return new Shield(shieldDurability, shieldDefence);
     }
 
-    //TODO
     public Sceptre buildSceptre() {
-        return null;
+        int duration = config.optInt("mind_control_duration");
+        return new Sceptre(duration);
     }
 
-    //TODO
     public MidnightArmour buildMidnightArmour() {
-        return null;
+        double armourAttack = config.optDouble("midnight_armour_attack");
+        double armourDefence = config.optDouble("midnight_armour_defence");
+        return new MidnightArmour(armourAttack, armourDefence);
     }
 
-    //TODO update method
     private Entity constructEntity(JSONObject jsonEntity, JSONObject config) {
         Position pos = new Position(jsonEntity.getInt("x"), jsonEntity.getInt("y"));
 
@@ -182,6 +182,8 @@ public class EntityFactory {
             return new Exit(pos);
         case "treasure":
             return new Treasure(pos);
+        case "sun_stone":
+            return new SunStone(pos);
         case "wood":
             return new Wood(pos);
         case "arrow":

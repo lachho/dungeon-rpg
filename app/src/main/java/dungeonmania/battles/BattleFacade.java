@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dungeonmania.Game;
-import dungeonmania.battles.battleDecorator.BuffDecorator;
-import dungeonmania.battles.battleDecorator.DecoratedPlayer;
 import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
@@ -18,7 +16,6 @@ import dungeonmania.util.NameConverter;
 
 public class BattleFacade {
     private List<BattleResponse> battleResponses = new ArrayList<>();
-    // private List<BattleItem> battleItems;
     private BattleStatistics playerStats;
     private BattleStatistics enemyStats;
     private Game game;
@@ -27,12 +24,10 @@ public class BattleFacade {
     private BuffDecorator buffs;
 
     public void battle(Game game, Player player, Enemy enemy) {
-        // 0. init
         this.game = game;
         this.player = player;
         this.enemy = enemy;
-        // battleItems = new ArrayList<>();
-        buffs = new DecoratedPlayer();
+        buffs = new BuffDecorator();
         playerStats = new BattleStatistics(player.getBattleStatistics());
         enemyStats = enemy.getBattleStatistics();
         calculatePlayerBuff();
@@ -52,13 +47,8 @@ public class BattleFacade {
         if (player.getState() != "Base") {
             player.applyBuff(playerStats);
         } else {
-            // FIXME demeter violation
             for (BattleItem item : player.getInventory().getEntities(BattleItem.class)) {
-                // if (!(item instanceof Potion)) {
-                buffs = new DecoratedPlayer(buffs, item);
-                // item.applyBuff(playerStats);
-                // battleItems.add(item);
-                // }
+                buffs = new BuffDecorator(buffs, item);
             }
         }
         buffs.applyBuff(playerStats);
@@ -68,7 +58,8 @@ public class BattleFacade {
     private void calculateMercenaryBuff() {
         List<Mercenary> mercs = game.getMap().getEntities(Mercenary.class);
         for (Mercenary merc : mercs) {
-            if (merc.isAllied()) merc.applyBuff(playerStats);
+            if (merc.isAllied())
+                merc.applyBuff(playerStats);
         }
     }
 
@@ -85,10 +76,6 @@ public class BattleFacade {
     }
 
     private void decreaseDurabilityOfItems() {
-        // for (BattleItem item : battleItems) {
-        //     if (item instanceof InventoryItem)
-        //         item.use(game);
-        // }
         buffs.use(game);
     }
 

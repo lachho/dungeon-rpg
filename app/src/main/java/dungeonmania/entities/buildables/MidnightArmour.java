@@ -4,10 +4,9 @@ import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
-import dungeonmania.entities.collectables.Key;
+import dungeonmania.entities.collectables.Arrow;
 import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Sword;
-import dungeonmania.entities.collectables.Treasure;
 import dungeonmania.entities.collectables.Weapon;
 import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.inventory.Inventory;
@@ -37,31 +36,32 @@ public class MidnightArmour extends Entity implements Buildable, Weapon {
     }
 
     @Override
-    public int getDurability() {
-        return durability;
-    }
-
-    @Override
     public boolean checkBuildCriteria(Inventory inventory) {
         return inventory.count(Sword.class) >= 1 && (inventory.count(SunStone.class) >= 1);
     }
 
     @Override
-    public Buildable build(EntityFactory factory) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'build'");
+    public Buildable build(EntityFactory factory, Inventory inventory) {
+        remove(inventory);
+        return factory.buildMidnightArmour();
     }
 
     @Override
     public boolean remove(Inventory inventory) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        if (!checkBuildCriteria(inventory)) {
+            return false;
+        }
+
+        inventory.removeFirst(Sword.class);
+        inventory.removeFirst(SunStone.class);
+        inventory.removeMultiple(Arrow.class, 3);
+        inventory.removeMultiple(Wood.class, 2);
+        return true;
     }
 
     @Override
     public String getName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+        return "midnight_armour";
     }
 
 }
