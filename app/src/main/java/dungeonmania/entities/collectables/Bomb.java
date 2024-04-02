@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dungeonmania.Game;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Switch;
@@ -37,14 +38,14 @@ public class Bomb extends Collectables {
     }
 
     @Override
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (state != State.SPAWNED)
             return;
         if (entity instanceof Player) {
             if (!((Player) entity).pickUp(this))
                 return;
             subs.stream().forEach(s -> s.unsubscribe(this));
-            map.destroyEntity(this);
+            game.destroyEntity(this);
         }
         this.state = State.INVENTORY;
     }

@@ -69,13 +69,13 @@ public class Player extends Entity implements Battleable, Overlappable {
         map.moveTo(this, Position.translateBy(this.getPosition(), direction));
     }
 
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (entity instanceof Enemy) {
             if (entity instanceof Mercenary) {
                 if (((Mercenary) entity).isAllied())
                     return;
             }
-            map.getGame().battle(this, (Enemy) entity);
+            game.battle(this, (Enemy) entity);
         }
     }
 
@@ -168,7 +168,8 @@ public class Player extends Entity implements Battleable, Overlappable {
 
     public void applyBuff(BattleStatistics origin) {
 
-        if (!getState().equals("Base")) state.applyBuff(origin);
+        if (!getState().equals("Base"))
+            state.applyBuff(origin);
 
         // if (state.isInvincible()) {
         //     return BattleStatistics.applyBuff(origin, new BattleStatistics(0, 0, 0, 1, 1, true, true));

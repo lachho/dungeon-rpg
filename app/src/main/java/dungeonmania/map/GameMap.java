@@ -12,7 +12,6 @@ import dungeonmania.entities.Destroyable;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Moveable;
 import dungeonmania.entities.Overlappable;
-import dungeonmania.entities.Player;
 import dungeonmania.entities.Portal;
 import dungeonmania.entities.Switch;
 import dungeonmania.entities.collectables.Bomb;
@@ -24,7 +23,6 @@ import dungeonmania.util.Position;
 public class GameMap {
     private Game game;
     private Map<Position, GraphNode> nodes = new HashMap<>();
-    private Player player;
 
     /**
      * Initialise the game map
@@ -109,7 +107,7 @@ public class GameMap {
         List<Runnable> callbacks = new ArrayList<>();
         getEntities(entity.getPosition()).forEach(e -> {
             if (e != entity && e instanceof Moveable)
-                callbacks.add(() -> ((Moveable) e).onMovedAway(this, entity));
+                callbacks.add(() -> ((Moveable) e).onMovedAway(game, entity));
         });
         callbacks.forEach(callback -> {
             callback.run();
@@ -120,7 +118,7 @@ public class GameMap {
         List<Runnable> overlapCallbacks = new ArrayList<>();
         getEntities(entity.getPosition()).forEach(e -> {
             if (e != entity && e instanceof Overlappable)
-                overlapCallbacks.add(() -> ((Overlappable) e).onOverlap(this, entity));
+                overlapCallbacks.add(() -> ((Overlappable) e).onOverlap(game, entity));
         });
         overlapCallbacks.forEach(callback -> {
             callback.run();
@@ -202,7 +200,7 @@ public class GameMap {
         removeNode(entity);
 
         if (entity instanceof Destroyable) {
-            ((Destroyable) entity).onDestroy(this);
+            ((Destroyable) entity).onDestroy(game);
         }
     }
 
@@ -250,13 +248,6 @@ public class GameMap {
         return getEntities().stream().filter(type::isInstance).map(type::cast).collect(Collectors.toList());
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
 
     public Game getGame() {
         return game;

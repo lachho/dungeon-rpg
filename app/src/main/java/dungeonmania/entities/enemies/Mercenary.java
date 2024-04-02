@@ -17,7 +17,7 @@ import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvincible;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvisibleAndZombieToast;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveMercenary;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveStrategy;
-import dungeonmania.map.GameMap;
+// import dungeonmania.map.GameMap;
 // import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -58,10 +58,10 @@ public class Mercenary extends Enemy implements Interactable {
     }
 
     @Override
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (allied)
             return;
-        super.onOverlap(map, entity);
+        super.onOverlap(game, entity);
     }
 
     /**

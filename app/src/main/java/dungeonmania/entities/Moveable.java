@@ -1,7 +1,7 @@
 package dungeonmania.entities;
 
-import dungeonmania.map.GameMap;
+import dungeonmania.Game;
 
 public interface Moveable {
-  public void onMovedAway(GameMap map, Entity entity);
+  public void onMovedAway(Game game, Entity entity);
 }

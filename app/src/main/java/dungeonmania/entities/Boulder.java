@@ -2,6 +2,7 @@ package dungeonmania.entities;
 
 import dungeonmania.entities.enemies.Spider;
 import dungeonmania.map.GameMap;
+import dungeonmania.Game;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -19,9 +20,9 @@ public class Boulder extends Entity implements Overlappable {
         return false;
     }
 
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (entity instanceof Player) {
-            map.moveTo(this, entity.getFacing());
+            game.moveTo(this, entity.getFacing());
         }
     }
 
