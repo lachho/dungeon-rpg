@@ -54,7 +54,7 @@ public class Bomb extends Collectables {
         setPosition(p);
         map.addEntity(this);
         this.state = State.PLACED;
-        List<Position> adjPosList = getPosition().getCardinallyAdjacentPositions();
+        List<Position> adjPosList = getCardinallyAdjacentPositions();
         adjPosList.stream().forEach(node -> {
             List<Entity> entities = map.getEntities(node).stream().filter(e -> (e instanceof Switch))
                     .collect(Collectors.toList());
@@ -64,8 +64,8 @@ public class Bomb extends Collectables {
     }
 
     public void explode(GameMap map) {
-        int x = getPosition().getX();
-        int y = getPosition().getY();
+        int x = getXPosition();
+        int y = getYPosition();
         for (int i = x - radius; i <= x + radius; i++) {
             for (int j = y - radius; j <= y + radius; j++) {
                 List<Entity> entities = map.getEntities(new Position(i, j));

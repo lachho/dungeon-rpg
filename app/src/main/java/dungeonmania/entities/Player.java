@@ -49,9 +49,14 @@ public class Player extends Entity implements Battleable, Overlappable {
         return inventory.hasWeapon();
     }
 
-    public BattleItem getWeapon() {
-        return inventory.getWeapon();
+    public void useWeapon(Game game) {
+        inventory.useWeapon(game);
     }
+
+    // unused
+    // public BattleItem getWeapon() {
+    //     return inventory.getWeapon();
+    // }
 
     public List<String> getBuildables() {
         return inventory.getBuildables();
@@ -77,10 +82,6 @@ public class Player extends Entity implements Battleable, Overlappable {
             }
             game.battle(this, (Enemy) entity);
         }
-    }
-
-    public Entity getEntity(String itemUsedId) {
-        return inventory.getEntity(itemUsedId);
     }
 
     public boolean pickUp(Entity item) {
@@ -185,5 +186,13 @@ public class Player extends Entity implements Battleable, Overlappable {
 
     public String getState() {
         return state.getState();
+    }
+
+    public Entity getInventoryEntity(String itemUsedId) {
+        return inventory.getEntity(itemUsedId);
+    }
+
+    public <T> List<T> getInventoryEntities(Class<T> clz) {
+        return inventory.getEntities(clz);
     }
 }
