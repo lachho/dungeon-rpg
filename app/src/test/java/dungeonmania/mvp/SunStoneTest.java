@@ -187,8 +187,8 @@ public class SunStoneTest {
     public void battleWithMindControl() throws InvalidActionException {
         DungeonManiaController controller = new DungeonManiaController();
         //TODO update such that we build a sceptre, not a shield in d_battleTest_shieldDurabilityTest
-        String config = "c_SunStoneTest_shieldDurability";
-        DungeonResponse res = controller.newGame("d_SunStoneTest_shieldDurabilityTest", config);
+        String config = "c_SunStoneTest_mindControl";
+        DungeonResponse res = controller.newGame("d_SunStoneTest_mindControl", config);
 
         List<EntityResponse> entities = res.getEntities();
         assertEquals(1, TestUtils.countEntityOfType(entities, "player"));
@@ -201,7 +201,7 @@ public class SunStoneTest {
         // Pick up treasure
         res = controller.tick(Direction.RIGHT);
 
-        //TODO Pick up key
+        //TODO Pick up sunstone
         res = controller.tick(Direction.RIGHT);
 
         assertEquals(1, TestUtils.getInventory(res, "treasure").size());
@@ -227,7 +227,6 @@ public class SunStoneTest {
 
         // This is the attack without ally
         double playerBaseAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("player_attack", config));
-        //TODO i have no idea what number ally_attack should be
         double allyAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("ally_attack", config));
 
         // check values with ally boost
@@ -244,4 +243,69 @@ public class SunStoneTest {
         firstRound = lastBattle.getRounds().get(0);
         assertEquals((playerBaseAttack) / 5, -firstRound.getDeltaEnemyHealth(), 0.001);
     }
+
+    @Test
+    @Tag("20-8")
+    @DisplayName("Craft Midnight armour with zombies")
+    public void battleWithMidnightArmour() throws InvalidActionException {
+        DungeonManiaController controller = new DungeonManiaController();
+        //TODO update such that we build a midnight armour, not a shield in d_battleTest_shieldDurabilityTest
+        // ensure there is 1 zombie and then 1 spider to battle
+        String config = "c_SunStoneTest_MidnightArmour";
+        DungeonResponse res = controller.newGame("d_SunStoneTest_MidnightArmour", config);
+
+        List<EntityResponse> entities = res.getEntities();
+        assertEquals(1, TestUtils.countEntityOfType(entities, "player"));
+        assertEquals(1, TestUtils.countEntityOfType(entities, "zombie_toast"));
+        assertEquals(1, TestUtils.countEntityOfType(entities, "spider"));
+
+        //TODO Pick up sword
+        res = controller.tick(Direction.RIGHT);
+
+        // Pick up treasure
+        res = controller.tick(Direction.RIGHT);
+
+        //TODO Pick up sjunstone
+        res = controller.tick(Direction.RIGHT);
+
+        assertEquals(1, TestUtils.getInventory(res, "treasure").size());
+        assertEquals(1, TestUtils.getInventory(res, "sunstone").size());
+        assertEquals(2, TestUtils.getInventory(res, "sword").size());
+
+        assertThrows(InvalidActionException.class, () -> controller.build("midnightarmour"));
+
+        // kill zombie number 1
+        res = controller.tick(Direction.RIGHT);
+
+        res = controller.build("midnightarmour");
+
+        // battle spider, has attack and defence bonus
+        res = controller.tick(Direction.RIGHT);
+
+        //TODO idk what this line does
+        assertTrue(res.getBattles().size() != 0);
+        List<BattleResponse> battles = res.getBattles();
+        BattleResponse lastBattle = battles.get(1);
+
+        // This is the attack without ally
+        double playerBaseAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("player_attack", config));
+        double allyAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("ally_attack", config));
+
+        // check values with ally boost
+        RoundResponse firstRound = lastBattle.getRounds().get(0);
+        assertEquals((playerBaseAttack + allyAttack) / 5, -firstRound.getDeltaEnemyHealth(), 0.001);
+
+        // check armour is held
+        assertNotEquals(0, lastBattle.getBattleItems().size());
+        assertTrue(lastBattle.getBattleItems().get(0).getType().startsWith("midnightarmour"));
+
+        // Assumption: Shield effect calculation to reduce damage makes enemyAttack =
+        // enemyAttack - shield effect
+        int enemyAttack = Integer.parseInt(TestUtils.getValueFromConfigFile("spider_attack", config));
+        int shieldEffect = Integer.parseInt(TestUtils.getValueFromConfigFile("shield_defence", config));
+        int expectedDamage = (enemyAttack - shieldEffect) / 10;
+        // Delta health is negative so take negative here
+        assertEquals(expectedDamage, -firstRound.getDeltaCharacterHealth(), 0.001);
+    }
+
 }
