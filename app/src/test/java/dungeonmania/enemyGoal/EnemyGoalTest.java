@@ -32,7 +32,7 @@ public class EnemyGoalTest {
     res = dmc.tick(Direction.LEFT);
 
     // player has picked up weapon
-    // assertEquals(1, TestUtils.getInventory(res, "sword").size());
+    assertEquals(1, TestUtils.getInventory(res, "sword").size());
 
     // cardinally adjacent: true, has sword: true
     res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
@@ -93,9 +93,6 @@ public class EnemyGoalTest {
     // Kill the spider
     res = dmc.tick(Direction.DOWN);
     assertEquals(0, TestUtils.getEntities(res, "spider").size());
-
-    // dmc.tick(Direction.LEFT);
-    // res = dmc.tick(Direction.LEFT);
 
     // assert goal not met - a spawner still exists
     assertTrue(TestUtils.getGoals(res).contains(":enemy"));
@@ -409,7 +406,7 @@ public class EnemyGoalTest {
     res = dmc.tick(Direction.LEFT);
 
     // player has picked up weapon
-    // assertEquals(1, TestUtils.getInventory(res, "sword").size());
+    assertEquals(1, TestUtils.getInventory(res, "sword").size());
 
     // cardinally adjacent: true, has sword: true
     res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
