@@ -40,6 +40,9 @@ public class EnemyGoalTest {
     // we've destroyed the spawner
     assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
 
+    // destroying the spawner doesn't count as destroying an enemy
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+
     dmc.tick(Direction.DOWN);
     dmc.tick(Direction.DOWN);
     res = dmc.tick(Direction.RIGHT);
