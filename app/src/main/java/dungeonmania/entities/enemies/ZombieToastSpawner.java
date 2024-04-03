@@ -18,6 +18,8 @@ public class ZombieToastSpawner extends Entity implements Interactable, Destroya
         game.spawnZombie(game, this);
     }
 
+    // Destroying a ZombieToastSpawner doesn't count towards numDefeatedEnemies count in Game
+    @Override
     public void onDestroy(Game game) {
         game.unsubscribe(getId());
     }
