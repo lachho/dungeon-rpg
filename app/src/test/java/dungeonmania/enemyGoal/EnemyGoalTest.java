@@ -388,6 +388,39 @@ public class EnemyGoalTest {
     assertEquals("", TestUtils.getGoals(res));
   }
 
+  @Test
+  @Tag("2a-10")
+  @DisplayName("Set enemy goal, destroy all spawners and minimum number of enemies = 0")
+  // Should be achieved
+  public void testBasicDestroyAllSpawnersNoEnemies() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites",
+        "c__enemyGoalTest_basicDestroyAllSpawnersNoEntites");
+
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
+    assertEquals(1, TestUtils.getEntities(res, "sword").size());
+
+    // move player to left
+    res = dmc.tick(Direction.LEFT);
+
+    // player has picked up weapon
+    // assertEquals(1, TestUtils.getInventory(res, "sword").size());
+
+    // cardinally adjacent: true, has sword: true
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+
+    // we've destroyed the spawner
+    assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
+
+    // assert goal met
+    assertEquals("", TestUtils.getGoals(res));
+  }
+
   // complex test?
 
 }
