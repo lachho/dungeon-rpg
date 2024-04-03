@@ -52,10 +52,8 @@ public class Inventory {
     }
 
     public List<String> getBuildables() {
-        return buildables.stream()
-            .filter(buildable -> buildable.checkBuildCriteria(this))
-            .map(Buildable::getName)
-            .collect(Collectors.toList());
+        return buildables.stream().filter(buildable -> buildable.checkBuildCriteria(this)).map(Buildable::getName)
+                .collect(Collectors.toList());
 
         // int wood = count(Wood.class);
         // int arrows = count(Arrow.class);
@@ -73,14 +71,11 @@ public class Inventory {
     }
 
     public InventoryItem build(String type, EntityFactory factory) {
-        return buildables.stream()
-            .filter(item -> type.equals(item.getName()) && item.checkBuildCriteria(this))
-            .findFirst()
-            .map(item -> {
-                item.remove(this);
-                return item.build(factory);
-            })
-            .orElse(null);
+        return buildables.stream().filter(item -> type.equals(item.getName()) && item.checkBuildCriteria(this))
+                .findFirst().map(item -> {
+                    item.remove(this);
+                    return item.build(factory);
+                }).orElse(null);
 
         // List<Wood> wood = getEntities(Wood.class);
         // List<Arrow> arrows = getEntities(Arrow.class);
