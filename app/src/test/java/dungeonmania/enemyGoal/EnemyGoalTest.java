@@ -344,7 +344,7 @@ public class EnemyGoalTest {
   public void testEnemyOrBoulderGoal() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d__enemyGoalTest_boulderOr.json", "c_basicGoalsTest_oneSwitch");
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_boulderOr", "c_basicGoalsTest_oneSwitch");
 
     // move player to right
     res = dmc.tick(Direction.RIGHT);
@@ -367,7 +367,7 @@ public class EnemyGoalTest {
   public void testEnemyAndTreasureGoal() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d__enemyGoalTest_treasureAnd.json",
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_treasureAnd",
         "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
 
     assertTrue(TestUtils.getGoals(res).contains(":enemy"));
