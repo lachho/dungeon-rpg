@@ -248,7 +248,6 @@ public class GameMap {
         return getEntities().stream().filter(type::isInstance).map(type::cast).collect(Collectors.toList());
     }
 
-
     public Game getGame() {
         return game;
     }
