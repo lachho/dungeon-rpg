@@ -4,10 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
-import dungeonmania.entities.collectables.Bomb;
+import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.TreasureCount;
 import dungeonmania.entities.collectables.potions.Potion;
 import dungeonmania.entities.enemies.Enemy;
@@ -26,7 +25,7 @@ public class Player extends Entity implements Battleable, Overlappable {
     private BattleStatistics battleStatistics;
     private Inventory inventory;
     private Queue<Potion> queue = new LinkedList<>();
-    private int nextTrigger = 0;
+    private int nextPotionTick = 0;
 
     private int collectedTreasureCount = 0;
 
@@ -98,39 +97,36 @@ public class Player extends Entity implements Battleable, Overlappable {
             inventory.remove(item);
     }
 
-    public void use(Bomb bomb, GameMap map) {
-        inventory.remove(bomb);
-        bomb.onPutDown(map, getPosition());
-    }
-
-    public void triggerNext(int currentTick) {
+    public void nextPotion(int currentTick) {
         if (queue.isEmpty()) {
-            // inEffective = null;
             changeState(new BaseState());
             return;
         }
         Potion potion = queue.remove();
         changeState(potion.createState());
 
-        nextTrigger = currentTick + potion.getDuration();
+        nextPotionTick = currentTick + potion.getDuration();
     }
 
     public void changeState(PlayerState playerState) {
         state = playerState;
     }
 
-    public void use(Potion potion, int tick) {
-        inventory.remove(potion);
+    public void addPotion(Potion potion, int tick) {
         queue.add(potion);
         if (getState().equals("Base")) {
-            triggerNext(tick);
+            nextPotion(tick);
         }
     }
 
     public void onTick(int tick) {
-        if (getState().equals("Base") || tick == nextTrigger) {
-            triggerNext(tick);
+        if (getState().equals("Base") || tick == nextPotionTick) {
+            nextPotion(tick);
         }
+    }
+
+    public int mindControlDuration() {
+        return inventory.mindControlDuration();
     }
 
     public void remove(InventoryItem item) {
@@ -154,17 +150,22 @@ public class Player extends Entity implements Battleable, Overlappable {
         return inventory.count(itemType);
     }
 
+    public <T extends InventoryItem> boolean containsEntityOfType(Class<T> itemType) {
+        return countEntityOfType(itemType) >= 1;
+    }
+
     public void applyBuff(BattleStatistics origin) {
         if (!getState().equals("Base"))
             state.applyBuff(origin);
     }
 
-    @Override
-    public void use(Game game) {
-        return;
-    }
-
     public String getState() {
         return state.getState();
     }
+
+    public boolean hasKey(int lockNumber) {
+        Key key = inventory.getFirst(Key.class);
+        return (key != null && key.getnumber() == lockNumber);
+    }
+
 }

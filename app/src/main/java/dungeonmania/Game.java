@@ -9,9 +9,10 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.Interactable;
 import dungeonmania.entities.Player;
-import dungeonmania.entities.collectables.Bomb;
-import dungeonmania.entities.collectables.potions.Potion;
+import dungeonmania.entities.collectables.Usable;
 import dungeonmania.entities.enemies.Enemy;
+import dungeonmania.entities.enemies.Mercenary;
+import dungeonmania.entities.enemies.ZombieToast;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.Goal;
 import dungeonmania.map.GameMap;
@@ -50,7 +51,10 @@ public class Game {
         map.init();
         this.tickCount = 0;
         player = map.getPlayer();
-        register(() -> player.onTick(tickCount), PLAYER_MOVEMENT, "potionQueue");
+        register(() -> player.onTick(tickCount), PLAYER_MOVEMENT_CALLBACK, "potionQueue");
+        for (Mercenary merc : map.getEntities(Mercenary.class)) {
+            register(() -> merc.onTick(tickCount), PLAYER_MOVEMENT_CALLBACK, "allyCheck");
+        }
     }
 
     public Game tick(Direction movementDirection) {
@@ -63,14 +67,11 @@ public class Game {
         Entity item = player.getEntity(itemUsedId);
         if (item == null)
             throw new InvalidActionException(String.format("Item with id %s doesn't exist", itemUsedId));
-        if (!(item instanceof Bomb) && !(item instanceof Potion))
+        if (!(item instanceof Usable))
             throw new IllegalArgumentException(String.format("%s cannot be used", item.getClass()));
 
         registerOnce(() -> {
-            if (item instanceof Bomb)
-                player.use((Bomb) item, map);
-            if (item instanceof Potion)
-                player.use((Potion) item, tickCount);
+            ((Usable) item).use(player, map);
         }, PLAYER_MOVEMENT, "playerUsesItem");
         tick();
         return this;
@@ -91,6 +92,9 @@ public class Game {
         List<String> buildables = player.getBuildables();
         if (!buildables.contains(buildable)) {
             throw new InvalidActionException(String.format("%s cannot be built", buildable));
+            // FIXME is this demeter below
+        } else if (buildable.equals("midnight_armour") && !map.getEntities(ZombieToast.class).isEmpty()) {
+            throw new InvalidActionException(String.format("%s cannot be build as Zombie Toasts exist", buildable));
         }
         registerOnce(() -> player.build(buildable, entityFactory), PLAYER_MOVEMENT, "playerBuildsItem");
         tick();

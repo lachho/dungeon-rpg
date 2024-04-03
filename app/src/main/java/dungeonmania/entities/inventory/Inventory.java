@@ -103,4 +103,7 @@ public class Inventory {
         return getFirst(Weapon.class);
     }
 
+    public int mindControlDuration() {
+        return getFirst(Sceptre.class).getDuration();
+    }
 }

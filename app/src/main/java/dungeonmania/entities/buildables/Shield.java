@@ -2,6 +2,7 @@ package dungeonmania.entities.buildables;
 
 import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
+import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.collectables.SpecialCraftable;
@@ -9,7 +10,7 @@ import dungeonmania.entities.collectables.SunStone;
 import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.inventory.Inventory;
 
-public class Shield extends Entity implements Buildable {
+public class Shield extends Entity implements Buildable, BattleItem {
     private int durability;
     private double defence;
 

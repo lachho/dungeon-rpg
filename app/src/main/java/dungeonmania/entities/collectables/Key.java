@@ -2,7 +2,7 @@ package dungeonmania.entities.collectables;
 
 import dungeonmania.util.Position;
 
-public class Key extends Collectables implements DoorUnlockable, SpecialCraftable {
+public class Key extends Collectables implements SpecialCraftable {
     private int number;
 
     public Key(Position position, int number) {

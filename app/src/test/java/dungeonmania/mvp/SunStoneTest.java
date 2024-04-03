@@ -53,7 +53,6 @@ public class SunStoneTest {
     public void treasureGoal() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        //c_basicGoalsTest_treasure d_SunStoneTest_treasure c_SunStoneTest
         DungeonResponse res = dmc.newGame("d_SunStoneTest_treasure", "c_SunStoneTest");
 
         // move player to right
@@ -105,7 +104,7 @@ public class SunStoneTest {
         res = dmc.tick(Direction.RIGHT);
         assertEquals(2, TestUtils.getInventory(res, "sun_stone").size());
 
-        // Build Bow
+        // Build Sceptre
         assertEquals(0, TestUtils.getInventory(res, "sceptre").size());
         res = assertDoesNotThrow(() -> dmc.build("sceptre"));
         assertEquals(1, TestUtils.getInventory(res, "sceptre").size());
@@ -182,49 +181,55 @@ public class SunStoneTest {
     @DisplayName("Test Mindcontrol")
     public void battleWithMindControl() throws InvalidActionException {
         DungeonManiaController controller = new DungeonManiaController();
-        //TODO update such that we build a sceptre, not a shield in d_battleTest_shieldDurabilityTest
         String config = "c_SunStoneTest";
         DungeonResponse res = controller.newGame("d_SunStoneTest_mindControl", config);
 
         List<EntityResponse> entities = res.getEntities();
         assertEquals(1, TestUtils.countEntityOfType(entities, "player"));
-        assertEquals(3, TestUtils.countEntityOfType(entities, "zombie_toast"));
-        assertEquals(3, TestUtils.countEntityOfType(entities, "mercenary"));
+        assertEquals(1, TestUtils.countEntityOfType(entities, "zombie_toast"));
+        assertEquals(1, TestUtils.countEntityOfType(entities, "mercenary"));
+        String mercId = TestUtils.getEntitiesStream(res, "mercenary").findFirst().get().getId();
 
-        //TODO Pick up Arrows
+        // Pick up Arrows
         res = controller.tick(Direction.RIGHT);
         res = controller.tick(Direction.RIGHT);
 
-        // Pick up treasure
+        // Pick up key
         res = controller.tick(Direction.RIGHT);
 
-        //TODO Pick up sun_stone
+        // Pick up sun_stone
         res = controller.tick(Direction.RIGHT);
 
-        assertEquals(1, TestUtils.getInventory(res, "treasure").size());
+        assertEquals(1, TestUtils.getInventory(res, "key").size());
         assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
         assertEquals(2, TestUtils.getInventory(res, "arrow").size());
 
         res = controller.build("sceptre");
+        assertEquals(1, TestUtils.getInventory(res, "sceptre").size());
+        res = assertDoesNotThrow(() -> controller.interact(mercId));
 
-        // battle zombie number 1
-        res = controller.tick(Direction.RIGHT);
+        // kill zombie number 1
+        int battlesHeld = 0;
+        while (battlesHeld == 0) {
+            res = controller.tick(Direction.RIGHT);
+            battlesHeld = res.getBattles().size();
+        }
 
-        // move such that mind control expires
         res = controller.tick(Direction.LEFT);
         res = controller.tick(Direction.RIGHT);
+        res = controller.tick(Direction.LEFT);
+        assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
 
-        // battle zombie number 2, no more ally attack bonus
-        res = controller.tick(Direction.RIGHT);
+        // battle mercenary, no more sceptre bonus
+        while (battlesHeld == 1) {
+            res = controller.tick(Direction.RIGHT);
+            battlesHeld = res.getBattles().size();
+        }
 
-        // battle zombie number 3, no more ally attack bonus
-        res = controller.tick(Direction.RIGHT);
-
-        assertTrue(res.getBattles().size() != 0);
+        assertEquals(2, res.getBattles().size());
         List<BattleResponse> battles = res.getBattles();
         BattleResponse firstBattle = battles.get(0);
 
-        // This is the attack without ally
         double playerBaseAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("player_attack", config));
         double allyAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("ally_attack", config));
 
@@ -232,13 +237,8 @@ public class SunStoneTest {
         RoundResponse firstRound = firstBattle.getRounds().get(0);
         assertEquals((playerBaseAttack + allyAttack) / 5, -firstRound.getDeltaEnemyHealth(), 0.001);
 
-        assertNotEquals(0, firstBattle.getBattleItems().size());
-        assertTrue(firstBattle.getBattleItems().get(0).getType().startsWith("sceptre"));
-
         // check values for no ally boost
         BattleResponse lastBattle = battles.get(battles.size() - 1);
-        // the sceptre is not used, hence no ally bonuses
-        assertEquals(0, lastBattle.getBattleItems().size());
         firstRound = lastBattle.getRounds().get(0);
         assertEquals((playerBaseAttack) / 5, -firstRound.getDeltaEnemyHealth(), 0.001);
     }
@@ -248,36 +248,42 @@ public class SunStoneTest {
     @DisplayName("Craft Midnight armour with zombies")
     public void battleWithMidnightArmour() throws InvalidActionException {
         DungeonManiaController controller = new DungeonManiaController();
-        //TODO update such that we build a midnight armour, not a shield in d_battleTest_shieldDurabilityTest
-        // ensure there is 1 zombie and then 1 spider to battle
         String config = "c_SunStoneTest";
         DungeonResponse res = controller.newGame("d_SunStoneTest_MidnightArmour", config);
 
         List<EntityResponse> entities = res.getEntities();
         assertEquals(1, TestUtils.countEntityOfType(entities, "player"));
         assertEquals(1, TestUtils.countEntityOfType(entities, "zombie_toast"));
-        assertEquals(1, TestUtils.countEntityOfType(entities, "spider"));
+        assertEquals(1, TestUtils.countEntityOfType(entities, "mercenary"));
 
-        //TODO Pick up sword, treasure, sunstone
+        // Pick up sword, treasure, sunstone
+        res = controller.tick(Direction.RIGHT);
         res = controller.tick(Direction.RIGHT);
         res = controller.tick(Direction.RIGHT);
         res = controller.tick(Direction.RIGHT);
 
-        assertEquals(1, TestUtils.getInventory(res, "treasure").size());
+        assertEquals(1, TestUtils.getInventory(res, "key").size());
         assertEquals(1, TestUtils.getInventory(res, "sun_stone").size());
         assertEquals(1, TestUtils.getInventory(res, "sword").size());
 
         assertThrows(InvalidActionException.class, () -> controller.build("midnight_armour"));
 
         // kill zombie number 1
-        res = controller.tick(Direction.RIGHT);
+        int battlesHeld = 0;
+        while (battlesHeld == 0) {
+            res = controller.tick(Direction.RIGHT);
+            battlesHeld = res.getBattles().size();
+        }
 
         res = controller.build("midnight_armour");
 
-        // battle spider, has attack and defence bonus
-        res = controller.tick(Direction.RIGHT);
+        // battle mercenary, has attack and defence bonus
+        while (battlesHeld == 1) {
+            res = controller.tick(Direction.RIGHT);
+            battlesHeld = res.getBattles().size();
+        }
 
-        assertTrue(res.getBattles().size() != 0);
+        assertEquals(2, res.getBattles().size());
         List<BattleResponse> battles = res.getBattles();
         BattleResponse lastBattle = battles.get(1);
 
@@ -295,9 +301,9 @@ public class SunStoneTest {
 
         // Assumption: armour effect calculation to reduce damage makes enemyAttack =
         // enemyAttack - armour effect
-        int enemyAttack = Integer.parseInt(TestUtils.getValueFromConfigFile("spider_attack", config));
-        int armourEffect = Integer.parseInt(TestUtils.getValueFromConfigFile("midnight_armour_defence", config));
-        int expectedDamage = (enemyAttack - armourEffect) / 10;
+        double enemyAttack = Double.parseDouble(TestUtils.getValueFromConfigFile("mercenary_attack", config));
+        double armourEffect = Double.parseDouble(TestUtils.getValueFromConfigFile("midnight_armour_defence", config));
+        double expectedDamage = (enemyAttack - armourEffect) / 10;
         // Delta health is negative so take negative here
         assertEquals(expectedDamage, -firstRound.getDeltaCharacterHealth(), 0.001);
     }

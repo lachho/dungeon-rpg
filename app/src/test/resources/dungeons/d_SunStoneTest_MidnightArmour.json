@@ -16,21 +16,16 @@
             "y": 1
         },
         {
-            "type": "treasure",
-            "x": 3,
-            "y": 1
-        },
-        {
             "type": "key",
-            "x": 4,
+            "x": 3,
             "y": 1,
-            "key": 1
+            "key": "1"
         },
         {
             "type": "door",
             "x": 4,
             "y": 20,
-            "key": 1
+            "key": 2
         },
         {
             "type": "wall",
@@ -173,8 +168,14 @@
             "y": 1
         },
         {
-            "type": "spider",
+            "type": "door",
             "x": 10,
+            "y": 1,
+            "key": 1
+        },
+        {
+            "type": "mercenary",
+            "x": 11,
             "y": 1
         },
         {

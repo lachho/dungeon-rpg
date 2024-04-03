@@ -265,4 +265,8 @@ public class GameMap {
     public void setGame(Game game) {
         this.game = game;
     }
+
+    public int getTick() {
+        return game.getTick();
+    }
 }

@@ -1,7 +1,5 @@
 package dungeonmania.entities.buildables;
 
-import dungeonmania.Game;
-import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.collectables.Arrow;
@@ -16,20 +14,6 @@ public class Sceptre extends Entity implements Buildable {
     public Sceptre(int duration) {
         super(null);
         this.duration = duration;
-    }
-
-    @Override
-    public void applyBuff(BattleStatistics origin) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'applyBuff'");
-    }
-
-    @Override
-    public void use(Game game) {
-        duration--;
-        if (duration <= 0) {
-            game.getPlayer().remove(this);
-        }
     }
 
     @Override
@@ -62,6 +46,10 @@ public class Sceptre extends Entity implements Buildable {
     @Override
     public String getName() {
         return "sceptre";
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
 }
