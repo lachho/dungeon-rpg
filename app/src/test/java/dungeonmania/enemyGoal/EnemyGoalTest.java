@@ -19,12 +19,194 @@ public class EnemyGoalTest {
   public void testBasicDestroyAllSpawnersMinimumEnemies() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d_enemyGoalTest_basicDestroyAllSpawnersMinimumEntites",
-        "c_enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites",
+        "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
+
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+
     assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
     String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
 
-    // move player to right
+    // move player to left
+    res = dmc.tick(Direction.LEFT);
+
+    // player has picked up weapon
+    assertEquals(1, TestUtils.getInventory(res, "sword").size());
+
+    // cardinally adjacent: false, has sword: true
+    assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+
+    // cardinally adjacent: true, has sword: true
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+
+    // we've destroyed the spawner
+    assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
+
+    dmc.tick(Direction.DOWN);
+    dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.RIGHT);
+    assertEquals(1, TestUtils.getEntities(res, "spider").size());
+
+    // Kill the spider
+    res = dmc.tick(Direction.DOWN);
+    assertEquals(0, TestUtils.getEntities(res, "spider").size());
+
+    // assert goal met
+    assertEquals("", TestUtils.getGoals(res));
+  }
+
+  @Test
+  @Tag("2a-2")
+  @DisplayName("Set enemy goal, destroy all but 1 spawners and minimum number of enemies")
+  // Shouldn't be achieved
+  public void testDestroyMostSpawnersMinimumEnemies() {
+    // Two zombie spawners and one spider
+    // We destroy one spawner and one spider
+    // Goal is not met
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicDestroyMostSpawnersMinimumEntites",
+        "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+
+    // move player to left
+    res = dmc.tick(Direction.LEFT);
+
+    // player has picked up weapon
+    assertEquals(1, TestUtils.getInventory(res, "sword").size());
+
+    // cardinally adjacent: false, has sword: true
+    assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
+    assertEquals(2, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+
+    // cardinally adjacent: true, has sword: true
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+
+    // we've destroyed a spawner
+    assertEquals(1, TestUtils.countType(res, "zombie_toast_spawner"));
+
+    dmc.tick(Direction.DOWN);
+    dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.RIGHT);
+    assertEquals(1, TestUtils.getEntities(res, "spider").size());
+
+    // Kill the spider
+    res = dmc.tick(Direction.DOWN);
+    assertEquals(0, TestUtils.getEntities(res, "spider").size());
+
+    // dmc.tick(Direction.LEFT);
+    // res = dmc.tick(Direction.LEFT);
+
+    // assert goal not met - a spawner still exists
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+  }
+
+  @Test
+  @Tag("2a-3")
+  // Shouldn't be achieved
+  @DisplayName("Set enemy goal, destory all spawners and minimum number of enemies minus one")
+  public void testDestroyAllSpawnersMostEnemies() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites",
+        "c__enemyGoalTest_basicDestroyAllSpawnersNotMinimumEntites");
+
+    // Map has goal set to destroying two enemies, but only one exists on the map
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
+    // move player to left
+    res = dmc.tick(Direction.LEFT);
+
+    // player has picked up weapon
+    assertEquals(1, TestUtils.getInventory(res, "sword").size());
+
+    // cardinally adjacent: false, has sword: true
+    assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+
+    // cardinally adjacent: true, has sword: true
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+
+    // we've destroyed the spawner
+    assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
+
+    dmc.tick(Direction.DOWN);
+    dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.RIGHT);
+    assertEquals(1, TestUtils.getEntities(res, "spider").size());
+
+    // Kill the spider
+    res = dmc.tick(Direction.DOWN);
+    assertEquals(0, TestUtils.getEntities(res, "spider").size());
+
+    // dmc.tick(Direction.LEFT);
+    // res = dmc.tick(Direction.LEFT);
+
+    // assert not goal met - numEnemiesDefeated < targetNumEnemiesDefeated
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+  }
+
+  @Test
+  @Tag("2a-4")
+  @DisplayName("Set enemy goal, destroy minimum entities, and then destroy the spawner")
+  // Should be achieved
+  public void testDestroyEnemyThenSpawner() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites",
+        "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
+
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
+    res = dmc.tick(Direction.RIGHT);
+    assertEquals(1, TestUtils.getEntities(res, "spider").size());
+    // kill the spider
+    res = dmc.tick(Direction.DOWN);
+    assertEquals(0, TestUtils.getEntities(res, "spider").size());
+
+    dmc.tick(Direction.LEFT);
+    dmc.tick(Direction.LEFT);
+    res = dmc.tick(Direction.UP);
+    // player has picked up weapon
+    assertEquals(1, TestUtils.getInventory(res, "sword").size());
+
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+    // we've destroyed the spawner
+    assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
+
+    // assert goal met
+    assertEquals("", TestUtils.getGoals(res));
+  }
+
+  // Tests 1 - 4 but also with an exit goal
+
+  @Test
+  @Tag("2a-5")
+  @DisplayName("Set enemy and exit goal, destroy all spawners and minimum number of enemies")
+  // Should be achieved
+  public void testExitDestroyAllSpawnersMinimumEnemies() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_exitDestroyAllSpawnersMinimumEntites",
+        "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
+
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":exit"));
+
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
+    // move player to left
     res = dmc.tick(Direction.LEFT);
 
     // player has picked up weapon
@@ -53,37 +235,158 @@ public class EnemyGoalTest {
     res = dmc.tick(Direction.LEFT);
 
     // assert goal met
+    assertEquals(":exit", TestUtils.getGoals(res));
+
+    // move to exit
+    dmc.tick(Direction.LEFT);
+    res = dmc.tick(Direction.LEFT);
     assertEquals("", TestUtils.getGoals(res));
   }
 
   @Test
-  @Tag("2a-2")
-  @DisplayName("Set enemy goal, destroy all but 1 spawners and minimum number of enemies")
+  @Tag("2a-6")
+  @DisplayName("Set enemy and exit goal, destroy all but 1 spawners and minimum number of enemies")
   // Shouldn't be achieved
-  public void testDestroyMostSpawnersMinimumEnemies() {
+  public void testExitDestroyMostSpawnersMinimumEnemies() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d_basicGoalsTest_exit", "c_basicGoalsTest_exit");
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicDestroyMostSpawnersMinimumEntites",
+        "c__enemyGoalTest_exitDestroyAllSpawnersMinimumEntites");
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+
+    // move player to left
+    res = dmc.tick(Direction.LEFT);
+
+    // player has picked up weapon
+    assertEquals(1, TestUtils.getInventory(res, "sword").size());
+
+    // cardinally adjacent: false, has sword: true
+    assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
+    assertEquals(2, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+
+    // cardinally adjacent: true, has sword: true
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+
+    // we've destroyed a spawner
+    assertEquals(1, TestUtils.countType(res, "zombie_toast_spawner"));
+
+    dmc.tick(Direction.DOWN);
+    dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.RIGHT);
+    assertEquals(1, TestUtils.getEntities(res, "spider").size());
+
+    // Kill the spider
+    res = dmc.tick(Direction.DOWN);
+    assertEquals(0, TestUtils.getEntities(res, "spider").size());
+
+    // assert goal not met - a spawner still exists
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+
+    // move to exit
+    dmc.tick(Direction.LEFT);
+    res = dmc.tick(Direction.LEFT);
+
+    // move off exit, assert goal not met
+    res = dmc.tick(Direction.LEFT);
+    assertTrue(TestUtils.getGoals(res).contains(":exit"));
+
   }
 
   @Test
-  @Tag("2a-3")
-  // Shouldn't be achieved
-  @DisplayName("Set enemy goal, destory all spawners and minimum number of enemies minus one")
-  public void testDestroyAllSpawnersMostEnemies() {
-    DungeonManiaController dmc;
-    dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d_basicGoalsTest_exit", "c_basicGoalsTest_exit");
-  }
-
-  @Test
-  @Tag("2a-4")
-  @DisplayName("Set enemy goal, no spawners and minimum number of enemies")
+  @Tag("2a-7")
+  @DisplayName("Set enemy and exit goal, destroy minimum entities, and then destroy the spawner")
   // Should be achieved
-  public void testNoSpawnersMinimumEnemies() {
+  public void testBExitDestroyEnemyThenSpawner() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d_basicGoalsTest_exit", "c_basicGoalsTest_exit");
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_exitDestroyAllSpawnersMinimumEntites",
+        "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
+
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":exit"));
+
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
+    res = dmc.tick(Direction.RIGHT);
+    assertEquals(1, TestUtils.getEntities(res, "spider").size());
+    // kill the spider
+    res = dmc.tick(Direction.DOWN);
+    assertEquals(0, TestUtils.getEntities(res, "spider").size());
+
+    dmc.tick(Direction.LEFT);
+    dmc.tick(Direction.LEFT);
+    res = dmc.tick(Direction.UP);
+    // player has picked up weapon
+    assertEquals(1, TestUtils.getInventory(res, "sword").size());
+
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+    // we've destroyed the spawner
+    assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
+
+    // assert goal met
+    assertEquals(":exit", TestUtils.getGoals(res));
+
+    // move to exit
+    dmc.tick(Direction.LEFT);
+    dmc.tick(Direction.DOWN);
+    dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.DOWN);
+    assertEquals("", TestUtils.getGoals(res));
   }
+
+  // Basic boulder OR enemy goal
+
+  // basic treasure AND enemy goal
+
+  // complex test?
+
+  // @Test
+  // @Tag("2a-4")
+  // @DisplayName("Set enemy goal, no enemies - undefined behaviour")
+  // // Should be achieved
+  // public void testNoSpawnersMinimumEnemies() {
+  //   DungeonManiaController dmc;
+  //   dmc = new DungeonManiaController();
+  //   DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicNoEntities",
+  //       "c__enemyGoalTest_basicDestroyAllSpawnersNotMinimumEntites");
+
+  //   assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+
+  //   // move player to right
+  //   res = dmc.tick(Direction.LEFT);
+
+  //   // player has picked up weapon
+  //   assertEquals(1, TestUtils.getInventory(res, "sword").size());
+
+  //   // cardinally adjacent: true, has sword: true
+  //   String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+  //   res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+
+  //   // we've destroyed a spawner
+  //   assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
+
+  //   // 1 Spider, 0 Spawners
+  //   assertEquals(0, TestUtils.getEntities(res, "spider").size());
+
+  //   dmc.tick(Direction.DOWN);
+  //   // kill the spider
+  //   res = dmc.tick(Direction.RIGHT);
+  //   assertEquals(0, TestUtils.getEntities(res, "spider").size());
+  //   // assert goal met
+  //   assertEquals("", TestUtils.getGoals(res));
+
+  //   // dmc.tick(Direction.DOWN);
+  //   // dmc.tick(Direction.DOWN);
+  //   // dmc.tick(Direction.LEFT);
+  //   // dmc.tick(Direction.LEFT);
+  //   // res = dmc.tick(Direction.LEFT);
+
+  //   // // assert goal met
+  //   // assertEquals("", TestUtils.getGoals(res));
+  // }
 
 }
