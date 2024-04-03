@@ -52,11 +52,6 @@ public class Player extends Entity implements Battleable, Overlappable {
         inventory.useWeapon(game);
     }
 
-    // unused
-    // public BattleItem getWeapon() {
-    //     return inventory.getWeapon();
-    // }
-
     public List<String> getBuildables() {
         return inventory.getBuildables();
     }
