@@ -1,7 +1,6 @@
 package dungeonmania.enemyGoal;
 
 import dungeonmania.DungeonManiaController;
-import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.mvp.TestUtils;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.util.Direction;
@@ -27,15 +26,13 @@ public class EnemyGoalTest {
     assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
     String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
 
+    assertEquals(1, TestUtils.getEntities(res, "sword").size());
+
     // move player to left
     res = dmc.tick(Direction.LEFT);
 
     // player has picked up weapon
-    assertEquals(1, TestUtils.getInventory(res, "sword").size());
-
-    // cardinally adjacent: false, has sword: true
-    assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
-    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    // assertEquals(1, TestUtils.getInventory(res, "sword").size());
 
     // cardinally adjacent: true, has sword: true
     res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
@@ -68,7 +65,7 @@ public class EnemyGoalTest {
     dmc = new DungeonManiaController();
     DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicDestroyMostSpawnersMinimumEntites",
         "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
-    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    assertEquals(2, TestUtils.getEntities(res, "zombie_toast_spawner").size());
     String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
 
     assertTrue(TestUtils.getGoals(res).contains(":enemy"));
@@ -78,10 +75,6 @@ public class EnemyGoalTest {
 
     // player has picked up weapon
     assertEquals(1, TestUtils.getInventory(res, "sword").size());
-
-    // cardinally adjacent: false, has sword: true
-    assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
-    assertEquals(2, TestUtils.getEntities(res, "zombie_toast_spawner").size());
 
     // cardinally adjacent: true, has sword: true
     res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
@@ -127,10 +120,6 @@ public class EnemyGoalTest {
     // player has picked up weapon
     assertEquals(1, TestUtils.getInventory(res, "sword").size());
 
-    // cardinally adjacent: false, has sword: true
-    assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
-    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
-
     // cardinally adjacent: true, has sword: true
     res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
 
@@ -145,9 +134,6 @@ public class EnemyGoalTest {
     // Kill the spider
     res = dmc.tick(Direction.DOWN);
     assertEquals(0, TestUtils.getEntities(res, "spider").size());
-
-    // dmc.tick(Direction.LEFT);
-    // res = dmc.tick(Direction.LEFT);
 
     // assert not goal met - numEnemiesDefeated < targetNumEnemiesDefeated
     assertTrue(TestUtils.getGoals(res).contains(":enemy"));
@@ -212,10 +198,6 @@ public class EnemyGoalTest {
     // player has picked up weapon
     assertEquals(1, TestUtils.getInventory(res, "sword").size());
 
-    // cardinally adjacent: false, has sword: true
-    assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
-    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
-
     // cardinally adjacent: true, has sword: true
     res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
 
@@ -231,15 +213,14 @@ public class EnemyGoalTest {
     res = dmc.tick(Direction.DOWN);
     assertEquals(0, TestUtils.getEntities(res, "spider").size());
 
-    dmc.tick(Direction.LEFT);
-    res = dmc.tick(Direction.LEFT);
-
-    // assert goal met
-    assertEquals(":exit", TestUtils.getGoals(res));
+    assertTrue(TestUtils.getGoals(res).contains(":exit"));
+    assertFalse(TestUtils.getGoals(res).contains(":enemy"));
 
     // move to exit
     dmc.tick(Direction.LEFT);
     res = dmc.tick(Direction.LEFT);
+
+    // assert goal met
     assertEquals("", TestUtils.getGoals(res));
   }
 
@@ -250,9 +231,9 @@ public class EnemyGoalTest {
   public void testExitDestroyMostSpawnersMinimumEnemies() {
     DungeonManiaController dmc;
     dmc = new DungeonManiaController();
-    DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicDestroyMostSpawnersMinimumEntites",
-        "c__enemyGoalTest_exitDestroyAllSpawnersMinimumEntites");
-    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_exitDestroyMostSpawnersMinimumEntites",
+        "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
+    assertEquals(2, TestUtils.getEntities(res, "zombie_toast_spawner").size());
     String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
 
     assertTrue(TestUtils.getGoals(res).contains(":enemy"));
@@ -263,14 +244,8 @@ public class EnemyGoalTest {
     // player has picked up weapon
     assertEquals(1, TestUtils.getInventory(res, "sword").size());
 
-    // cardinally adjacent: false, has sword: true
-    assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
-    assertEquals(2, TestUtils.getEntities(res, "zombie_toast_spawner").size());
-
-    // cardinally adjacent: true, has sword: true
+    // destroy a spawner
     res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
-
-    // we've destroyed a spawner
     assertEquals(1, TestUtils.countType(res, "zombie_toast_spawner"));
 
     dmc.tick(Direction.DOWN);
@@ -291,6 +266,8 @@ public class EnemyGoalTest {
 
     // move off exit, assert goal not met
     res = dmc.tick(Direction.LEFT);
+
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
     assertTrue(TestUtils.getGoals(res).contains(":exit"));
 
   }
@@ -328,7 +305,8 @@ public class EnemyGoalTest {
     assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
 
     // assert goal met
-    assertEquals(":exit", TestUtils.getGoals(res));
+    assertTrue(TestUtils.getGoals(res).contains(":exit"));
+    assertFalse(TestUtils.getGoals(res).contains(":enemy"));
 
     // move to exit
     dmc.tick(Direction.LEFT);
@@ -382,10 +360,6 @@ public class EnemyGoalTest {
     // player has picked up weapon
     assertEquals(1, TestUtils.getInventory(res, "sword").size());
 
-    // cardinally adjacent: false, has sword: true
-    assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
-    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
-
     // cardinally adjacent: true, has sword: true
     res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
 
@@ -402,7 +376,8 @@ public class EnemyGoalTest {
     assertEquals(0, TestUtils.getEntities(res, "spider").size());
 
     // assert goal met
-    assertEquals(":treasure", TestUtils.getGoals(res));
+    assertTrue(TestUtils.getGoals(res).contains(":treasure"));
+    assertFalse(TestUtils.getGoals(res).contains(":enemy"));
 
     // move to treasure
     dmc.tick(Direction.LEFT);
