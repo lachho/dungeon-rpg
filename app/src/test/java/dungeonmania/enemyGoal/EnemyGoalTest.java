@@ -338,55 +338,78 @@ public class EnemyGoalTest {
     assertEquals("", TestUtils.getGoals(res));
   }
 
-  // Basic boulder OR enemy goal
+  @Test
+  @Tag("2a-8")
+  @DisplayName("Test achieving a basic boulders OR enemy goal")
+  public void testEnemyOrBoulderGoal() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_boulderOr.json", "c_basicGoalsTest_oneSwitch");
 
-  // basic treasure AND enemy goal
+    // move player to right
+    res = dmc.tick(Direction.RIGHT);
+
+    // assert goal not met
+    assertTrue(TestUtils.getGoals(res).contains(":boulders"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+
+    // move boulder onto switch
+    res = dmc.tick(Direction.RIGHT);
+
+    // assert goal met
+    assertEquals("", TestUtils.getGoals(res));
+  }
+
+  @Test
+  @Tag("2a-9")
+  @DisplayName("Set enemy AND treasure goal")
+  // Should be achieved
+  public void testEnemyAndTreasureGoal() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_treasureAnd.json",
+        "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
+
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":treasure"));
+
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
+    // move player to left
+    res = dmc.tick(Direction.LEFT);
+
+    // player has picked up weapon
+    assertEquals(1, TestUtils.getInventory(res, "sword").size());
+
+    // cardinally adjacent: false, has sword: true
+    assertThrows(InvalidActionException.class, () -> dmc.interact(spawnerId));
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+
+    // cardinally adjacent: true, has sword: true
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+
+    // we've destroyed the spawner
+    assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
+
+    dmc.tick(Direction.DOWN);
+    dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.RIGHT);
+    assertEquals(1, TestUtils.getEntities(res, "spider").size());
+
+    // Kill the spider
+    res = dmc.tick(Direction.DOWN);
+    assertEquals(0, TestUtils.getEntities(res, "spider").size());
+
+    // assert goal met
+    assertEquals(":treasure", TestUtils.getGoals(res));
+
+    // move to treasure
+    dmc.tick(Direction.LEFT);
+    res = dmc.tick(Direction.LEFT);
+    assertEquals("", TestUtils.getGoals(res));
+  }
 
   // complex test?
-
-  // @Test
-  // @Tag("2a-4")
-  // @DisplayName("Set enemy goal, no enemies - undefined behaviour")
-  // // Should be achieved
-  // public void testNoSpawnersMinimumEnemies() {
-  //   DungeonManiaController dmc;
-  //   dmc = new DungeonManiaController();
-  //   DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicNoEntities",
-  //       "c__enemyGoalTest_basicDestroyAllSpawnersNotMinimumEntites");
-
-  //   assertTrue(TestUtils.getGoals(res).contains(":enemy"));
-
-  //   // move player to right
-  //   res = dmc.tick(Direction.LEFT);
-
-  //   // player has picked up weapon
-  //   assertEquals(1, TestUtils.getInventory(res, "sword").size());
-
-  //   // cardinally adjacent: true, has sword: true
-  //   String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
-  //   res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
-
-  //   // we've destroyed a spawner
-  //   assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
-
-  //   // 1 Spider, 0 Spawners
-  //   assertEquals(0, TestUtils.getEntities(res, "spider").size());
-
-  //   dmc.tick(Direction.DOWN);
-  //   // kill the spider
-  //   res = dmc.tick(Direction.RIGHT);
-  //   assertEquals(0, TestUtils.getEntities(res, "spider").size());
-  //   // assert goal met
-  //   assertEquals("", TestUtils.getGoals(res));
-
-  //   // dmc.tick(Direction.DOWN);
-  //   // dmc.tick(Direction.DOWN);
-  //   // dmc.tick(Direction.LEFT);
-  //   // dmc.tick(Direction.LEFT);
-  //   // res = dmc.tick(Direction.LEFT);
-
-  //   // // assert goal met
-  //   // assertEquals("", TestUtils.getGoals(res));
-  // }
 
 }

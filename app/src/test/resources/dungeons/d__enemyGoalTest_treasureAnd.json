@@ -1,0 +1,35 @@
+{
+  "entities": [
+    {
+      "x": 1,
+      "y": 0,
+      "type": "zombie_toast_spawner"
+    },
+    {
+      "x": 2,
+      "y": 1,
+      "type": "player"
+    },
+    {
+      "x": 3,
+      "y": 3,
+      "type": "spider"
+    },
+    {
+      "x": 0,
+      "y": 4,
+      "type": "treasure"
+    }
+  ],
+  "goal-condition": {
+    "goal": "AND",
+    "subgoals": [
+        {
+            "goal": "enemy"
+        },
+        {
+            "goal": "treasure"
+        }
+    ]
+  }
+}
