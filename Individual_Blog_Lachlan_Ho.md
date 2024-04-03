@@ -17,10 +17,16 @@
 - Decoupled potion from player
 - Refactored BattleStatistics applyBuff updates to reduce coupling
 - Refactored BattleItems to use a decorator pattern
+- Task 3 - Attack multipler ammended
 
 ## Week 8
 
-- List the tasks you completed this week here
+- Task 3 - use of optDouble instead of optInt in Entity Factory
+- Task 3 - implementation of Bribe radius
+- Task 2 - Sunstone and buildables planning and design
+- Task 2 - Sunstone and buildables tests and dungeons written
+- Task 2 - Sunstone and buildables implementation
+- Refactored Inventory.java and removed hardcoding of buildables
 
 ## Week 9
 
