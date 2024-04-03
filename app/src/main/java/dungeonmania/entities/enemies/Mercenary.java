@@ -12,7 +12,6 @@ import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvincible;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvisibleAndZombieToast;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveMercenary;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveStrategy;
-import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
 public class Mercenary extends Enemy implements Interactable {
@@ -54,10 +53,10 @@ public class Mercenary extends Enemy implements Interactable {
     }
 
     @Override
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (allied)
             return;
-        super.onOverlap(map, entity);
+        super.onOverlap(game, entity);
     }
 
     private boolean withinRadius(Position player) {
@@ -108,9 +107,9 @@ public class Mercenary extends Enemy implements Interactable {
 
         if (allied) {
             moveStrategy = new MoveAlly();
-        } else if (game.getPlayer().getState().equals("Invisible")) {
+        } else if (game.getPlayerState().equals("Invisible")) {
             moveStrategy = new MoveInvisibleAndZombieToast();
-        } else if (game.getPlayer().getState().equals("Invincible")) {
+        } else if (game.getPlayerState().equals("Invincible")) {
             moveStrategy = new MoveInvincible();
         } else {
             moveStrategy = new MoveMercenary();

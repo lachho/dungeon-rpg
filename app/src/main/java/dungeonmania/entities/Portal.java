@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import dungeonmania.entities.enemies.Mercenary;
 import dungeonmania.entities.enemies.ZombieToast;
 import dungeonmania.map.GameMap;
+import dungeonmania.Game;
 import dungeonmania.util.Position;
 
 public class Portal extends Entity implements Overlappable {
@@ -27,24 +28,20 @@ public class Portal extends Entity implements Overlappable {
     }
 
     public boolean canTeleportTo(GameMap map, Entity entity) {
-        List<Position> neighbours = getPosition().getCardinallyAdjacentPositions();
+        List<Position> neighbours = getCardinallyAdjacentPositions();
         return neighbours.stream().allMatch(n -> map.canMoveTo(entity, n));
     }
 
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (pair == null)
             return;
         if (entity instanceof Player || entity instanceof Mercenary || entity instanceof ZombieToast)
-            doTeleport(map, entity);
+            doTeleport(game.getMap(), entity);
     }
 
     private void doTeleport(GameMap map, Entity entity) {
-        Position destination = pair.getPosition()
-                .getCardinallyAdjacentPositions()
-                .stream()
-                .filter(dest -> map.canMoveTo(entity, dest))
-                .findAny()
-                .orElse(null);
+        Position destination = pair.getCardinallyAdjacentPositions().stream()
+                .filter(dest -> map.canMoveTo(entity, dest)).findAny().orElse(null);
         if (destination != null) {
             map.moveTo(entity, destination);
         }
@@ -55,13 +52,11 @@ public class Portal extends Entity implements Overlappable {
     }
 
     public List<Position> getDestPositions(GameMap map, Entity entity) {
-        return pair == null
-                ? null
-                : pair.getPosition().getAdjacentPositions()
-                    .stream()
-                    .filter(p -> map.canMoveTo(entity, p))
-                    .collect(Collectors.toList());
+        return pair == null ? null
+                : pair.getCardinallyAdjacentPositions().stream().filter(p -> map.canMoveTo(entity, p))
+                        .collect(Collectors.toList());
     }
+
     public void bind(Portal portal) {
         if (this.pair == portal)
             return;

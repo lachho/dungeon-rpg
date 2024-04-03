@@ -85,7 +85,7 @@ public class GameBuilder {
                 map.addNode(newNode);
 
             if (entity instanceof Player)
-                map.setPlayer((Player) entity);
+                game.setPlayer((Player) entity);
         });
         game.setMap(map);
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dungeonmania.Game;
 import dungeonmania.entities.BattleItem;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
@@ -99,6 +100,7 @@ public class Inventory {
         return getFirst(Weapon.class) != null;
     }
 
+    // FIXME- getWeapon()/useWeapon() is only used in ZombieToastSpawner - bad inheritance
     public BattleItem getWeapon() {
         return getFirst(Weapon.class);
     }
@@ -106,4 +108,9 @@ public class Inventory {
     public int mindControlDuration() {
         return getFirst(Sceptre.class).getDuration();
     }
+
+    public void useWeapon(Game game) {
+        getWeapon().use(game);
+    }
+
 }

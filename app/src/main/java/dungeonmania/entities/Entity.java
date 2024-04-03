@@ -35,6 +35,14 @@ public abstract class Entity {
         return position;
     }
 
+    public int getXPosition() {
+        return position.getX();
+    }
+
+    public int getYPosition() {
+        return position.getY();
+    }
+
     public List<Position> getCardinallyAdjacentPositions() {
         return position.getCardinallyAdjacentPositions();
     }

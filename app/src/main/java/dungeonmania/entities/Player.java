@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import dungeonmania.Game;
 import dungeonmania.battles.BattleStatistics;
 import dungeonmania.battles.Battleable;
 import dungeonmania.entities.collectables.Key;
@@ -47,9 +48,14 @@ public class Player extends Entity implements Battleable, Overlappable {
         return inventory.hasWeapon();
     }
 
-    public BattleItem getWeapon() {
-        return inventory.getWeapon();
+    public void useWeapon(Game game) {
+        inventory.useWeapon(game);
     }
+
+    // unused
+    // public BattleItem getWeapon() {
+    //     return inventory.getWeapon();
+    // }
 
     public List<String> getBuildables() {
         return inventory.getBuildables();
@@ -67,18 +73,14 @@ public class Player extends Entity implements Battleable, Overlappable {
         map.moveTo(this, Position.translateBy(this.getPosition(), direction));
     }
 
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (entity instanceof Enemy) {
             if (entity instanceof Mercenary) {
                 if (((Mercenary) entity).isAllied())
                     return;
             }
-            map.getGame().battle(this, (Enemy) entity);
+            game.battle(this, (Enemy) entity);
         }
-    }
-
-    public Entity getEntity(String itemUsedId) {
-        return inventory.getEntity(itemUsedId);
     }
 
     public boolean pickUp(Entity item) {
@@ -152,10 +154,12 @@ public class Player extends Entity implements Battleable, Overlappable {
 
     public <T extends InventoryItem> boolean containsEntityOfType(Class<T> itemType) {
         return countEntityOfType(itemType) >= 1;
+
     }
 
     public void applyBuff(BattleStatistics origin) {
         if (!getState().equals("Base"))
+
             state.applyBuff(origin);
     }
 
@@ -168,4 +172,11 @@ public class Player extends Entity implements Battleable, Overlappable {
         return (key != null && key.getnumber() == lockNumber);
     }
 
+    public Entity getInventoryEntity(String itemUsedId) {
+        return inventory.getEntity(itemUsedId);
+    }
+
+    public <T> List<T> getInventoryEntities(Class<T> clz) {
+        return inventory.getEntities(clz);
+    }
 }

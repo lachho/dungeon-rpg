@@ -21,7 +21,7 @@ public class Bow extends Entity implements Buildable, Weapon {
     public void use(Game game) {
         durability--;
         if (durability <= 0) {
-            game.getPlayer().remove(this);
+            game.removePlayerInventoryItem(this);
         }
     }
 

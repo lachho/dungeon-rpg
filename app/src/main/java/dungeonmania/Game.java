@@ -13,6 +13,8 @@ import dungeonmania.entities.collectables.Usable;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.Mercenary;
 import dungeonmania.entities.enemies.ZombieToast;
+import dungeonmania.entities.enemies.ZombieToastSpawner;
+import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.Goal;
 import dungeonmania.map.GameMap;
@@ -50,7 +52,6 @@ public class Game {
         this.id = UUID.randomUUID().toString();
         map.init();
         this.tickCount = 0;
-        player = map.getPlayer();
         register(() -> player.onTick(tickCount), PLAYER_MOVEMENT_CALLBACK, "potionQueue");
         for (Mercenary merc : map.getEntities(Mercenary.class)) {
             register(() -> merc.onTick(tickCount), PLAYER_MOVEMENT_CALLBACK, "allyCheck");
@@ -64,7 +65,7 @@ public class Game {
     }
 
     public Game tick(String itemUsedId) throws InvalidActionException {
-        Entity item = player.getEntity(itemUsedId);
+        Entity item = player.getInventoryEntity(itemUsedId);
         if (item == null)
             throw new InvalidActionException(String.format("Item with id %s doesn't exist", itemUsedId));
         if (!(item instanceof Usable))
@@ -77,13 +78,12 @@ public class Game {
         return this;
     }
 
-    // FIXME - demeter violation
     public void battle(Player player, Enemy enemy) {
         battleFacade.battle(this, player, enemy);
-        if (player.getBattleStatistics().getHealth() <= 0) {
+        if (player.getBattleStatisticsHealth() <= 0) {
             map.destroyEntity(player);
         }
-        if (enemy.getBattleStatistics().getHealth() <= 0) {
+        if (enemy.getBattleStatisticsHealth() <= 0) {
             map.destroyEntity(enemy);
         }
     }
@@ -92,8 +92,7 @@ public class Game {
         List<String> buildables = player.getBuildables();
         if (!buildables.contains(buildable)) {
             throw new InvalidActionException(String.format("%s cannot be built", buildable));
-            // FIXME is this demeter below
-        } else if (buildable.equals("midnight_armour") && !map.getEntities(ZombieToast.class).isEmpty()) {
+        } else if (buildable.equals("midnight_armour") && map.doesTypeExist(ZombieToast.class)) {
             throw new InvalidActionException(String.format("%s cannot be build as Zombie Toasts exist", buildable));
         }
         registerOnce(() -> player.build(buildable, entityFactory), PLAYER_MOVEMENT, "playerBuildsItem");
@@ -222,11 +221,51 @@ public class Game {
         return player;
     }
 
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
     public BattleFacade getBattleFacade() {
         return battleFacade;
     }
 
     public void moveTo(Entity entity, Position position) {
         map.moveTo(entity, position);
+    }
+
+    public void moveTo(Entity entity, Direction direction) {
+        map.moveTo(entity, direction);
+    }
+
+    public void addEntity(Entity entity) {
+        map.addEntity(entity);
+    }
+
+    public void destroyEntity(Entity entity) {
+        map.destroyEntity(entity);
+    }
+
+    public <T extends Entity> List<T> getMapEntities(Class<T> type) {
+        return map.getEntities(type);
+    }
+
+    public String getPlayerState() {
+        return player.getState();
+    }
+
+    public void removePlayerInventoryItem(InventoryItem item) {
+        player.remove(item);
+    }
+
+    public void spawnZombie(Game game, ZombieToastSpawner zombieToastSpawner) {
+        entityFactory.spawnZombie(game, zombieToastSpawner);
+    }
+
+    public boolean canMoveTo(Entity entity, Position position) {
+        return map.canMoveTo(entity, position);
+    }
+
+    public Position mapDijkstraPathFind(Position enemyPosition, Position playerPosition, Enemy enemy) {
+        return map.dijkstraPathFind(enemyPosition, playerPosition, enemy);
     }
 }

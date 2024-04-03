@@ -47,7 +47,7 @@ public class BattleFacade {
         if (player.getState() != "Base") {
             player.applyBuff(playerStats);
         } else {
-            for (BattleItem item : player.getInventory().getEntities(BattleItem.class)) {
+            for (BattleItem item : player.getInventoryEntities(BattleItem.class)) {
                 buffs = new BuffDecorator(buffs, item);
             }
         }

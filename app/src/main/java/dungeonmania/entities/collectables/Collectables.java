@@ -4,7 +4,7 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Overlappable;
 import dungeonmania.entities.inventory.InventoryItem;
-import dungeonmania.map.GameMap;
+import dungeonmania.Game;
 import dungeonmania.util.Position;
 
 public class Collectables extends Entity implements InventoryItem, Overlappable {
@@ -12,11 +12,11 @@ public class Collectables extends Entity implements InventoryItem, Overlappable 
         super(position);
     }
 
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (entity instanceof Player) {
-        if (!((Player) entity).pickUp(this))
-            return;
-        map.destroyEntity(this);
+            if (!((Player) entity).pickUp(this))
+                return;
+            game.destroyEntity(this);
         }
     }
 }

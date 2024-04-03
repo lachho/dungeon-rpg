@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import dungeonmania.Game;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.Player;
 import dungeonmania.entities.Switch;
@@ -37,14 +38,14 @@ public class Bomb extends Collectables implements Usable {
     }
 
     @Override
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (state != State.SPAWNED)
             return;
         if (entity instanceof Player) {
             if (!((Player) entity).pickUp(this))
                 return;
             subs.stream().forEach(s -> s.unsubscribe(this));
-            map.destroyEntity(this);
+            game.destroyEntity(this);
         }
         this.state = State.INVENTORY;
     }
@@ -53,7 +54,7 @@ public class Bomb extends Collectables implements Usable {
         setPosition(p);
         map.addEntity(this);
         this.state = State.PLACED;
-        List<Position> adjPosList = getPosition().getCardinallyAdjacentPositions();
+        List<Position> adjPosList = getCardinallyAdjacentPositions();
         adjPosList.stream().forEach(node -> {
             List<Entity> entities = map.getEntities(node).stream().filter(e -> (e instanceof Switch))
                     .collect(Collectors.toList());
@@ -63,8 +64,8 @@ public class Bomb extends Collectables implements Usable {
     }
 
     public void explode(GameMap map) {
-        int x = getPosition().getX();
-        int y = getPosition().getY();
+        int x = getXPosition();
+        int y = getYPosition();
         for (int i = x - radius; i <= x + radius; i++) {
             for (int j = y - radius; j <= y + radius; j++) {
                 List<Entity> entities = map.getEntities(new Position(i, j));

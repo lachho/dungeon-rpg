@@ -24,7 +24,7 @@ public class Shield extends Entity implements Buildable, BattleItem {
     public void use(Game game) {
         durability--;
         if (durability <= 0) {
-            game.getPlayer().remove(this);
+            game.removePlayerInventoryItem(this);
         }
     }
 

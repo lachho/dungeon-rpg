@@ -1,6 +1,7 @@
 package dungeonmania.entities;
 
 import dungeonmania.map.GameMap;
+import dungeonmania.Game;
 
 import dungeonmania.entities.collectables.Key;
 import dungeonmania.entities.collectables.SunStone;
@@ -31,7 +32,7 @@ public class Door extends Entity implements Overlappable {
     }
 
     @Override
-    public void onOverlap(GameMap map, Entity entity) {
+    public void onOverlap(Game game, Entity entity) {
         if (!(entity instanceof Player))
             return;
 

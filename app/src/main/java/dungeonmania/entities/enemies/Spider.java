@@ -47,7 +47,7 @@ public class Spider extends Enemy {
     }
 
     public Position getNextPosition() {
-        return getMovementTrajectory().get(getNextPositionElement());
+        return movementTrajectory.get(getNextPositionElement());
     }
 
     @Override
