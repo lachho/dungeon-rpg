@@ -6,27 +6,32 @@
             "y": 1
         },
         {
-            "type": "treasure",
+            "type": "wood",
+            "x": 2,
+            "y": 1
+        },
+        {
+            "type": "sun_stone",
             "x": 3,
             "y": 1
         },
         {
-            "type": "treasure",
+            "type": "sun_stone",
             "x": 4,
             "y": 1
         },
         {
-            "type": "treasure",
+            "type": "arrow",
             "x": 5,
             "y": 1
         },
         {
-            "type": "treasure",
-            "x": 6,
-            "y": 1
+            "type": "exit",
+            "x": 0,
+            "y": 2
         }
     ],
     "goal-condition": {
-        "goal": "treasure"
+        "goal": "exit"
     }
 }

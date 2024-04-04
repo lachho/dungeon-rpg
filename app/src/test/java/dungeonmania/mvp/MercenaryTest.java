@@ -132,7 +132,13 @@ public class MercenaryTest {
         assertEquals(1, TestUtils.getInventory(res, "treasure").size());
         assertEquals(new Position(7, 1), getMercPos(res));
 
-        // attempt bribe
+        // attempt bribe should fail
+        assertThrows(InvalidActionException.class, () -> dmc.interact(mercId));
+        assertEquals(1, TestUtils.getInventory(res, "treasure").size());
+
+        res = dmc.tick(Direction.RIGHT);
+        res = dmc.tick(Direction.RIGHT);
+        // bribe should go pass since close enough now
         assertDoesNotThrow(() -> dmc.interact(mercId));
         assertEquals(1, TestUtils.getInventory(res, "treasure").size());
     }

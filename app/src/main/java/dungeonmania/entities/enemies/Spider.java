@@ -4,11 +4,6 @@ import java.util.List;
 
 import dungeonmania.Game;
 import dungeonmania.entities.Entity;
-// import dungeonmania.entities.Boulder;
-// import dungeonmania.entities.collectables.potions.InvincibilityPotion;
-// import dungeonmania.entities.enemies.enemyMoveStrategy.MoveInvincible;
-// import dungeonmania.entities.enemies.enemyMoveStrategy.MoveMercenary;
-// import dungeonmania.map.GameMap;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveSpider;
 import dungeonmania.entities.enemies.enemyMoveStrategy.MoveStrategy;
 import dungeonmania.util.Position;
