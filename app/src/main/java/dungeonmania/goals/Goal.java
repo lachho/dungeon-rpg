@@ -3,6 +3,7 @@ package dungeonmania.goals;
 import dungeonmania.Game;
 import dungeonmania.goals.goalStrategy.AndGoal;
 import dungeonmania.goals.goalStrategy.BoulderGoal;
+import dungeonmania.goals.goalStrategy.EnemyGoal;
 import dungeonmania.goals.goalStrategy.ExitGoal;
 import dungeonmania.goals.goalStrategy.GoalStrategy;
 import dungeonmania.goals.goalStrategy.NoGoal;
@@ -26,6 +27,9 @@ public class Goal {
             break;
         case "treasure":
             strategy = new TreasureGoal(target);
+            break;
+        case "enemy":
+            strategy = new EnemyGoal(target);
             break;
         default:
             strategy = new NoGoal();

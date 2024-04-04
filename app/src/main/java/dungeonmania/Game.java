@@ -30,6 +30,7 @@ public class Game {
     private BattleFacade battleFacade;
     private EntityFactory entityFactory;
     private boolean isInTick = false;
+    private int numDefeatedEnemies = 0;
     public static final int PLAYER_MOVEMENT = 0;
     public static final int PLAYER_MOVEMENT_CALLBACK = 1;
     public static final int AI_MOVEMENT = 2;
@@ -267,5 +268,13 @@ public class Game {
 
     public Position mapDijkstraPathFind(Position enemyPosition, Position playerPosition, Enemy enemy) {
         return map.dijkstraPathFind(enemyPosition, playerPosition, enemy);
+    }
+
+    public int getNumDefeatedEnemies() {
+        return numDefeatedEnemies;
+    }
+
+    public void setNumDefeatedEnemies(int numDefeatedEnemies) {
+        this.numDefeatedEnemies = numDefeatedEnemies;
     }
 }
