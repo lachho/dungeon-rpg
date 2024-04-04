@@ -248,11 +248,19 @@ public class GameMap {
         return getEntities().stream().filter(type::isInstance).map(type::cast).collect(Collectors.toList());
     }
 
+    public <T extends Entity> boolean doesTypeExist(Class<T> type) {
+        return !getEntities(type).isEmpty();
+    }
+
     public Game getGame() {
         return game;
     }
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public int getTick() {
+        return game.getTick();
     }
 }

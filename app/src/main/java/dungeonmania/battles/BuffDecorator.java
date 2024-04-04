@@ -1,22 +1,21 @@
-package dungeonmania.battles.battleDecorator;
+package dungeonmania.battles;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import dungeonmania.Game;
-import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.BattleItem;
 
-public class DecoratedPlayer implements BuffDecorator {
+public class BuffDecorator implements BattleItem {
     private BuffDecorator decorator;
     private BattleItem item;
 
-    public DecoratedPlayer() {
+    public BuffDecorator() {
         decorator = null;
         item = null;
     }
 
-    public DecoratedPlayer(BuffDecorator decorator, BattleItem item) {
+    public BuffDecorator(BuffDecorator decorator, BattleItem item) {
         this.decorator = decorator;
         this.item = item;
     }

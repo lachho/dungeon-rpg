@@ -5,40 +5,45 @@ import dungeonmania.battles.BattleStatistics;
 import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.collectables.Arrow;
+import dungeonmania.entities.collectables.SunStone;
+import dungeonmania.entities.collectables.Sword;
 import dungeonmania.entities.collectables.Weapon;
 import dungeonmania.entities.collectables.Wood;
 import dungeonmania.entities.inventory.Inventory;
 
-public class Bow extends Entity implements Buildable, Weapon {
-    private int durability;
+public class MidnightArmour extends Entity implements Buildable, Weapon {
+    private double attack;
+    private double defence;
+    private int durability = 1;
 
-    public Bow(int durability) {
+    public MidnightArmour(double attack, double defence) {
         super(null);
-        this.durability = durability;
-    }
-
-    @Override
-    public void use(Game game) {
-        durability--;
-        if (durability <= 0) {
-            game.removePlayerInventoryItem(this);
-        }
+        this.attack = attack;
+        this.defence = defence;
     }
 
     @Override
     public void applyBuff(BattleStatistics origin) {
-        origin.addMagnifier(2);
+        origin.addAttack(attack);
+        origin.addDefence(defence);
+    }
+
+    @Override
+    public void use(Game game) {
+        if (durability <= 0) {
+            game.getPlayer().remove(this);
+        }
     }
 
     @Override
     public boolean checkBuildCriteria(Inventory inventory) {
-        return inventory.count(Wood.class) >= 1 && inventory.count(Arrow.class) >= 3;
+        return inventory.count(Sword.class) >= 1 && (inventory.count(SunStone.class) >= 1);
     }
 
     @Override
     public Buildable build(EntityFactory factory, Inventory inventory) {
         remove(inventory);
-        return factory.buildBow();
+        return factory.buildMidnightArmour();
     }
 
     @Override
@@ -47,14 +52,16 @@ public class Bow extends Entity implements Buildable, Weapon {
             return false;
         }
 
-        inventory.removeFirst(Wood.class);
+        inventory.removeFirst(Sword.class);
+        inventory.removeFirst(SunStone.class);
         inventory.removeMultiple(Arrow.class, 3);
-
+        inventory.removeMultiple(Wood.class, 2);
         return true;
     }
 
     @Override
     public String getName() {
-        return "bow";
+        return "midnight_armour";
     }
+
 }
