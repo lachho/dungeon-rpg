@@ -48,6 +48,8 @@ public abstract class Enemy extends Entity implements Battleable, Destroyable, O
 
     public void onDestroy(Game game) {
         game.unsubscribe(getId());
+
+        game.setNumDefeatedEnemies(game.getNumDefeatedEnemies() + 1);
     }
 
     public abstract void move(Game game);
