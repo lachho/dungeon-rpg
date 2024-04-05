@@ -27,6 +27,7 @@
     }
   ],
   "goal-condition": {
+<<<<<<< HEAD
     "goal": "AND",
     "subgoals": [
         {
@@ -36,5 +37,8 @@
             "goal": "enemy"
         }
     ]
+=======
+    "goal": "exit"
+>>>>>>> 9b45504b91926515cb64cf409f90a756069dc40c
   }
 }

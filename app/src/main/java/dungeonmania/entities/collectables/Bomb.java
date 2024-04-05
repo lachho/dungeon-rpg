@@ -12,7 +12,7 @@ import dungeonmania.entities.Player;
 import dungeonmania.entities.Switch;
 import dungeonmania.map.GameMap;
 
-public class Bomb extends Collectables {
+public class Bomb extends Collectables implements Usable {
     public enum State {
         SPAWNED, INVENTORY, PLACED
     }
@@ -78,5 +78,11 @@ public class Bomb extends Collectables {
 
     public State getState() {
         return state;
+    }
+
+    @Override
+    public void use(Player player, GameMap map) {
+        player.remove(this);
+        onPutDown(map, player.getPosition());
     }
 }

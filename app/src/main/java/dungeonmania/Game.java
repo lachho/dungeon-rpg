@@ -9,9 +9,10 @@ import dungeonmania.entities.Entity;
 import dungeonmania.entities.EntityFactory;
 import dungeonmania.entities.Interactable;
 import dungeonmania.entities.Player;
-import dungeonmania.entities.collectables.Bomb;
-import dungeonmania.entities.collectables.potions.Potion;
+import dungeonmania.entities.collectables.Usable;
 import dungeonmania.entities.enemies.Enemy;
+import dungeonmania.entities.enemies.Mercenary;
+import dungeonmania.entities.enemies.ZombieToast;
 import dungeonmania.entities.enemies.ZombieToastSpawner;
 import dungeonmania.entities.inventory.InventoryItem;
 import dungeonmania.exceptions.InvalidActionException;
@@ -56,7 +57,6 @@ public class Game {
         for (Mercenary merc : map.getEntities(Mercenary.class)) {
             register(() -> merc.onTick(tickCount), PLAYER_MOVEMENT_CALLBACK, "allyCheck");
         }
-        // foo
     }
 
     public Game tick(Direction movementDirection) {
@@ -69,14 +69,11 @@ public class Game {
         Entity item = player.getInventoryEntity(itemUsedId);
         if (item == null)
             throw new InvalidActionException(String.format("Item with id %s doesn't exist", itemUsedId));
-        if (!(item instanceof Bomb) && !(item instanceof Potion))
+        if (!(item instanceof Usable))
             throw new IllegalArgumentException(String.format("%s cannot be used", item.getClass()));
 
         registerOnce(() -> {
-            if (item instanceof Bomb)
-                player.use((Bomb) item, map);
-            if (item instanceof Potion)
-                player.use((Potion) item, tickCount);
+            ((Usable) item).use(player, map);
         }, PLAYER_MOVEMENT, "playerUsesItem");
         tick();
         return this;
@@ -96,6 +93,8 @@ public class Game {
         List<String> buildables = player.getBuildables();
         if (!buildables.contains(buildable)) {
             throw new InvalidActionException(String.format("%s cannot be built", buildable));
+        } else if (buildable.equals("midnight_armour") && map.doesTypeExist(ZombieToast.class)) {
+            throw new InvalidActionException(String.format("%s cannot be build as Zombie Toasts exist", buildable));
         }
         registerOnce(() -> player.build(buildable, entityFactory), PLAYER_MOVEMENT, "playerBuildsItem");
         tick();

@@ -9,6 +9,6 @@ import dungeonmania.entities.inventory.InventoryItem;
  */
 public interface BattleItem extends InventoryItem {
     public void applyBuff(BattleStatistics origin);
+
     public void use(Game game);
-    public int getDurability();
 }
