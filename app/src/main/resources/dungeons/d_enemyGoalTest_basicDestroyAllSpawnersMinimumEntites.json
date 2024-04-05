@@ -27,6 +27,14 @@
     }
   ],
   "goal-condition": {
-    "goal": "exit"
+    "goal": "AND",
+    "subgoals": [
+        {
+            "goal": "exit"
+        },
+        {
+            "goal": "enemy"
+        }
+    ]
   }
 }

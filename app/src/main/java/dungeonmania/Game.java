@@ -52,7 +52,11 @@ public class Game {
         this.id = UUID.randomUUID().toString();
         map.init();
         this.tickCount = 0;
-        register(() -> player.onTick(tickCount), PLAYER_MOVEMENT, "potionQueue");
+        register(() -> player.onTick(tickCount), PLAYER_MOVEMENT_CALLBACK, "potionQueue");
+        for (Mercenary merc : map.getEntities(Mercenary.class)) {
+            register(() -> merc.onTick(tickCount), PLAYER_MOVEMENT_CALLBACK, "allyCheck");
+        }
+        // foo
     }
 
     public Game tick(Direction movementDirection) {
