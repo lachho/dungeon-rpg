@@ -32,7 +32,7 @@ public class Switch extends Entity implements Moveable, Overlappable {
         bombs.remove(b);
     }
 
-    // FIXME - demeter 
+    // FIXME - demeter
     public void onOverlap(Game game, Entity entity) {
         if (entity instanceof Boulder) {
             activated = true;
