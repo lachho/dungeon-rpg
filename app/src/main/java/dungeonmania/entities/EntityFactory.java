@@ -216,7 +216,7 @@ public class EntityFactory {
             return new Door(pos, jsonEntity.getInt("key"));
         case "key":
             return new Key(pos, jsonEntity.getInt("key"));
-        case "light_bulb_on":
+        case "light_bulb_off":
             return new LightBulb(pos, jsonEntity.getString("logic"));
         case "wire":
             return new Wire(pos);
