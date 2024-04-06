@@ -6,7 +6,7 @@ import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
-public class LogicalBomb extends Bomb {
+public class LogicalBomb extends Bomb implements LogicalEntity {
   private LogicalStrategy logicalStrategy;
 
   public LogicalBomb(Position position, int radius, String strategy) {
