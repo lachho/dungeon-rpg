@@ -1,7 +1,8 @@
-package dungeonmania.mvp;
+package dungeonmania.sunStone;
 
 import dungeonmania.DungeonManiaController;
 import dungeonmania.exceptions.InvalidActionException;
+import dungeonmania.mvp.TestUtils;
 import dungeonmania.response.models.BattleResponse;
 import dungeonmania.response.models.DungeonResponse;
 import dungeonmania.response.models.EntityResponse;
