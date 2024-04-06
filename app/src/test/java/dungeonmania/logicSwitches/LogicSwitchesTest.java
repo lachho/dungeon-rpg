@@ -149,7 +149,7 @@ public class LogicSwitchesTest {
     public void testAnd1Wire() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_LogicSwitchesTest_And1Wire", "c_LogicSwitchesTest");
+        DungeonResponse res = dmc.newGame("d_LogicSwitchesTest_And1wire", "c_LogicSwitchesTest");
 
         // lights start off
         assertEquals(1, TestUtils.getEntities(res, "light_bulb_off").size());
@@ -166,7 +166,7 @@ public class LogicSwitchesTest {
     public void testXor1Wire() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_LogicSwitchesTest_Xor1Wire", "c_LogicSwitchesTest");
+        DungeonResponse res = dmc.newGame("d_LogicSwitchesTest_Xor1wire", "c_LogicSwitchesTest");
 
         // lights start off
         assertEquals(1, TestUtils.getEntities(res, "light_bulb_off").size());
@@ -212,7 +212,7 @@ public class LogicSwitchesTest {
     public void testCoand1Wire() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        DungeonResponse res = dmc.newGame("d_LogicSwitchesTest_Coand1Wire", "c_LogicSwitchesTest");
+        DungeonResponse res = dmc.newGame("d_LogicSwitchesTest_Coand1wire", "c_LogicSwitchesTest");
 
         // lights start off
         assertEquals(1, TestUtils.getEntities(res, "light_bulb_off").size());
