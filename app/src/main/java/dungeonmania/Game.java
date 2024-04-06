@@ -3,7 +3,6 @@ package dungeonmania;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import dungeonmania.battles.BattleFacade;
 import dungeonmania.entities.Entity;
@@ -16,7 +15,6 @@ import dungeonmania.entities.enemies.Mercenary;
 import dungeonmania.entities.enemies.ZombieToast;
 import dungeonmania.entities.enemies.ZombieToastSpawner;
 import dungeonmania.entities.inventory.InventoryItem;
-import dungeonmania.entities.logical.LogicalEntity;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.Goal;
 import dungeonmania.map.GameMap;
