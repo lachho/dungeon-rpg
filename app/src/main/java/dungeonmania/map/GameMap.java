@@ -360,6 +360,16 @@ public class GameMap {
                 if (visited.containsKey(p)) {
                     continue;
                 }
+                // we only want to add a position if it has a wire
+                // FIXME this is a bit of a mess
+                GraphNode newNode = nodes.get(p);
+                if (newNode == null) {
+                    continue;
+                }
+
+                if (!newNode.getEntities().stream().anyMatch(e -> e instanceof Wire)) {
+                    continue;
+                }
                 visited.put(p, true);
                 queue.add(p);
             }
