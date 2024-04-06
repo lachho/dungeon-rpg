@@ -32,10 +32,12 @@ public class Switch extends Entity implements Moveable, Overlappable {
         bombs.remove(b);
     }
 
+    // FIXME - demeter 
     public void onOverlap(Game game, Entity entity) {
         if (entity instanceof Boulder) {
             activated = true;
             game.getMap().bfsLogicalEntities(getPosition(), true, game.getTick(), false);
+            game.getMap().evaluateAllLogicalEntities();
             bombs.stream().filter(b -> !(b instanceof LogicalBomb)).forEach(b -> b.notify(game.getMap()));
         }
     }
@@ -44,7 +46,7 @@ public class Switch extends Entity implements Moveable, Overlappable {
         if (entity instanceof Boulder) {
             activated = false;
             game.getMap().bfsLogicalEntities(getPosition(), false, game.getTick(), false);
-
+            game.getMap().evaluateAllLogicalEntities();
         }
     }
 

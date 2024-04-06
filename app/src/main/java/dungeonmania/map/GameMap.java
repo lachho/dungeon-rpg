@@ -20,8 +20,8 @@ import dungeonmania.entities.Switch;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.ZombieToastSpawner;
-import dungeonmania.entities.logical.Current;
 import dungeonmania.entities.logical.LogicalEntity;
+import dungeonmania.entities.logical.Toggleable;
 import dungeonmania.entities.logical.Wire;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
@@ -249,10 +249,10 @@ public class GameMap {
 
             for (Entity e : entities) {
                 // FIXME could do currNode.getLogicalEntities/getCurrentEntities to make this a bit nicer
-                if (e instanceof Current) {
-                    if (((Current) e).hasCurrent()) {
+                if (e instanceof Wire) {
+                    if (((Wire) e).hasCurrent()) {
                         adjacentActiveCurrents.add(p);
-                        activatedTickNumbers.add(((Current) e).getActivatedTickNumber());
+                        activatedTickNumbers.add(((Wire) e).getActivatedTickNumber());
                     }
                 }
             }
@@ -297,7 +297,7 @@ public class GameMap {
             List<Entity> entities = currNode.getEntities();
 
             for (Entity e : entities) {
-                if (e instanceof Current) {
+                if (e instanceof Wire) {
                     adjacentCurrents.add(p);
                 }
             }
@@ -371,11 +371,12 @@ public class GameMap {
 
     // For all on logical entities that are no longer reachable by wire (i.e. after bomb explodes),
     // turn them off
+    // FIXME sorry about this typecasting rip
     public void toggleUnreachableEntities() {
         // Get all logical entities on the map
-        List<LogicalEntity> allLogicalEntities = getEntities().stream().filter(e -> e instanceof LogicalEntity)
-                .map(e -> (LogicalEntity) e).collect(Collectors.toList());
-        List<LogicalEntity> reachableEntities = new ArrayList<>();
+        List<Entity> allLogicalEntities = getEntities().stream().filter(e -> e instanceof Toggleable)
+                .map(e -> (Entity) e).collect(Collectors.toList());
+        List<Entity> reachableEntities = new ArrayList<>();
 
         // Do a BFS from all switches to get all reachable entities on the map (after the bomb has exploded)
         List<Position> allSwitchPositions = getEntities(Switch.class).stream().map(e -> e.getPosition())
@@ -383,22 +384,33 @@ public class GameMap {
         for (Position p : allSwitchPositions) {
             List<LogicalEntity> currReachable = bfsLogicalEntities(p, false, getTick(), true);
             for (LogicalEntity logicalEntity : currReachable) {
-                reachableEntities.add(logicalEntity);
+                reachableEntities.add((Entity) logicalEntity);
             }
         }
 
         // remove duplicates from list of reachable entities
-        HashSet<LogicalEntity> uniqueReachableEntities = new HashSet<LogicalEntity>(reachableEntities);
+        HashSet<Entity> uniqueReachableEntities = new HashSet<Entity>(reachableEntities);
         reachableEntities.clear();
         reachableEntities.addAll(uniqueReachableEntities);
 
         // Create a list of entities that aren't reachable anymore because the bomb exploded
-        List<LogicalEntity> unreachableEntities = new ArrayList<>(allLogicalEntities);
+        List<Entity> unreachableEntities = new ArrayList<>(allLogicalEntities);
         unreachableEntities.removeAll(reachableEntities);
 
         // Turn all these unreachable entities off
-        for (LogicalEntity logicalEntity : unreachableEntities) {
-            logicalEntity.turnOff();
+        for (Entity logicalEntity : unreachableEntities) {
+            Toggleable toggleableLogicalEntity = (Toggleable) logicalEntity;
+            toggleableLogicalEntity.turnOff();
+        }
+    }
+
+    public void evaluateAllLogicalEntities() {
+        // Get all logical entities on the map
+        List<LogicalEntity> allLogicalEntities = getEntities().stream().filter(e -> e instanceof LogicalEntity)
+                .map(e -> (LogicalEntity) e).collect(Collectors.toList());
+
+        for (LogicalEntity logicalEntity : allLogicalEntities) {
+            logicalEntity.evaluate(game);
         }
     }
 

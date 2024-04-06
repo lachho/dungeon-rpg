@@ -7,7 +7,7 @@ import dungeonmania.entities.Player;
 import dungeonmania.map.GameMap;
 import dungeonmania.util.Position;
 
-public class SwitchDoor extends Door implements LogicalEntity {
+public class SwitchDoor extends Door implements LogicalEntity, Toggleable {
   private boolean open = false;
   private LogicalStrategy logicalStrategy;
 

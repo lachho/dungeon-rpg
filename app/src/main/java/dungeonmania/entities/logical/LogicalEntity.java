@@ -1,5 +1,7 @@
 package dungeonmania.entities.logical;
 
+import dungeonmania.Game;
+
 public interface LogicalEntity {
-  public void turnOff();
+  public boolean evaluate(Game game);
 }

@@ -4,7 +4,7 @@ import dungeonmania.Game;
 import dungeonmania.entities.Entity;
 import dungeonmania.util.Position;
 
-public class LightBulb extends Entity implements LogicalEntity {
+public class LightBulb extends Entity implements LogicalEntity, Toggleable {
   private LogicalStrategy logicalStrategy;
   private boolean isOn = false;
 

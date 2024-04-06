@@ -4,16 +4,12 @@ import dungeonmania.entities.Entity;
 
 import dungeonmania.util.Position;
 
-public class Wire extends Entity implements Current, LogicalEntity {
+public class Wire extends Entity implements Toggleable {
   private boolean hasCurrent = false;
   private int activatedTickNumber;
 
   public Wire(Position position) {
     super(position);
-  }
-
-  public void onTick(int tickCount) {
-    // TODO do something;
   }
 
   public boolean hasCurrent() {
