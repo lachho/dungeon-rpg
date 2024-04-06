@@ -19,7 +19,7 @@
       "type": "bomb",
       "x": 3,
       "y": 2,
-      "logic": "and"
+      "logic": "or"
     },
     {
       "type": "switch",
