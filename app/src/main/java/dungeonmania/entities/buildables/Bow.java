@@ -27,7 +27,7 @@ public class Bow extends Entity implements Buildable, Weapon {
 
     @Override
     public void applyBuff(BattleStatistics origin) {
-
+        origin.addMagnifier(2);
     }
 
     @Override
