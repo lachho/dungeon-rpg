@@ -418,6 +418,60 @@ public class EnemyGoalTest {
     assertEquals("", TestUtils.getGoals(res));
   }
 
+  @Test
+  @Tag("2a-11")
+  @DisplayName("Set enemy and exit goal, move to exit before enemy goal is achieved")
+  // Should be achieved
+  public void testBasicEnemyAndExitGoal() {
+    DungeonManiaController dmc;
+    dmc = new DungeonManiaController();
+    DungeonResponse res = dmc.newGame("d__enemyGoalTest_exitDestroyAllSpawnersMinimumEntites",
+        "c__enemyGoalTest_basicDestroyAllSpawnersNoEntites");
+
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":exit"));
+
+    assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
+    String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
+
+    assertEquals(1, TestUtils.getEntities(res, "sword").size());
+
+    // move player to left
+    res = dmc.tick(Direction.LEFT);
+
+    // player has picked up weapon
+    assertEquals(1, TestUtils.getInventory(res, "sword").size());
+
+    res = dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.DOWN);
+    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+
+    // on top of the exit now, enemy goal hasnt been achieved so goal hasnt been met
+    res = dmc.tick(Direction.LEFT);
+
+    res = dmc.tick(Direction.UP);
+    assertTrue(TestUtils.getGoals(res).contains(":exit"));
+
+    res = dmc.tick(Direction.UP);
+    res = dmc.tick(Direction.UP);
+    res = dmc.tick(Direction.UP);
+
+    // cardinally adjacent: true, has sword: true
+    res = assertDoesNotThrow(() -> dmc.interact(spawnerId));
+
+    // we've destroyed the spawner
+    assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
+    assertFalse(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":exit"));
+
+    res = dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.DOWN);
+    res = dmc.tick(Direction.DOWN);
+    // at the exit now, goal met
+    assertEquals("", TestUtils.getGoals(res));
+  }
   // complex test?
 
 }
