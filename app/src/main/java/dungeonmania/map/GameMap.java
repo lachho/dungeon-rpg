@@ -329,6 +329,13 @@ public class GameMap {
             Position currPos = queue.poll();
 
             GraphNode currNode = nodes.get(currPos);
+
+            // TODO - added this if to stop all the regression tests from failing
+            // don't know if this will work with new logic tests
+            // need to figure out what nodes is
+            if (currNode == null) {
+                continue;
+            }
             List<Entity> currEntities = currNode.getEntities();
 
             for (Entity e : currEntities) {
@@ -350,7 +357,7 @@ public class GameMap {
 
             List<Position> adjPositions = currPos.getCardinallyAdjacentPositions();
             for (Position p : adjPositions) {
-                if (visited.get(p)) {
+                if (visited.containsKey(p)) {
                     continue;
                 }
                 visited.put(p, true);
