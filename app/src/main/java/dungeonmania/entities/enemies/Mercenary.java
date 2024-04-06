@@ -59,7 +59,12 @@ public class Mercenary extends Enemy implements Interactable {
         super.onOverlap(game, entity);
     }
 
+    private boolean withinRadius(Position player) {
+        int x = Math.abs(getPosition().getX() - player.getX());
+        int y = Math.abs(getPosition().getY() - player.getY());
 
+        return x <= bribeRadius && y <= bribeRadius;
+    }
 
     /**
      * check whether the current merc can be bribed
@@ -67,7 +72,7 @@ public class Mercenary extends Enemy implements Interactable {
      * @return
      */
     private boolean canBeBribed(Player player) {
-        return player.countEntityOfType(Treasure.class) >= bribeAmount;
+        return withinRadius(player.getPosition()) && player.countEntityOfType(Treasure.class) >= bribeAmount;
     }
 
     /**
