@@ -103,20 +103,20 @@ public class EntityFactory {
     }
 
     public Spider buildSpider(Position pos) {
-        double spiderHealth = config.optDouble("spider_health", Spider.DEFAULT_HEALTH);
-        double spiderAttack = config.optDouble("spider_attack", Spider.DEFAULT_ATTACK);
+        double spiderHealth = config.optInteger("spider_health", Spider.DEFAULT_HEALTH);
+        double spiderAttack = config.optInteger("spider_attack", Spider.DEFAULT_ATTACK);
         return new Spider(pos, spiderHealth, spiderAttack);
     }
 
     public Player buildPlayer(Position pos) {
-        double playerHealth = config.optDouble("player_health", Player.DEFAULT_HEALTH);
-        double playerAttack = config.optDouble("player_attack", Player.DEFAULT_ATTACK);
+        double playerHealth = config.optInteger("player_health", Player.DEFAULT_HEALTH);
+        double playerAttack = config.optInteger("player_attack", Player.DEFAULT_ATTACK);
         return new Player(pos, playerHealth, playerAttack);
     }
 
     public ZombieToast buildZombieToast(Position pos) {
-        double zombieHealth = config.optDouble("zombie_health", ZombieToast.DEFAULT_HEALTH);
-        double zombieAttack = config.optDouble("zombie_attack", ZombieToast.DEFAULT_ATTACK);
+        double zombieHealth = config.optInteger("zombie_health", ZombieToast.DEFAULT_HEALTH);
+        double zombieAttack = config.optInteger("zombie_attack", ZombieToast.DEFAULT_ATTACK);
         return new ZombieToast(pos, zombieHealth, zombieAttack);
     }
 
@@ -126,10 +126,10 @@ public class EntityFactory {
     }
 
     public Mercenary buildMercenary(Position pos) {
-        double mercenaryHealth = config.optDouble("mercenary_health", Mercenary.DEFAULT_HEALTH);
-        double mercenaryAttack = config.optDouble("mercenary_attack", Mercenary.DEFAULT_ATTACK);
-        double allyAttack = config.optDouble("ally_attack", Mercenary.DEFAULT_HEALTH);
-        double allyDefence = config.optDouble("ally_defence", Mercenary.DEFAULT_ATTACK);
+        double mercenaryHealth = config.optInteger("mercenary_health", Mercenary.DEFAULT_HEALTH);
+        double mercenaryAttack = config.optInteger("mercenary_attack", Mercenary.DEFAULT_ATTACK);
+        double allyAttack = config.optInteger("ally_attack", Mercenary.DEFAULT_HEALTH);
+        double allyDefence = config.optInteger("ally_defence", Mercenary.DEFAULT_ATTACK);
         int mercenaryBribeAmount = config.optInt("bribe_amount", Mercenary.DEFAULT_BRIBE_AMOUNT);
         int mercenaryBribeRadius = config.optInt("bribe_radius", Mercenary.DEFAULT_BRIBE_RADIUS);
         return new Mercenary(pos, mercenaryHealth, mercenaryAttack, mercenaryBribeAmount, mercenaryBribeRadius,
@@ -143,7 +143,7 @@ public class EntityFactory {
 
     public Shield buildShield() {
         int shieldDurability = config.optInt("shield_durability");
-        double shieldDefence = config.optDouble("shield_defence");
+        double shieldDefence = config.optInteger("shield_defence");
         return new Shield(shieldDurability, shieldDefence);
     }
 
@@ -153,8 +153,8 @@ public class EntityFactory {
     }
 
     public MidnightArmour buildMidnightArmour() {
-        double armourAttack = config.optDouble("midnight_armour_attack");
-        double armourDefence = config.optDouble("midnight_armour_defence");
+        double armourAttack = config.optInteger("midnight_armour_attack");
+        double armourDefence = config.optInteger("midnight_armour_defence");
         return new MidnightArmour(armourAttack, armourDefence);
     }
 
@@ -200,7 +200,7 @@ public class EntityFactory {
         case "portal":
             return new Portal(pos, ColorCodedType.valueOf(jsonEntity.getString("colour")));
         case "sword":
-            double swordAttack = config.optDouble("sword_attack", Sword.DEFAULT_ATTACK);
+            double swordAttack = config.optInteger("sword_attack", Sword.DEFAULT_ATTACK);
             int swordDurability = config.optInt("sword_durability", Sword.DEFAULT_DURABILITY);
             return new Sword(pos, swordAttack, swordDurability);
         case "spider":
