@@ -104,7 +104,7 @@ public class LogicSwitchesTest {
         // turn on switch
         res = dmc.tick(Direction.RIGHT);
         // light off still
-        assertEquals(0, TestUtils.getEntities(res, "light_bulb_off").size());
+        assertEquals(1, TestUtils.getEntities(res, "light_bulb_off").size());
 
         res = dmc.tick(Direction.DOWN);
         res = dmc.tick(Direction.DOWN);

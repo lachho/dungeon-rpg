@@ -8,28 +8,23 @@
     {
       "x": 1,
       "y": 0,
-      "type": "wood"
+      "type": "sword"
     },
     {
       "x": 1,
       "y": 1,
-      "type": "wood"
+      "type": "sun_stone"
     },
     {
       "x": 2,
       "y": 1,
-      "type": "switch_door"
+      "type": "switch_door",
+      "logic": "or"
     },
     {
       "x": 3,
       "y": 1,
       "type": "wire"
-    },
-    {
-      "key": "1",
-      "x": 1,
-      "y": 2,
-      "type": "key"
     },
     {
       "x": 2,
@@ -54,6 +49,6 @@
     }
   ],
   "goal-condition": {
-    "goal": "exit"
+    "goal": "treasure"
   }
 }

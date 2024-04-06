@@ -35,12 +35,14 @@
       {
         "x": 8,
         "y": 3,
-        "type": "switch_door"
+        "type": "switch_door",
+        "logic": "or"
       },
       {
         "x": 8,
         "y": 4,
-        "type": "switch_door"
+        "type": "switch_door",
+        "logic": "or"
       }
     ],
     "goal-condition": {
