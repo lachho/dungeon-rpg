@@ -255,6 +255,11 @@ public class GameMap {
                         activatedTickNumbers.add(((Wire) e).getActivatedTickNumber());
                     }
                 }
+                if (e instanceof Switch) {
+                    if (((Switch) e).isActivated()) {
+                        adjacentActiveCurrents.add(p);
+                    }
+                }
             }
 
         }
@@ -297,7 +302,7 @@ public class GameMap {
             List<Entity> entities = currNode.getEntities();
 
             for (Entity e : entities) {
-                if (e instanceof Wire) {
+                if (e instanceof Wire || e instanceof Switch) {
                     adjacentCurrents.add(p);
                 }
             }
