@@ -2,9 +2,12 @@ package dungeonmania.map;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 import dungeonmania.Game;
@@ -17,6 +20,9 @@ import dungeonmania.entities.Switch;
 import dungeonmania.entities.collectables.Bomb;
 import dungeonmania.entities.enemies.Enemy;
 import dungeonmania.entities.enemies.ZombieToastSpawner;
+import dungeonmania.entities.logical.Current;
+import dungeonmania.entities.logical.LogicalEntity;
+import dungeonmania.entities.logical.Wire;
 import dungeonmania.util.Direction;
 import dungeonmania.util.Position;
 
@@ -220,6 +226,175 @@ public class GameMap {
         }
     }
 
+    /**
+     *
+     * @param currPos: Position where we want to check the 4 cardinally adjacent spots
+     * @param sameTick: Boolean - true if we want to find the max number of active currents activated on the same tick
+     * @return
+     */
+    public Integer getNumAdjacentActiveCurrents(Position currPos, boolean sameTick) {
+        List<Position> adjacentActiveCurrents = new ArrayList<Position>();
+        List<Integer> activatedTickNumbers = new ArrayList<Integer>();
+
+        List<Position> neighbours = currPos.getCardinallyAdjacentPositions();
+
+        for (Position p : neighbours) {
+            if (!nodes.containsKey(p)) {
+                continue;
+            }
+
+            // FIXME demeter rip
+            GraphNode currNode = nodes.get(p);
+            List<Entity> entities = currNode.getEntities();
+
+            for (Entity e : entities) {
+                // FIXME could do currNode.getLogicalEntities/getCurrentEntities to make this a bit nicer
+                if (e instanceof Current) {
+                    if (((Current) e).hasCurrent()) {
+                        adjacentActiveCurrents.add(p);
+                        activatedTickNumbers.add(((Current) e).getActivatedTickNumber());
+                    }
+                }
+            }
+
+        }
+
+        // this is probs overkill but idk how else to find the number of same ticks haha
+        if (sameTick) {
+            Map<Integer, Integer> frequencyMap = new HashMap<>();
+
+            // Hashmap with key = activated tick number, value = number of times the activated tick number appears
+            for (int num : activatedTickNumbers) {
+                frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+            }
+
+            // find the activated tick number with the highest frequency
+            int maxFreq = 0;
+            for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
+                int currFreq = entry.getValue();
+                if (currFreq > maxFreq) {
+                    maxFreq = currFreq;
+                }
+            }
+
+            return maxFreq;
+        }
+
+        return adjacentActiveCurrents.size();
+    }
+
+    // FIXME repeated code rip
+    public Integer getNumAdjacentCurrents(Position currPos) {
+        List<Position> neighbours = currPos.getCardinallyAdjacentPositions();
+        List<Position> adjacentCurrents = new ArrayList<Position>();
+
+        for (Position p : neighbours) {
+            if (!nodes.containsKey(p)) {
+                continue;
+            }
+
+            GraphNode currNode = nodes.get(p);
+            List<Entity> entities = currNode.getEntities();
+
+            for (Entity e : entities) {
+                if (e instanceof Current) {
+                    adjacentCurrents.add(p);
+                }
+            }
+        }
+
+        return adjacentCurrents.size();
+    }
+
+    /**
+     *
+     * @param startingPos: starting position to perform the BFS from
+     * @param turnOn: boolean if we want to then the current entities on or off.
+     * i.e. if turnOn = true, we want to turn the current entities on
+     * @param tickCount: the number of the tick we are on
+     * @param getReachable: boolean, true if we only want to get a list of reachable entities,
+     * and not modify any entiites
+     *
+     */
+    public List<LogicalEntity> bfsLogicalEntities(Position startingPos, boolean turnOn, int tickCount,
+            boolean getReachable) {
+        Map<Position, Boolean> visited = new HashMap<>();
+        Queue<Position> queue = new LinkedList<>();
+        List<LogicalEntity> reachableEntities = new ArrayList<>();
+
+        visited.put(startingPos, true);
+        queue.add(startingPos);
+
+        while (queue.size() != 0) {
+            Position currPos = queue.poll();
+
+            GraphNode currNode = nodes.get(currPos);
+            List<Entity> currEntities = currNode.getEntities();
+
+            for (Entity e : currEntities) {
+                if (e instanceof LogicalEntity) {
+                    reachableEntities.add((LogicalEntity) e);
+                }
+
+                if (!(e instanceof Wire) || getReachable) {
+                    continue;
+                }
+
+                Wire wire = (Wire) e;
+
+                if (turnOn != wire.hasCurrent()) {
+                    wire.toggle();
+                    wire.setActivatedTickNumber(tickCount);
+                }
+            }
+
+            List<Position> adjPositions = currPos.getCardinallyAdjacentPositions();
+            for (Position p : adjPositions) {
+                if (visited.get(p)) {
+                    continue;
+                }
+                visited.put(p, true);
+                queue.add(p);
+            }
+
+        }
+
+        return reachableEntities;
+    }
+
+    // For all on logical entities that are no longer reachable by wire (i.e. after bomb explodes),
+    // turn them off
+    public void toggleUnreachableEntities() {
+        // Get all logical entities on the map
+        List<LogicalEntity> allLogicalEntities = getEntities().stream().filter(e -> e instanceof LogicalEntity)
+                .map(e -> (LogicalEntity) e).collect(Collectors.toList());
+        List<LogicalEntity> reachableEntities = new ArrayList<>();
+
+        // Do a BFS from all switches to get all reachable entities on the map (after the bomb has exploded)
+        List<Position> allSwitchPositions = getEntities(Switch.class).stream().map(e -> e.getPosition())
+                .collect(Collectors.toList());
+        for (Position p : allSwitchPositions) {
+            List<LogicalEntity> currReachable = bfsLogicalEntities(p, false, getTick(), true);
+            for (LogicalEntity logicalEntity : currReachable) {
+                reachableEntities.add(logicalEntity);
+            }
+        }
+
+        // remove duplicates from list of reachable entities
+        HashSet<LogicalEntity> uniqueReachableEntities = new HashSet<LogicalEntity>(reachableEntities);
+        reachableEntities.clear();
+        reachableEntities.addAll(uniqueReachableEntities);
+
+        // Create a list of entities that aren't reachable anymore because the bomb exploded
+        List<LogicalEntity> unreachableEntities = new ArrayList<>(allLogicalEntities);
+        unreachableEntities.removeAll(reachableEntities);
+
+        // Turn all these unreachable entities off
+        for (LogicalEntity logicalEntity : unreachableEntities) {
+            logicalEntity.turnOff();
+        }
+    }
+
     public Entity getEntity(String id) {
         Entity res = null;
         for (Map.Entry<Position, GraphNode> entry : nodes.entrySet()) {
@@ -252,9 +427,10 @@ public class GameMap {
         return !getEntities(type).isEmpty();
     }
 
-    public Game getGame() {
-        return game;
-    }
+    // unused
+    // public Game getGame() {
+    //     return game;
+    // }
 
     public void setGame(Game game) {
         this.game = game;

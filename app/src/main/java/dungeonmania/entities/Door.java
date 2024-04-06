@@ -17,6 +17,10 @@ public class Door extends Entity implements Overlappable {
         this.number = number;
     }
 
+    public Door(Position position) {
+        super(position);
+    }
+
     @Override
     public boolean canMoveOnto(GameMap map, Entity entity) {
         if (open || entity instanceof Spider) {
