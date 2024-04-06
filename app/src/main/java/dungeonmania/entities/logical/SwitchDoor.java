@@ -49,9 +49,10 @@ public class SwitchDoor extends Door implements LogicalEntity, Toggleable {
     if (logicalStrategy.evaluate(game, getPosition())) {
       openDoor(true);
       return true;
+    } else {
+      turnOff();
+      return false;
     }
-
-    return false;
   }
 
   public void turnOff() {

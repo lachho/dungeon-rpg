@@ -30,9 +30,11 @@ public class LightBulb extends Entity implements LogicalEntity, Toggleable {
     if (logicalStrategy.evaluate(game, getPosition())) {
       turnOn(true);
       return true;
+    } else {
+      turnOff();
+      return false;
     }
 
-    return false;
   }
 
   public void turnOff() {
