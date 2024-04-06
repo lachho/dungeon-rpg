@@ -2,7 +2,7 @@ package dungeonmania.entities.logical;
 
 public class StrategyFactory {
   public static LogicalStrategy getStrategy(String strategy) {
-    if (strategy.equals("abd")) {
+    if (strategy.equals("and")) {
       return new AndStrategy();
     } else if (strategy.equals("or")) {
       return new OrStrategy();
