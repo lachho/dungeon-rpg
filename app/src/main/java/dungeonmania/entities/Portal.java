@@ -35,7 +35,7 @@ public class Portal extends Entity implements Overlappable {
     public void onOverlap(Game game, Entity entity) {
         if (pair == null)
             return;
-        if (entity instanceof Player || entity instanceof Mercenary || entity instanceof ZombieToast)
+        if (entity instanceof Player || entity instanceof Mercenary)
             doTeleport(game.getMap(), entity);
     }
 
