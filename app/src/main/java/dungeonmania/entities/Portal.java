@@ -28,7 +28,9 @@ public class Portal extends Entity implements Overlappable {
 
     public boolean canTeleportTo(GameMap map, Entity entity) {
         List<Position> neighbours = getCardinallyAdjacentPositions();
-        return neighbours.stream().allMatch(n -> map.canMoveTo(entity, n));
+        int numMovablePositions = neighbours.stream().filter(n -> map.canMoveTo(entity, n)).collect(Collectors.toList())
+                .size();
+        return numMovablePositions > 0;
     }
 
     public void onOverlap(Game game, Entity entity) {
