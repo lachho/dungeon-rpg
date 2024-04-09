@@ -74,6 +74,13 @@ public class Bomb extends Collectables implements Usable {
                     map.destroyEntity(e);
             }
         }
+
+        map.toggleUnreachableEntities();
+        map.evaluateAllLogicalEntities();
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     public State getState() {
