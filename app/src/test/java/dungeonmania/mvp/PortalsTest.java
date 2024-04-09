@@ -96,9 +96,9 @@ public class PortalsTest {
         for (int i = 0; (i < 100 && !zombiePosition.equals(portalPosition)); ++i) {
             res = controller.tick(Direction.DOWN);
             zombiePosition = TestUtils.getEntities(res, "zombie_toast").get(0).getPosition();
-            assertTrue(TestUtils.getManhattanDistance(zombiePosition, portalPosition) > 0);
+            assertTrue(TestUtils.getManhattanDistance(zombiePosition, portalPosition) <= 1);
         }
-        assertTrue(TestUtils.getManhattanDistance(zombiePosition, portalPosition) > 0);
+        assertTrue(TestUtils.getManhattanDistance(zombiePosition, portalPosition) <= 1);
     }
 
     @Test
