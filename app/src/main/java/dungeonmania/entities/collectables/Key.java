@@ -1,5 +1,8 @@
 package dungeonmania.entities.collectables;
 
+import dungeonmania.Game;
+import dungeonmania.entities.Entity;
+import dungeonmania.entities.Player;
 import dungeonmania.util.Position;
 
 public class Key extends Collectables implements SpecialCraftable {
@@ -14,4 +17,10 @@ public class Key extends Collectables implements SpecialCraftable {
         return number;
     }
 
+    @Override
+    public void onOverlap(Game game, Entity entity) {
+        if (entity instanceof Player && !((Player) entity).containsEntityOfType(Key.class)) {
+            super.onOverlap(game, entity);
+        }
+    }
 }
