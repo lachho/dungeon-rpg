@@ -15,6 +15,7 @@ import dungeonmania.entities.enemies.Mercenary;
 import dungeonmania.entities.enemies.ZombieToast;
 import dungeonmania.entities.enemies.ZombieToastSpawner;
 import dungeonmania.entities.inventory.InventoryItem;
+import dungeonmania.entities.logical.LogicalEntity;
 import dungeonmania.exceptions.InvalidActionException;
 import dungeonmania.goals.Goal;
 import dungeonmania.map.GameMap;
@@ -166,6 +167,14 @@ public class Game {
         return tickCount;
     }
 
+    public int getNumAdjacentActiveCurrents(Position position, boolean sameTick) {
+        return map.getNumAdjacentActiveCurrents(position, sameTick);
+    }
+
+    public int getNumAdjacentCurrents(Position position) {
+        return map.getNumAdjacentCurrents(position);
+    }
+
     public List<Entity> getEntities(Position position) {
         return map.getEntities(position);
     }
@@ -276,5 +285,14 @@ public class Game {
 
     public void setNumDefeatedEnemies(int numDefeatedEnemies) {
         this.numDefeatedEnemies = numDefeatedEnemies;
+    }
+
+    public List<LogicalEntity> bfsLogicalEntities(Position startingPos, boolean turnOn, int tickCount,
+            boolean getReachable, boolean updateTickNumber) {
+        return map.bfsLogicalEntities(startingPos, turnOn, tickCount, getReachable, updateTickNumber);
+    }
+
+    public void evaluateAllLogicalEntities() {
+        map.evaluateAllLogicalEntities();
     }
 }
