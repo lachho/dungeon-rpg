@@ -140,4 +140,21 @@ public class PortalsTest {
                 || TestUtils.getManhattanDistance(playerPos, yellowPortalPos) == 1);
     }
 
+    @Test
+    @Tag("7-7")
+    @DisplayName("Test can teleport when portal has 3 adjacent walls")
+    public void testTeleport3Walls() {
+        DungeonManiaController controller = new DungeonManiaController();
+        DungeonResponse res = controller.newGame("d_PortalsTest_test3Walls",
+                "c_PortalsTest_testMultiplePortalsChain");
+
+        Position endPortalPos = new Position(1, 3);
+
+        // Move into the portal
+        res = controller.tick(Direction.RIGHT);
+        Position playerPos = TestUtils.getPlayer(res).get().getPosition();
+
+        // Player should end up at one of the outside portals
+        assertTrue(TestUtils.getManhattanDistance(playerPos, endPortalPos) == 1);
+    }
 }
