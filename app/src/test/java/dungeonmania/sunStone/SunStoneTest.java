@@ -120,8 +120,6 @@ public class SunStoneTest {
     public void buildShieldWithSunStone() {
         DungeonManiaController dmc;
         dmc = new DungeonManiaController();
-        //TODO update to replace treasure with sun_stone, sun_stone to be retained
-        //d_BuildablesTest_BuildShieldWithTreasure
         DungeonResponse res = dmc.newGame("d_SunStoneTest_BuildShieldWithSunStone", "c_SunStoneTest");
         assertEquals(0, TestUtils.getInventory(res, "wood").size());
         assertEquals(0, TestUtils.getInventory(res, "sun_stone").size());
