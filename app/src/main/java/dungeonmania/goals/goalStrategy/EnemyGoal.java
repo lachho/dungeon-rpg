@@ -22,7 +22,7 @@ public class EnemyGoal implements GoalStrategy {
     if (this.achieved(game))
       return "";
 
-    return ":enemy";
+    return ":enemies";
   }
 
 }

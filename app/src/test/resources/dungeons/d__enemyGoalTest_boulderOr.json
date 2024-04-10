@@ -18,7 +18,7 @@
         "goal": "OR",
         "subgoals": [
             {
-                "goal": "enemy"
+                "goal": "enemies"
             },
             {
                 "goal": "boulders"
