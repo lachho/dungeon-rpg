@@ -27,6 +27,6 @@
     }
   ],
   "goal-condition": {
-    "goal": "enemy"
+    "goal": "enemies"
   }
 }

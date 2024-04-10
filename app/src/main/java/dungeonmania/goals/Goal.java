@@ -28,7 +28,7 @@ public class Goal {
         case "treasure":
             strategy = new TreasureGoal(target);
             break;
-        case "enemy":
+        case "enemies":
             strategy = new EnemyGoal(target);
             break;
         default:

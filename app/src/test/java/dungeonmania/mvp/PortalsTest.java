@@ -145,8 +145,7 @@ public class PortalsTest {
     @DisplayName("Test can teleport when portal has 3 adjacent walls")
     public void testTeleport3Walls() {
         DungeonManiaController controller = new DungeonManiaController();
-        DungeonResponse res = controller.newGame("d_PortalsTest_test3Walls",
-                "c_PortalsTest_testMultiplePortalsChain");
+        DungeonResponse res = controller.newGame("d_PortalsTest_test3Walls", "c_PortalsTest_testMultiplePortalsChain");
 
         Position endPortalPos = new Position(1, 3);
 

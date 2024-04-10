@@ -21,7 +21,7 @@ public class EnemyGoalTest {
     DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites",
         "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
 
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
     assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
     String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
@@ -41,7 +41,7 @@ public class EnemyGoalTest {
     assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
 
     // destroying the spawner doesn't count as destroying an enemy
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
     dmc.tick(Direction.DOWN);
     dmc.tick(Direction.DOWN);
@@ -71,7 +71,7 @@ public class EnemyGoalTest {
     assertEquals(2, TestUtils.getEntities(res, "zombie_toast_spawner").size());
     String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
 
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
     // move player to left
     res = dmc.tick(Direction.LEFT);
@@ -95,7 +95,7 @@ public class EnemyGoalTest {
     assertEquals(0, TestUtils.getEntities(res, "spider").size());
 
     // assert goal not met - a spawner still exists
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
   }
 
   @Test
@@ -109,7 +109,7 @@ public class EnemyGoalTest {
         "c__enemyGoalTest_basicDestroyAllSpawnersNotMinimumEntites");
 
     // Map has goal set to destroying two enemies, but only one exists on the map
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
     assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
     String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
@@ -136,7 +136,7 @@ public class EnemyGoalTest {
     assertEquals(0, TestUtils.getEntities(res, "spider").size());
 
     // assert not goal met - numEnemiesDefeated < targetNumEnemiesDefeated
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
   }
 
   @Test
@@ -149,7 +149,7 @@ public class EnemyGoalTest {
     DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites",
         "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
 
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
     assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
     String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
@@ -186,7 +186,7 @@ public class EnemyGoalTest {
     DungeonResponse res = dmc.newGame("d__enemyGoalTest_exitDestroyAllSpawnersMinimumEntites",
         "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
 
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
     assertTrue(TestUtils.getGoals(res).contains(":exit"));
 
     assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
@@ -214,7 +214,7 @@ public class EnemyGoalTest {
     assertEquals(0, TestUtils.getEntities(res, "spider").size());
 
     assertTrue(TestUtils.getGoals(res).contains(":exit"));
-    assertFalse(TestUtils.getGoals(res).contains(":enemy"));
+    assertFalse(TestUtils.getGoals(res).contains(":enemies"));
 
     // move to exit
     dmc.tick(Direction.LEFT);
@@ -236,7 +236,7 @@ public class EnemyGoalTest {
     assertEquals(2, TestUtils.getEntities(res, "zombie_toast_spawner").size());
     String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
 
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
     // move player to left
     res = dmc.tick(Direction.LEFT);
@@ -258,7 +258,7 @@ public class EnemyGoalTest {
     assertEquals(0, TestUtils.getEntities(res, "spider").size());
 
     // assert goal not met - a spawner still exists
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
     // move to exit
     dmc.tick(Direction.LEFT);
@@ -267,7 +267,7 @@ public class EnemyGoalTest {
     // move off exit, assert goal not met
     res = dmc.tick(Direction.LEFT);
 
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
     assertTrue(TestUtils.getGoals(res).contains(":exit"));
 
   }
@@ -282,7 +282,7 @@ public class EnemyGoalTest {
     DungeonResponse res = dmc.newGame("d__enemyGoalTest_exitDestroyAllSpawnersMinimumEntites",
         "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
 
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
     assertTrue(TestUtils.getGoals(res).contains(":exit"));
 
     assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
@@ -306,7 +306,7 @@ public class EnemyGoalTest {
 
     // assert goal met
     assertTrue(TestUtils.getGoals(res).contains(":exit"));
-    assertFalse(TestUtils.getGoals(res).contains(":enemy"));
+    assertFalse(TestUtils.getGoals(res).contains(":enemies"));
 
     // move to exit
     dmc.tick(Direction.LEFT);
@@ -329,7 +329,7 @@ public class EnemyGoalTest {
 
     // assert goal not met
     assertTrue(TestUtils.getGoals(res).contains(":boulders"));
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
     // move boulder onto switch
     res = dmc.tick(Direction.RIGHT);
@@ -348,7 +348,7 @@ public class EnemyGoalTest {
     DungeonResponse res = dmc.newGame("d__enemyGoalTest_treasureAnd",
         "c__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites");
 
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
     assertTrue(TestUtils.getGoals(res).contains(":treasure"));
 
     assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
@@ -377,7 +377,7 @@ public class EnemyGoalTest {
 
     // assert goal met
     assertTrue(TestUtils.getGoals(res).contains(":treasure"));
-    assertFalse(TestUtils.getGoals(res).contains(":enemy"));
+    assertFalse(TestUtils.getGoals(res).contains(":enemies"));
 
     // move to treasure
     dmc.tick(Direction.LEFT);
@@ -395,7 +395,7 @@ public class EnemyGoalTest {
     DungeonResponse res = dmc.newGame("d__enemyGoalTest_basicDestroyAllSpawnersMinimumEntites",
         "c__enemyGoalTest_basicDestroyAllSpawnersNoEntites");
 
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
     assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
     String spawnerId = TestUtils.getEntities(res, "zombie_toast_spawner").get(0).getId();
@@ -428,7 +428,7 @@ public class EnemyGoalTest {
     DungeonResponse res = dmc.newGame("d__enemyGoalTest_exitDestroyAllSpawnersMinimumEntites",
         "c__enemyGoalTest_basicDestroyAllSpawnersNoEntites");
 
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
     assertTrue(TestUtils.getGoals(res).contains(":exit"));
 
     assertEquals(1, TestUtils.getEntities(res, "zombie_toast_spawner").size());
@@ -445,7 +445,7 @@ public class EnemyGoalTest {
     res = dmc.tick(Direction.DOWN);
     res = dmc.tick(Direction.DOWN);
     res = dmc.tick(Direction.DOWN);
-    assertTrue(TestUtils.getGoals(res).contains(":enemy"));
+    assertTrue(TestUtils.getGoals(res).contains(":enemies"));
 
     // on top of the exit now, enemy goal hasnt been achieved so goal hasnt been met
     res = dmc.tick(Direction.LEFT);
@@ -462,7 +462,7 @@ public class EnemyGoalTest {
 
     // we've destroyed the spawner
     assertEquals(0, TestUtils.countType(res, "zombie_toast_spawner"));
-    assertFalse(TestUtils.getGoals(res).contains(":enemy"));
+    assertFalse(TestUtils.getGoals(res).contains(":enemies"));
     assertTrue(TestUtils.getGoals(res).contains(":exit"));
 
     res = dmc.tick(Direction.DOWN);
