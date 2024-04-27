@@ -29,11 +29,6 @@
 - Note: To get the 10 / 10 for this question, you had to get each and every problem in the codebase, which is pretty impossible imo. With that being said, you got a fair chunk of them :)
 
 ### Task 2
-
-- Coupling is minimised throughout the codebase
-- This is because many of the features have not been implemented correctly (such as creating the subclasses of device and satellite) and hence there is no opportunity to create coupling
-- The simulate method within the blackout controller indicates coupling (the logic in this function should be split among the teleporting satellite, relay satellite etc.).
-
 #### Enemy Goal
 - Correctly Implemented
 - Design is good
