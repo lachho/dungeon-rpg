@@ -1,1 +1,3 @@
-You can view the assignment specification here: https://nw-syd-gitlab.cseunsw.tech/COMP2511/24T1/specs/assignment-ii-spec
+# Dungeon RPG 
+
+Playable Top down RPG game writing using Object Oriented Programming (Java). Extensive use of design patterns and strong focus on object oriented design principles.
